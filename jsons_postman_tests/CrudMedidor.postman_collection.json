@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "0d53d5df-f612-4c73-aaf8-cab61792ece2",
+		"name": "CrudMedidor",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36280962"
+	},
+	"item": [
+		{
+			"name": "CrearMedidor_Directo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcSerie\": \"SERIE009\",\r\n    \"vcidCliente\": \"12345\",\r\n    \"vcdescripcion\": \"Medidor de prueba\",\r\n    \"marcaMed\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"lisMacro\": true,\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"vcfechaInstalacion\": \"2024-07-03\",\r\n    \"estado\": {\r\n        \"ncodigo\": 5\r\n    },\r\n    \"vcfechaHoraUltimaLectura\": \"2024-07-01T12:00:00\",\r\n    \"vcperiodoIntegracion\": \"Diario\",\r\n    \"vcultimoEstadoRele\": \"Activo\",\r\n    \"vcfirmware\": \"1.0.0\",\r\n    \"viaObtencionDatos\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"canalDeComunicacion\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"vcip\": \"192.168.1.1\",\r\n    \"vcpuerto\": \"8080\",\r\n    \"tipoDeModuloDeCom\": {\r\n        \"ncodigo\": 3\r\n    },\r\n    \"configuracionProtocolo\": {\r\n        \"vcdireccionFisica\": \"123\",\r\n        \"vcdireccionLogica\": \"456\",\r\n        \"vcdireccionCliente\": \"789\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 1\r\n        }\r\n    },\r\n    \"parametrosAvanzados\": [\r\n        {\r\n            \"vcSerie\": \"SERIE009\",\r\n            \"nCod\": 1,\r\n            \"vcValue\": \"Valor 1\"\r\n        },\r\n        {\r\n            \"vcSerie\": \"SERIE009\",\r\n            \"nCod\": 2,\r\n            \"vcValue\": \"Valor 2\"\r\n        }\r\n    ]\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/medidores",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"medidores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearMedidor_Concentrador",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcSerie\": \"SERIE004\",\r\n    \"vcidCliente\": \"12345\",\r\n    \"vcdescripcion\": \"Medidor de prueba\",\r\n    \"marcaMed\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"lisMacro\": true,\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"vcfechaInstalacion\": \"2024-07-03\",\r\n    \"estado\": {\r\n        \"ncodigo\": 6\r\n    },\r\n    \"vcfechaHoraUltimaLectura\": \"2024-07-01T12:00:00\",\r\n    \"vcperiodoIntegracion\": \"Diario\",\r\n    \"vcultimoEstadoRele\": \"Activo\",\r\n    \"vcfirmware\": \"1.0.0\",\r\n    \"viaObtencionDatos\": {\r\n        \"ncodigo\": 2\r\n    },\r\n    \"concentrador\": {\r\n        \"vcnoSerie\": \"7256\"\r\n    }\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/medidores",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"medidores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarMedidores",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/medidores",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"medidores"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TraerMedidor_vcSerie",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/medidores/SERIE001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"medidores",
+						"SERIE001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ActualizarMedidor_vcSerie",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcidCliente\": \"12345\",\r\n    \"vcdescripcion\": \"Medidor de prueba\",\r\n    \"marcaMed\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"lisMacro\": true,\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"vcfechaInstalacion\": \"2024-07-03\",\r\n    \"estado\": {\r\n        \"ncodigo\": 6\r\n    },\r\n    \"vcfechaHoraUltimaLectura\": \"2024-07-01T12:00:00\",\r\n    \"vcperiodoIntegracion\": \"Diario\",\r\n    \"vcultimoEstadoRele\": \"Activo\",\r\n    \"vcfirmware\": \"1.0.0\",\r\n    \"viaObtencionDatos\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"concentrador\": null,\r\n    \"canalDeComunicacion\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"vcip\": \"192.168.1.1\",\r\n    \"vcpuerto\": \"8080\",\r\n    \"tipoDeModuloDeCom\": {\r\n        \"ncodigo\": 3\r\n    },\r\n    \"configuracionProtocolo\": {\r\n        \"vcdireccionFisica\": \"123\",\r\n        \"vcdireccionLogica\": \"456\",\r\n        \"vcdireccionCliente\": \"789\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 2\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/medidores/SERIE001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"medidores",
+						"SERIE001"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BorrarMedidor_vcSerie",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/medidores/SERIE004",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"medidores",
+						"SERIE004"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

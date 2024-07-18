@@ -1,4 +1,4 @@
-package com.metrolink.ami_api.models.medidor;
+package com.metrolink.ami_api.models.medidor; //comentario
 
 import lombok.Data;
 

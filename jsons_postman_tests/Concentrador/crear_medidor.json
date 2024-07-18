@@ -1,0 +1,54 @@
+{
+    "no": "123456",
+    "descripcion": "Concentrador en planta",
+    "marca": "MarcaX",
+    "empresa": "EmpresaX",
+    "codigoCaja": "ABC123",
+    "longitudLatitud": "12.3456, -78.9101",
+    "fechaInstalacion": "2023-07-03",
+    "estado": {
+        "enReparacion": false,
+        "danado": false,
+        "enAlmacen": false,
+        "inicial": true,
+        "instaladoInactivo": false,
+        "instaladoActivo": true,
+        "removido": false
+    },
+    "canalComunicacion": {
+        "fourG": true,
+        "fiveG": false
+    },
+    "tipoDeComunicacion": {
+        "Cliente": {
+            "ipConcentrador": "192.168.1.1",
+            "puertoConcentrador": "8080"
+        },
+        "Servidor": {
+            "ipServidor": "192.168.1.2",
+            "puertoServidor": "8080"
+        },
+        "WebService": {
+            "endpoint": "http://example.com/api"
+        }
+    },
+    "tipoModuloComunicacion": {
+        "modemExterno": true,
+        "modemInterno": false
+    },
+    "configuracionProtocolo": {
+        "direccionFisica": "001122",
+        "direccionLogica": "334455",
+        "direccionCliente": 123,
+        "noBytes": "4",
+        "seguridad": {
+            "parametroSeguridad" : {
+                "clientS1" : false,
+                "ek" : true,
+                "ak" : false,
+                "securityControl" : false,
+                "valor" : "0000000000000000000"
+            }        
+        }
+    }
+}

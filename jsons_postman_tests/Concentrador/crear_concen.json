@@ -1,0 +1,52 @@
+{
+    "nidNo": 328,
+    "vcdescripcion": "Concentrador en planta",
+    "vcmarca": "Star",
+    "vcempresa": "EmpresaX",
+    "vccodigoCaja": "ABC123",
+    "vclongitudLatitud": "12.3456, -78.9101",
+    "vcfechaInstalacion": "2023-07-03",
+    "tipoDeComunicacion": {
+        "cliente": {
+            "vcipCliente": "192.168.1.1",
+            "vcpuertoCliente": "8080"
+        },
+        "servidor": {
+            "vcipServidor": "192.168.1.2",
+            "vcpuertoServidor": "8080"
+        },
+        "webService": {
+            "vcendpoint": "http://example.com/api"
+        }
+    },
+    "configuracionProtocolo": {
+        "vcdireccionFisica": "00112233",
+        "vcdireccionLogica": "44556677",
+        "vcdireccionCliente": "12345",
+        "vcnoBytes": "4",
+        "seguridadHLS": {
+            "lclientS1": true,
+            "lek": true,
+            "lak": false,
+            "lsecurityControl": true,
+            "lvalor": "some_value"
+        }
+    },
+    "tipoModuloComunicacion": {
+        "lmodemExterno": true,
+        "lmodemInterno": false
+    },
+    "canalComunicacion": {
+        "lfourG": false,
+        "lfiveG": true
+    },
+    "estado": {
+        "lenReparacion": false,
+        "ldanado": false,
+        "lenAlmacen": false,
+        "linicial": false,
+        "linstaladoInactivo": false,
+        "linstaladoActivo": true,
+        "lremovido": false
+    }
+}

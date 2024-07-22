@@ -19,7 +19,7 @@ public class MedidoresService {
     @Transactional
     public Medidores save(Medidores medidor, boolean isUpdate) {
         Optional<Medidores> existingMedidor = medidoresRepository.findById(medidor.getVcSerie());
-        if (existingMedidor.isPresent() && !isUpdate ) {
+        if (existingMedidor.isPresent() && !isUpdate) {
             throw new IllegalArgumentException("Medidores with vcSerie " + medidor.getVcSerie() + " already exists.");
         }
         return medidoresRepository.save(medidor);
@@ -53,6 +53,7 @@ public class MedidoresService {
         medidor.setVcpuerto(medidorDetails.getVcpuerto());
         medidor.setTipoDeModuloDeCom(medidorDetails.getTipoDeModuloDeCom());
         medidor.setConfiguracionProtocolo(medidorDetails.getConfiguracionProtocolo());
+        medidor.setConfiguracionActivo(medidorDetails.getConfiguracionActivo());
         return medidoresRepository.save(medidor);
     }
 

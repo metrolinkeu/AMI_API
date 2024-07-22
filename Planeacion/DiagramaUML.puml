@@ -17,8 +17,8 @@ package "com.metrolink.ami_api" {
             + Estados estado
             + UbicacionesEnInfra ubicacionEnInfra
             - vcfechaHoraUltimaLectura: String
-            - díasdeRegDíariosMensuales: String
-            - diasdeEventos: String
+            - vcdíasdeRegDíariosMensuales: String
+            - vcdiasdeEventos: String
             - vcperiodoIntegracion: String
             - vcultimoEstadoRele: String
             - vcfirmware: String

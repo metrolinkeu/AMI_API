@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 
+import com.metrolink.ami_api.models.bl.BlMovConfigActivos;
 import com.metrolink.ami_api.models.concentrador.Concentradores;
 import com.metrolink.ami_api.models.concentrador.ConfiguracionProtocolo;
 import com.metrolink.ami_api.models.tablasFront.CanalesDeComunicacion;
@@ -14,9 +15,11 @@ import com.metrolink.ami_api.models.tablasFrontMed.TiposDeModuloDeCom;
 import com.metrolink.ami_api.models.tablasFrontMed.ViasObtencionDatos;
 
 
+
 @Data
 @Entity
 @Table(name = "ami_m_Medidores")
+
 public class Medidores {
 
     @Id
@@ -37,13 +40,14 @@ public class Medidores {
     @JoinColumn(name = "ncodEstado", referencedColumnName = "ncodigo")
     private Estados estado;
 
-    // @ManyToOne
-    // @JoinColumn(name = "ncodUbicacionenInfra", referencedColumnName = "ncodigo")
-    // private UbicacionesenInfra ubicacionenInfra;
+    @ManyToOne
+    @JoinColumn(name = "ubicacionEnInfra", referencedColumnName = "ID_CONFIGURACION_ACTIVO")
+    private BlMovConfigActivos configuracionActivo;
 
+ 
     private String vcfechaHoraUltimaLectura;
-    private String díasdeRegDíariosMensuales;
-    private String diasdeEventos;
+    private String vcdíasdeRegDíariosMensuales;
+    private String vcdiasdeEventos;
 
     private String vcperiodoIntegracion;
     private String vcultimoEstadoRele;
@@ -76,5 +80,8 @@ public class Medidores {
     @JoinColumn(name = "vcSerieP", referencedColumnName = "vcSerieP")
     private ParamAdvMed paramAdvMed;
 
+    
 
 }
+
+

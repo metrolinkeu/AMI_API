@@ -53,6 +53,7 @@ public class MedidoresService {
         medidor.setVcpuerto(medidorDetails.getVcpuerto());
         medidor.setTipoDeModuloDeCom(medidorDetails.getTipoDeModuloDeCom());
         medidor.setConfiguracionProtocolo(medidorDetails.getConfiguracionProtocolo());
+        medidor.setParamAdvMed(medidorDetails.getParamAdvMed());
         medidor.setConfiguracionActivo(medidorDetails.getConfiguracionActivo());
         return medidoresRepository.save(medidor);
     }

@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "40ba2071-cdd3-40e2-b703-cbe5f16a7415",
+		"name": "CrudEstados",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36280962"
+	},
+	"item": [
+		{
+			"name": "CrearEstados",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 3,\r\n    \"vcempresa\": \"Empresay\",\r\n    \"vcconcat\": \"3 - Empresay\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/estados",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"estados"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarEstados",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/estados",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"estados"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar_Es_PorCodigo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/estados/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"estados",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actuali_Es_PorCodigo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcempresa\": \"ActualizacionEmpresaz\",\r\n    \"vcconcat\": \"ActualizacionConcatenación de Empresaz\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/estados/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"estados",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar_Es_PorCodigo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"marca\": \"MarcaActualizada\",\r\n    \"concat\": \"ConcatenadoActualizado\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/estados/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"estados",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

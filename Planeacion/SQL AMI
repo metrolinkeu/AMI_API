@@ -22,64 +22,7 @@ DROP TABLE ami_mov_param_adv_med CASCADE CONSTRAINTS;
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('2', 'Siemens', '2 - Siemens');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('3', 'Schneider', '3 - Schneider');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('4', 'ABB', '4 - ABB');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('5', 'Eaton', '5 - Eaton');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('6', 'GE', '6 - GE');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('7', 'Mitsubishi', '7 - Mitsubishi');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('8', 'Toshiba', '8 - Toshiba');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('9', 'Hitachi', '9 - Hitachi');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('10', 'Rockwell', '10 - Rockwell');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('11', 'Omron', '11 - Omron');
-INSERT INTO "AMI_API_DB"."AMI_M_MARCAS" (NCODIGO, VCMARCA, vcconcat) VALUES ('12', 'Phoenix Contact', '12 - Phoenix Contact');
-
-
-
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('1', '1 - Ecopetrol', 'Ecopetrol');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('2', '2 - Avianca', 'Avianca');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('3', '3 - Bancolombia', 'Bancolombia');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('4', '4 - Imsys', 'Imsys');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('5', '5 - Grupo Éxito', 'Grupo Éxito');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('6', '6 - CEMEX Colombia', 'CEMEX Colombia');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('7', '7 - Alpina', 'Alpina');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('8', '8 - Postobón', 'Postobón');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('9', '9 - ISA', 'ISA');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('10', '10 - Davivienda', 'Davivienda');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('11', '11 - Nutresa', 'Nutresa');
-INSERT INTO "AMI_API_DB"."AMI_M_EMPRESAS" (NCODIGO, VCCONCAT, VCEMPRESA) VALUES ('12', '12 - Terpel', 'Terpel');
-
-
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('0', '0 - Seleccione', 'Seleccione');
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('1', '1 - En Reparacion', 'En Reparacion');
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('2', '2 - Danado', 'Danado');
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('3', '3 - En almacen', 'En almacen');
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('4', '4 - Inicial', 'Inicial');
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('5', '5 - Instalado Inactivo', 'Instalado Inactivo');
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('6', '6 - Instalado Activo', 'Instalado Activo');
-INSERT INTO "AMI_API_DB"."AMI_M_ESTADOS" (NCODIGO, VCCONCAT, VCESTADO) VALUES ('7', '7 - Removido', 'Removido');
-
-INSERT INTO "AMI_API_DB"."AMI_M_CANALES_DE_COMUNICACION" (NCODIGO, VCCANAL_DE_COMUNICACION, VCCONCAT) VALUES ('0', 'Seleccion', '0 - Seleccion')
-INSERT INTO "AMI_API_DB"."AMI_M_CANALES_DE_COMUNICACION" (NCODIGO, VCCANAL_DE_COMUNICACION, VCCONCAT) VALUES ('1', '4 G', '0 - 4 G')
-INSERT INTO "AMI_API_DB"."AMI_M_CANALES_DE_COMUNICACION" (NCODIGO, VCCANAL_DE_COMUNICACION, VCCONCAT) VALUES ('2', '5 G', '0 - 5 G')
-
-INSERT INTO "AMI_API_DB"."AMI_M_TIPOS_DE_COMUNICACION" (NCODIGO, VCCONCAT, VCTIPOS_DE_COMUNICACION) VALUES ('0', '0 - Seleccione', 'Seleccione')
-INSERT INTO "AMI_API_DB"."AMI_M_TIPOS_DE_COMUNICACION" (NCODIGO, VCCONCAT, VCTIPOS_DE_COMUNICACION) VALUES ('1', '1 - Cliente', 'Cliente')
-INSERT INTO "AMI_API_DB"."AMI_M_TIPOS_DE_COMUNICACION" (NCODIGO, VCCONCAT, VCTIPOS_DE_COMUNICACION) VALUES ('2', '2 - Servidor', 'Servidor')
-INSERT INTO "AMI_API_DB"."AMI_M_TIPOS_DE_COMUNICACION" (NCODIGO, VCCONCAT, VCTIPOS_DE_COMUNICACION) VALUES ('3', '3 -  Web Service', ' Web Service')
-
-
-
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 

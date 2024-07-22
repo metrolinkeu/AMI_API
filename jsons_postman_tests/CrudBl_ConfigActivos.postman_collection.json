@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "7f4e5c68-9c21-47f0-8984-3b9d7b6141e8",
+		"name": "CrudBl_ConfigActivos",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36280962"
+	},
+	"item": [
+		{
+			"name": "CrearBl_ConfigActivo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"idConfiguracionActivo\": 11,\r\n    \"tipoActivo\": \"Transformador\",\r\n    \"vcNombre\": \"Tr11 20MVA\",\r\n    \"vcDescripcion\": \"Transformador secundario\",\r\n    \"vcZona\": \"Zona Este\",\r\n    \"vcSubzona\": \"Subzona A\",\r\n    \"vcSubestacion\": \"Subestación 2\",\r\n    \"vcBarra\": \"Barra A\",\r\n    \"nivelTension\": \"110 kV\",\r\n    \"claseTransformador\": \"Clase B\",\r\n    \"vcCapacidadMaxima\": \"20 MVA\",\r\n    \"vcNivelTensionPrimario\": \"110 kV\",\r\n    \"vcNivelTensionSecundario\": \"34.5 kV\",\r\n    \"vcNivelTensionTerciario\": \"13.2 kV\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/configActivos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"configActivos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarBl_ConfigActivos",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/configActivos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"configActivos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar_Config_PorCodigo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/configActivos/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"configActivos",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actuali_Config_PorCodigo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"tipoActivo\": \"Transformador\",\r\n    \"vcNombre\": \"Tr11 20MVA\",\r\n    \"vcDescripcion\": \"Transformador secundario\",\r\n    \"vcZona\": \"Zona Este\",\r\n    \"vcSubzona\": \"Subzona A\",\r\n    \"vcSubestacion\": \"Subestación 3\",\r\n    \"vcBarra\": \"Barra B\",\r\n    \"nivelTension\": \"110 kV\",\r\n    \"claseTransformador\": \"Clase B\",\r\n    \"vcCapacidadMaxima\": \"20 MVA\",\r\n    \"vcNivelTensionPrimario\": \"110 kV\",\r\n    \"vcNivelTensionSecundario\": \"34.5 kV\",\r\n    \"vcNivelTensionTerciario\": \"13.2 kV\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/configActivos/11",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"configActivos",
+						"11"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar_Config_PorCodigo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"marca\": \"MarcaActualizada\",\r\n    \"concat\": \"ConcatenadoActualizado\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/configActivos/126",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"configActivos",
+						"126"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

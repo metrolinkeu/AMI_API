@@ -1,0 +1,273 @@
+@startuml "API__procesos"
+
+!define SHOW_PART_PROCESOS 1
+
+
+
+package "com.metrolink.ami_api" {
+
+    package "com.metrolink.ami_api.models" {
+
+
+        package "com.metrolink.ami_api.models.medidor"{
+            class Medidores #FFFFBA {
+                - vcSerie: String
+                - vcidCliente: String
+                - vcdescripcion: String
+                + MarcasMed marcaMed
+                - lisMacro: Boolean
+                - vclongitudLatitud: String
+                - vcfechaInstalacion: String
+                + Estados estado
+                + UbicacionesEnInfra ubicacionEnInfra
+                - vcfechaHoraUltimaLectura: String
+                - vcdíasdeRegDíariosMensuales: String
+                - vcdiasdeEventos: String
+                - vcperiodoIntegracion: String
+                - vcultimoEstadoRele: String
+                - vcfirmware: String
+                + ViasObtencionDatos viaObtencionDatos
+                + Concentradores concentrador
+                + CanalesDeComunicacion CanalDeComunicacion
+                - vcip : String
+                - vcpuerto: String
+                + TiposDeModuloDeCom tipoDeModuloDeCom
+                + ConfiguracionProtocolo configuracionProtocolo
+                + ParamAdvMed paramAdvMed
+                + AgendaProgramacionesAMI AgendaProgramacionAMI
+
+
+                - vcsic: String
+                - vccanalesPerfilCarga: String
+              
+            }
+        }
+        package "com.metrolink.ami_api.models.concentrador" #d7f7e6{
+            class Concentradores #FFB3BA {
+                @Id
+                -vcnoSerie: String
+                --
+                -vcdescripcion: String
+                + Marcas marcas
+                + Empresas Empresas
+                --
+                -vccodigoCaja: String
+                -vclongitudLatitud: String
+                -vcfechaInstalacion: String
+                --
+                + Estados estado
+                + CanalesDeComunicacion CanalDeComunicacion
+                + ConfiguracionProtocolo configuracionProtocolo
+                + ParamTiposDeComunicacion paramTiposDeComunicacion
+                + ParamAdvCon paramAdvCon
+            }
+        }
+
+        package "com.metrolink.ami_api.models.procesos"{
+            package "com.metrolink.ami_api.models.procesos.primeralectura.autoConfigMed"{
+
+                class AutoConfigMed #fcf0cf {
+                    - id : Long
+                    - descripcion : String
+                    - fechaCreacion : String
+                    + GruposMedidores grupoMedidores
+                    + ViaObtencionDatos viaObtencionDatos
+                    + Solicitudes solicitud
+                }
+
+                class SolicitudInfoAutoConf{
+                    id: long
+                    periodoIntegracion: int
+                    canalesPerfilCarga1 : String
+                    canalesPerfilCarga2 : String
+                    canalesPerfilCarga3 : String
+                    estadoRele : String
+                }
+            }
+
+            package "com.metrolink.ami_api.models.procesos.programacionesAmi"{
+                class ProgramacionesAMI  #ffdee8 {
+                    - ncodigo : Long
+                    + GruposMedidores grupoMedidores
+                    + Peticiones peticion
+                    - vcestado: String
+                    + ParametrizacionesProg parametrizacionProg
+                }
+
+                class AgendaProgramacionesAMI  #e8ffde {
+                    - ncodigo : Long
+                    + ProgramacionesAMI ProgramacionAMI
+                    + EstadosHoy estadoHoy
+                    + Proximos proximo
+                    
+                    
+                }
+
+            }
+
+
+            class GrupoMedidores #6ae7f7{
+                id: long
+                filtro: String
+                SeriesMed: String
+            }
+
+
+        }
+        package "com.metrolink.ami_api.models.tablasFrontMed" #f595c2 {
+            class ViasObtencionDatos #fcce7e{
+                -ncodigo: Long
+                -vcviaObtencionDatos : String
+                -vcconcat : String
+            }
+        }
+    }
+}
+
+package "com.metrolink.ami_api.controllers" #c4eef5{
+
+    package "com.metrolink.ami_api.controllers.concentrador" #d7f7e6{
+        class ConcentradoresController #FFB3BA  {
+            + ConcentradoresService concentradoresService
+            * createConcentrador(concentrador: Concentrador): Concentrador
+            * getAllConcentradores() : List<Concentrador>
+            * getConcentradorById(id: Long) : Concentrador
+            * updateConcentrador(id: Long, concentradorDetails:  Concentrador) : Concentrador
+            * deleteConcentrador(id: Long) : void
+        }
+    }
+
+    package "com.metrolink.ami_api.controllers.medidor"{
+        class MedidoresController #FFFFBA{
+            + MedidoresService medidoresService
+            * createMedidor(medidores: Medidores): Medidores
+            * getAllMedidores() : List<Medidores>
+            * getMedidorById(vcSerie: String) : Medidores
+            * updateMedidor(vcSerie: String, medidorDetails:  Medidores) : Medidores
+            * deleteMedidor(vcSerie: String) : void
+        }
+    }
+
+    !if SHOW_PART_PROCESOS
+    package "com.metrolink.ami_api.controllers.procesos"{
+        package "com.metrolink.ami_api.controllers.procesos.deteccionMed"{
+            class DeteccionMedController #cfd4fc{
+
+            }
+        }
+        package "com.metrolink.ami_api.controllers.procesos.autoConfigMed"{
+            class AutoConfigMedController #fcf0cf {
+
+            }
+        }
+    }
+    !endif
+}
+
+package "com.metrolink.ami_api.services" #f5d0d0 {
+
+    package "com.metrolink.ami_api.services.concentrador" #d7f7e6 {
+        class ConcentradoresService #FFB3BA {
+            + ConcentradoresRepository concentradoresRepository
+            * save(concentrador: Concentrador, isUpdate : boolean ): Concentrador
+            * findAll() : List<Concentrador>
+            * findById(id: Long) : Optional<Concentrador>
+            * update(vcnoSerie: String, concentradorDetails: Concentradores  )
+            * deleteById(id : Long): void
+        }
+    }
+
+    package "com.metrolink.ami_api.services.medidor"  {
+        class MedidoresService #FFFFBA {
+            + MedidoresRepository medidoresRepository
+            * save(medidores: Medidores, isUpdate : boolean ): Medidores
+            * findAll() : List<Medidores>
+            * findById(vcSerie: String) : Optional<Medidores>
+            * update(vcSerie: String, medidorDetails: Medidores)
+            * deleteById(vcSerie : String): void
+        }
+    }
+
+    !if SHOW_PART_PROCESOS
+    package "com.metrolink.ami_api.services.procesos"{
+        package "com.metrolink.ami_api.services.procesos.deteccionMed"{
+            class DeteccionMedService #cfd4fc{
+            }
+            class ConectorDetecMedService #84f086{
+            }
+        }
+        package "com.metrolink.ami_api.services.procesos.autoConfigMed"{
+            class AutoConfigMedService #fcf0cf {
+            }
+            class ConectorAutoConfigMedService #84f086{
+            }
+        }
+    }
+    !endif
+}
+
+package "com.metrolink.ami_api.comunications" {
+    package "com.metrolink.ami_api.comunications.tcp" {
+        class TcpClientService {
+        }
+    }
+}
+
+package "com.metrolink.ami_api.repositories" #fdffd9{
+
+    package "com.metrolink.ami_api.repositories.concentrador" #d7f7e6 {
+        interface ConcentradoresRepository #FFB3BA {
+        }
+    }
+
+    package "com.metrolink.ami_api.repositories.medidor"  {
+        interface MedidoresRepository #FFFFBA {
+        }
+    }
+
+    package "com.metrolink.ami_api.repositories.procesos"  {
+        package "com.metrolink.ami_api.repositories.procesos.autoConfigMed" {
+            interface AutoConfigMedRepository #fcf0cf {
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+ConcentradoresController -> ConcentradoresService : usa
+ConcentradoresService --> Concentradores : usa
+ConcentradoresService -> ConcentradoresRepository : usa
+
+
+MedidoresController -> MedidoresService : usa
+MedidoresService --> Medidores : usa
+MedidoresService -> MedidoresRepository : usa
+
+DeteccionMedController -> DeteccionMedService : usa
+DeteccionMedService --> MedidoresRepository : usa
+DeteccionMedService -> ConcentradoresRepository  : usa
+DeteccionMedService --> Medidores : usa
+DeteccionMedService --> Concentradores : usa
+DeteccionMedService <-> ConectorDetecMedService : usa json
+
+AutoConfigMedController --> ConectorAutoConfigMedService : usa
+AutoConfigMedService --> AutoConfigMed :usa
+AutoConfigMedService -> AutoConfigMedRepository : usa
+AutoConfigMedService <-> ConectorAutoConfigMedService : usa
+
+AutoConfigMed --> GrupoMedidores : contiene
+AutoConfigMed --> ViasObtencionDatos : contiene
+AutoConfigMed ->SolicitudInfoAutoConf : contiene
+
+ProgramacionesAMI --> GrupoMedidores: contiene
+AgendaProgramacionesAMI -> ProgramacionesAMI: contiene
+Medidores --> AgendaProgramacionesAMI: contiene
+
+
+@enduml

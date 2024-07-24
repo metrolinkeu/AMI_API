@@ -6,7 +6,7 @@
 
 package "com.metrolink.ami_api" {
 
-    package "com.metrolink.ami_api.models" {
+    package "com.metrolink.ami_api.models" #f1f5f0{
 
 
         package "com.metrolink.ami_api.models.medidor"{
@@ -39,7 +39,7 @@ package "com.metrolink.ami_api" {
 
                 - vcsic: String
                 - vccanalesPerfilCarga: String
-              
+
             }
         }
         package "com.metrolink.ami_api.models.concentrador" #d7f7e6{
@@ -89,7 +89,7 @@ package "com.metrolink.ami_api" {
                 class ProgramacionesAMI  #ffdee8 {
                     - ncodigo : Long
                     + GruposMedidores grupoMedidores
-                    + Peticiones peticion
+                    + ListasPeticiones listaPeticiones
                     - vcestado: String
                     + ParametrizacionesProg parametrizacionProg
                 }
@@ -99,10 +99,41 @@ package "com.metrolink.ami_api" {
                     + ProgramacionesAMI ProgramacionAMI
                     + EstadosHoy estadoHoy
                     + Proximos proximo
-                    
-                    
+
+
                 }
 
+                class EstadosHoy{
+                    - ncodigo: Long
+                    - EstadosAgenda estadoAgenda
+                    - Proximo: boolean
+                    - fechaProximo: Date
+                    - horaProximo: Date
+                }
+                class EstadosAgenda{
+                    - ncodigo: Long
+                    - estados: String
+
+                }
+
+                class ListasPeticiones  #ff6b6b {
+                    - lectura_perfil_1 :  boolean
+                    - eventos : boolean
+                    - registros : boolean
+                    - factorPotencia : boolean
+                    - instantaneos : boolean
+                    + Rele rele
+                    + SinconizacionReloj sincronizacionReloj
+                }
+
+                class Rele{
+                    - accion: String
+                }
+
+                class SinconizacionReloj{
+                    - fecha: Date
+                    - hora: Date
+                }
             }
 
 
@@ -266,7 +297,16 @@ AutoConfigMed --> ViasObtencionDatos : contiene
 AutoConfigMed ->SolicitudInfoAutoConf : contiene
 
 ProgramacionesAMI --> GrupoMedidores: contiene
+ProgramacionesAMI --> ListasPeticiones: contiene
+ProgramacionesAMI -- Rele: contiene
+ProgramacionesAMI -- SinconizacionReloj: contiene
+
+
 AgendaProgramacionesAMI -> ProgramacionesAMI: contiene
+AgendaProgramacionesAMI --> EstadosHoy: contiene
+EstadosHoy -> EstadosAgenda: contiene
+
+
 Medidores --> AgendaProgramacionesAMI: contiene
 
 

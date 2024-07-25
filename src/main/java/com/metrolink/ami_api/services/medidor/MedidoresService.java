@@ -20,7 +20,7 @@ public class MedidoresService {
     public Medidores save(Medidores medidor, boolean isUpdate) {
         Optional<Medidores> existingMedidor = medidoresRepository.findById(medidor.getVcSerie());
         if (existingMedidor.isPresent() && !isUpdate) {
-            throw new IllegalArgumentException("Medidores with vcSerie " + medidor.getVcSerie() + " already exists.");
+            throw new IllegalArgumentException("Medidor with vcSerie " + medidor.getVcSerie() + " already exists.");
         }
         return medidoresRepository.save(medidor);
     }

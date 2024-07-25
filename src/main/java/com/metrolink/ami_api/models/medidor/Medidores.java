@@ -80,6 +80,9 @@ public class Medidores {
     @JoinColumn(name = "vcSerieP", referencedColumnName = "vcSerieP")
     private ParamAdvMed paramAdvMed;
 
+    @Transient
+    private boolean esExistente;
+
     
 
 }

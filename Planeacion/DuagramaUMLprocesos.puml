@@ -298,8 +298,8 @@ AutoConfigMed ->SolicitudInfoAutoConf : contiene
 
 ProgramacionesAMI --> GrupoMedidores: contiene
 ProgramacionesAMI --> ListasPeticiones: contiene
-ProgramacionesAMI -- Rele: contiene
-ProgramacionesAMI -- SinconizacionReloj: contiene
+ListasPeticiones -- Rele: contiene
+ListasPeticiones -- SinconizacionReloj: contiene
 
 
 AgendaProgramacionesAMI -> ProgramacionesAMI: contiene

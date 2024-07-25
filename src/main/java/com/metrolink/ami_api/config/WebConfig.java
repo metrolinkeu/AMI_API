@@ -14,7 +14,7 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8086") // Reemplaza con la URL de tu aplicación externa
+                        .allowedOrigins("http://localhost:8086/cyber-simex") // Reemplaza con la URL de tu aplicación externa
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
             }
         };

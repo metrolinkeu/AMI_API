@@ -18,3 +18,11 @@
 [2024-07-25 15:27:45] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "45588" } } 
 [2024-07-25 15:45:52] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "33817", "Medidor2": "18500", "Medidor3": "04994" } } 
 [2024-07-25 15:50:15] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "33240", "Medidor2": "15723" } } 
+[2024-07-26 10:05:58] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "02872", "Medidor2": "55761", "Medidor3": "88081" } } 
+[2024-07-26 12:51:20] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "36293", "Medidor2": "46651" } } 
+[2024-07-26 12:55:11] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "45327" } } 
+[2024-07-26 13:06:12] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "57884" } } 
+[2024-07-26 13:06:24] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "83555", "Medidor2": "93073" } } 
+[2024-07-26 13:09:41] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "88369" } } 
+[2024-07-26 13:09:41] [INFORMACIÓN] Concentrador no existente: 72561 
+[2024-07-26 13:09:58] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "00007", "Medidor2": "05070", "Medidor3": "04934" } } 

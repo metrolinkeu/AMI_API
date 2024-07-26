@@ -36,15 +36,12 @@ public class DeteccionMedService {
 
     public List<Medidores> procesarDeteccionByCon(String json) throws IOException {
 
-
         // Parsear el JSON para obtener los valores
         ObjectMapper objectMapperCon = new ObjectMapper();
         JsonNode jsonNode = objectMapperCon.readTree(json);
         String vcnoSerie = jsonNode.get("vcnoSerie").asText();
         // Imprimir los valores
         System.out.println("vcnoSerie: " + vcnoSerie);
-
-
 
         // Llamar al conector para procesar el JSON
         String jsonMed = conectorDetecMedService.usarConectorDeteccion(json);
@@ -71,29 +68,34 @@ public class DeteccionMedService {
         // Crear una instancia de Medidores para cada serial detectado y guardarlo en la
         // base de datos
         List<Medidores> medidoresGuardados = new ArrayList<>();
-        
 
-        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+        Concentradores concentrador;
+        try {
+            concentrador = concentradoresService.findById(vcnoSerie);
 
+            for (String value : medidoresDetectados.values()) {
+                Medidores medidor = new Medidores();
+                medidor.setVcSerie(value);
+                medidor.setLisMacro(true);
+                medidor.setConcentrador(concentrador);
 
+                try {
+                    // Guardar el medidor en la base de datos
+                    Medidores medidorGuardado = medidoresService.save(medidor, false);
+                    medidorGuardado.setEsExistente(false);
+                    medidoresGuardados.add(medidorGuardado);
+                } catch (IllegalArgumentException e) {
+                    Medidores medidorExistente = new Medidores();
+                    medidorExistente.setVcSerie(value);
+                    medidorExistente.setEsExistente(true);
+                    medidoresGuardados.add(medidorExistente);
+                }
 
-        for (String value : medidoresDetectados.values()) {
-            Medidores medidor = new Medidores();
-            medidor.setVcSerie(value);
-            medidor.setLisMacro(true);
-            medidor.setConcentrador(concentrador);
-
-            try {
-                // Guardar el medidor en la base de datos
-                Medidores medidorGuardado = medidoresService.save(medidor, false);
-                medidorGuardado.setEsExistente(false);
-                medidoresGuardados.add(medidorGuardado);
-            } catch (IllegalArgumentException e) {
-                Medidores medidorExistente = new Medidores();
-                medidorExistente.setVcSerie(value);
-                medidorExistente.setEsExistente(true);
-                medidoresGuardados.add(medidorExistente);
             }
+
+        } catch (RuntimeException e) {
+            System.out.println("Concentrador no existente");
+            logger.info("Concentrador no existente: " + vcnoSerie);
 
         }
 

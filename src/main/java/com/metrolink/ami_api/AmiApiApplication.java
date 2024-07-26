@@ -22,7 +22,9 @@ public class AmiApiApplication {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:8086") // Reemplaza con la URL de tu aplicación externa
                         .allowedMethods("*")
-						.allowedHeaders("*");
+                        
+						.allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }

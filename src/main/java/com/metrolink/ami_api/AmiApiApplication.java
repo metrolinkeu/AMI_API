@@ -9,18 +9,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 public class AmiApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(AmiApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AmiApiApplication.class, args);
+    }
 
-
-	@Bean
+    @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOriginPatterns("*") // Usar patrones en lugar de "*"
+                        .allowedOrigins("http://localhost:8086") // Permite solo el origen del frontend
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -28,4 +27,4 @@ public class AmiApiApplication {
         };
     }
 
-} 
+}

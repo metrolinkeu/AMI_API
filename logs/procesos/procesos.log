@@ -26,3 +26,4 @@
 [2024-07-26 13:09:41] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "88369" } } 
 [2024-07-26 13:09:41] [INFORMACIÓN] Concentrador no existente: 72561 
 [2024-07-26 13:09:58] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "00007", "Medidor2": "05070", "Medidor3": "04934" } } 
+[2024-07-29 11:31:44] [INFORMACIÓN] JSON Devuelto: { "Medidores": { "Medidor1": "50984", "Medidor2": "49448", "Medidor3": "74304" } } 

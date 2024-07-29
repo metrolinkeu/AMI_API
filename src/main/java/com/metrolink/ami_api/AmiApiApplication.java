@@ -20,10 +20,9 @@ public class AmiApiApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8086") // Reemplaza con la URL de tu aplicación externa
-                        .allowedMethods("*")
-                        
-						.allowedHeaders("*")
+                        .allowedOriginPatterns("*") // Usar patrones en lugar de "*"
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+                        .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };

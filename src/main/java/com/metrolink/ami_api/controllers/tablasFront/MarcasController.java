@@ -21,7 +21,7 @@ public class MarcasController {
         return new ResponseEntity<>(createdMarca, HttpStatus.CREATED);
     }
 
-    @CrossOrigin(origins = "http://localhost:8086")
+
     @GetMapping
     public ResponseEntity<List<Marcas>> getAllMarcas() {
         List<Marcas> marcas = marcasService.findAll();

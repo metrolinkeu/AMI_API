@@ -55,6 +55,8 @@ public class MedidoresService {
         medidor.setConfiguracionProtocolo(medidorDetails.getConfiguracionProtocolo());
         medidor.setParamAdvMed(medidorDetails.getParamAdvMed());
         medidor.setConfiguracionActivo(medidorDetails.getConfiguracionActivo());
+        medidor.setVcsic(medidorDetails.getVcsic());
+        medidor.setCanalesPerfilCarga(medidorDetails.getCanalesPerfilCarga());
         return medidoresRepository.save(medidor);
     }
 

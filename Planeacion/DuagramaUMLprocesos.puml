@@ -7,7 +7,7 @@
 package "com.metrolink.ami_api" {
 
     package "com.metrolink.ami_api.config"{
-        class LoggerConfigProcesos{
+        class LoggerConfigProcesos #05f7c3 {
 
             -static final Logger logger
             +static Logger getLogger()
@@ -47,14 +47,35 @@ package "com.metrolink.ami_api" {
                 + ConfiguracionProtocolo configuracionProtocolo
                 + ParamAdvMed paramAdvMed
                 + AgendaProgramacionesAMI AgendaProgramacionAMI
+                - vcsic: String
+                + CanalesPerfilCarga canalesPerfilCarga
                 @Transient
                 - esExistente: Boolean
 
+            }
 
-                - vcsic: String
-                - vccanalesPerfilCarga: String
+            class CanalesPerfilCarga #c1bbc9 {
+                - nid: Long
+                + CodigosObisCanal codigosObisCanal_1
+                + CodigosObisCanal codigosObisCanal_2
+                + CodigosObisCanal codigosObisCanal_3
 
             }
+
+            class CodigosObisCanal #c1bbc9{
+                - nid: Long
+                - vcobis_1: String
+                - vcobis_2: String
+                - vcobis_3: String
+                - vcobis_4: String
+                - vcobis_5: String
+                - vcobis_6: String
+                - vcobis_7: String
+                - vcobis_8: String
+                - vcobis_9: String
+                - vcobis_10: String
+            } 
+            
         }
         package "com.metrolink.ami_api.models.concentrador" #d7f7e6{
             class Concentradores #FFB3BA {
@@ -79,24 +100,6 @@ package "com.metrolink.ami_api" {
 
         package "com.metrolink.ami_api.models.procesos"{
             package "com.metrolink.ami_api.models.procesos.primeralectura.autoConfigMed"{
-
-                class AutoConfigMed #fcf0cf {
-                    - id : Long
-                    - descripcion : String
-                    - fechaCreacion : String
-                    + GruposMedidores grupoMedidores
-                    + ViaObtencionDatos viaObtencionDatos
-                    + Solicitudes solicitud
-                }
-
-                class SolicitudInfoAutoConf{
-                    id: long
-                    periodoIntegracion: int
-                    canalesPerfilCarga1 : String
-                    canalesPerfilCarga2 : String
-                    canalesPerfilCarga3 : String
-                    estadoRele : String
-                }
             }
 
             package "com.metrolink.ami_api.models.procesos.programacionesAmi"{
@@ -315,13 +318,11 @@ DeteccionMedService -> LoggerConfigProcesos: usa
 
 
 AutoConfigMedController --> ConectorAutoConfigMedService : usa
-AutoConfigMedService --> AutoConfigMed :usa
 AutoConfigMedService -> AutoConfigMedRepository : usa
 AutoConfigMedService <-> ConectorAutoConfigMedService : usa
 
-AutoConfigMed --> GrupoMedidores : contiene
-AutoConfigMed --> ViasObtencionDatos : contiene
-AutoConfigMed ->SolicitudInfoAutoConf : contiene
+
+
 
 ProgramacionesAMI --> GrupoMedidores: contiene
 ProgramacionesAMI --> ListasPeticiones: contiene
@@ -335,6 +336,12 @@ EstadosHoy -> EstadosAgenda: contiene
 
 
 Medidores --> AgendaProgramacionesAMI: contiene
+
+Medidores -> CanalesPerfilCarga: contiene
+
+CanalesPerfilCarga -> CodigosObisCanal: contiene
+CanalesPerfilCarga -> CodigosObisCanal: contiene
+CanalesPerfilCarga -> CodigosObisCanal: contiene
 
 
 @enduml

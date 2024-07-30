@@ -80,6 +80,14 @@ public class Medidores {
     @JoinColumn(name = "vcSerieP", referencedColumnName = "vcSerieP")
     private ParamAdvMed paramAdvMed;
 
+
+    private String vcsic;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "Canales_p_carga", referencedColumnName = "nid")
+    private CanalesPerfilCarga canalesPerfilCarga;
+
+
     @Transient
     private boolean esExistente;
 

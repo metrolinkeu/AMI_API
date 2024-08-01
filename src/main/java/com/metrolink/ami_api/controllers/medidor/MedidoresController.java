@@ -18,10 +18,10 @@ public class MedidoresController {
 
     @PostMapping
     public ResponseEntity<Medidores> createMedidor(@RequestBody Medidores medidor) {
-        try{
-        Medidores createdMedidor = medidoresService.save(medidor, false);
-        return new ResponseEntity<>(createdMedidor, HttpStatus.CREATED);
-        }catch (IllegalArgumentException e) {
+        try {
+            Medidores createdMedidor = medidoresService.save(medidor, false);
+            return new ResponseEntity<>(createdMedidor, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
         }
     }
@@ -38,8 +38,21 @@ public class MedidoresController {
         return ResponseEntity.ok(medidor);
     }
 
+    @GetMapping("/concentrador/{vcnoSerie}")
+    public ResponseEntity<List<Medidores>> getMedidoresByConcentradorVcnoSerie(@PathVariable String vcnoSerie) {
+        List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
+        return ResponseEntity.ok(medidores);
+    }
+
+    @GetMapping("/vcsic/{vcsic}")
+    public ResponseEntity<List<Medidores>> getMedidoresByVcsic(@PathVariable String vcsic) {
+        List<Medidores> medidores = medidoresService.findByVcsic(vcsic);
+        return ResponseEntity.ok(medidores);
+    }
+
     @PutMapping("/{vcSerie}")
-    public ResponseEntity<Medidores> updateMedidor(@PathVariable String vcSerie, @RequestBody Medidores medidorDetails) {
+    public ResponseEntity<Medidores> updateMedidor(@PathVariable String vcSerie,
+            @RequestBody Medidores medidorDetails) {
         Medidores updatedMedidor = medidoresService.update(vcSerie, medidorDetails);
         return ResponseEntity.ok(updatedMedidor);
     }

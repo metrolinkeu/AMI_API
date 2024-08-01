@@ -33,6 +33,14 @@ public class MedidoresService {
         return medidoresRepository.findById(vcSerie).orElseThrow(() -> new RuntimeException("Medidor not found"));
     }
 
+    public List<Medidores> findByConcentradorVcnoSerie(String vcnoSerie) {
+        return medidoresRepository.findByConcentradorVcnoSerie(vcnoSerie);
+    }
+
+    public List<Medidores> findByVcsic(String vcsic) {
+        return medidoresRepository.findByVcsic(vcsic);
+    }
+
     public Medidores update(String vcSerie, Medidores medidorDetails) {
         Medidores medidor = findById(vcSerie);
         medidor.setVcidCliente(medidorDetails.getVcidCliente());

@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "8091b44a-418d-4b96-ab2e-9d778cc57895",
+		"name": "AutoConfiguracionMedidores",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36280962"
+	},
+	"item": [
+		{
+			"name": "ObtenerAutoConfigBy_Conce",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcnoSerie\": \"7256\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/autoconfiguracion/ObtenerConfig",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"autoconfiguracion",
+						"ObtenerConfig"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerAutoConfigBy_list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcnoSerie\": \"7256\",\r\n    \"vcseriales\": {\r\n        \"vcserie1\": \"38516\",\r\n        \"vcserie2\": \"32470\",\r\n        \"vcserie3\": \"71542\"\r\n       \r\n        \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/autoconfiguracion/ObtenerConfig",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"autoconfiguracion",
+						"ObtenerConfig"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

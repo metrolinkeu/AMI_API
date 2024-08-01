@@ -42,7 +42,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Origin",
+						"value": "http://localhost:8080",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",

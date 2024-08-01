@@ -11,14 +11,12 @@ package "com.metrolink.ami_api" {
 
             -static final Logger logger
             +static Logger getLogger()
-
-
-
         }
-
     }
 
     package "com.metrolink.ami_api.models" #f1f5f0{
+
+
 
 
         package "com.metrolink.ami_api.models.medidor"{
@@ -74,8 +72,9 @@ package "com.metrolink.ami_api" {
                 - vcobis_8: String
                 - vcobis_9: String
                 - vcobis_10: String
-            } 
-            
+            }
+
+
         }
         package "com.metrolink.ami_api.models.concentrador" #d7f7e6{
             class Concentradores #FFB3BA {
@@ -99,8 +98,43 @@ package "com.metrolink.ami_api" {
         }
 
         package "com.metrolink.ami_api.models.procesos"{
-            package "com.metrolink.ami_api.models.procesos.primeralectura.autoConfigMed"{
+
+            package "com.metrolink.ami_api.models.procesos.primeraLectura"{
+                class AutoconfMedidor{
+                    - vcSerie: String
+                    + AutoConfCanalesPerfilCarga autoConfcanalesPerfilCarga
+                    - vcfechaHoraUltimaLectura: String
+                    - vcdíasdeRegDíariosMensuales: String
+                    - vcdiasdeEventos: String
+                    - vcperiodoIntegra: String
+                    - vcultimoEstadoRe: String
+                    - vcfirmware: String
+                }
+
+
+                class AutoConfCanalesPerfilCarga{
+                    + CodigosObisCanal codigosObisCanal_1
+                    + CodigosObisCanal codigosObisCanal_2
+                    + CodigosObisCanal codigosObisCanal_3
+                }
+
+                class AutoConfCodigosObisCanal{
+                    - vcobis_1: String
+                    - vcobis_2: String
+                    - vcobis_3: String
+                    - vcobis_4: String
+                    - vcobis_5: String
+                    - vcobis_6: String
+                    - vcobis_7: String
+                    - vcobis_8: String
+                    - vcobis_9: String
+                    - vcobis_10: String
+                }
+
+
+
             }
+
 
             package "com.metrolink.ami_api.models.procesos.programacionesAmi"{
                 class ProgramacionesAMI  #ffdee8 {
@@ -205,8 +239,10 @@ package "com.metrolink.ami_api" {
 
                 }
             }
-            package "com.metrolink.ami_api.controllers.procesos.autoConfigMed"{
-                class AutoConfigMedController #fcf0cf {
+            package "com.metrolink.ami_api.controllers.procesos.autoconfiguracion"{
+                class AutoConfiguracionController #fcf0cf {
+                    + AutoConfiguracionService autoConfiguracionService
+                    * recibirConfiguracion(request: HttpServletRequest): ResponseEntity<List<AutoconfMedidor>>
 
                 }
             }
@@ -253,10 +289,21 @@ package "com.metrolink.ami_api" {
                     * usarConectorDeteccion(json: String): String
                 }
             }
-            package "com.metrolink.ami_api.services.procesos.autoConfigMed"{
-                class AutoConfigMedService #fcf0cf {
+            package "com.metrolink.ami_api.services.procesos.autoconfiguracion"{
+                class AutoConfiguracionService #fcf0cf {
+                    + ConectorAutoConfService conectorAutoConfService
+                    + MedidoresRepository medidoresRepository
+                    + MedidoresService medidoresService
+                    * procesarConfiguracion(rootNode: JsonNode): List<AutoconfMedidor>
+
+
                 }
-                class ConectorAutoConfigMedService #84f086{
+                class ConectorAutoConfService #84f086{
+                    + MedidoresService medidoresService
+                    "Metodos provicionales"
+                    * procesarConfiguracion(json: String): List<AutoconfMedidor>
+                    * crearAutoconfMedidor(vcSerie: String, random: Random): AutoconfMedidor
+                    * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
                 }
             }
         }
@@ -283,10 +330,7 @@ package "com.metrolink.ami_api" {
         }
 
         package "com.metrolink.ami_api.repositories.procesos"  {
-            package "com.metrolink.ami_api.repositories.procesos.autoConfigMed" {
-                interface AutoConfigMedRepository #fcf0cf {
-                }
-            }
+
         }
     }
 
@@ -309,18 +353,33 @@ MedidoresService --> Medidores : usa
 MedidoresService -> MedidoresRepository : usa
 
 DeteccionMedController -> DeteccionMedService : usa
-DeteccionMedService --> MedidoresRepository : usa
-DeteccionMedService -> ConcentradoresRepository  : usa
-DeteccionMedService --> Medidores : usa
-DeteccionMedService --> Concentradores : usa
-DeteccionMedService <-> ConectorDetecMedService : usa json
+
+DeteccionMedService -> MedidoresService : @Autowired
+DeteccionMedService -> ConcentradoresService  : @Autowired
+DeteccionMedService -> Medidores : usa
+DeteccionMedService -> Concentradores : usa
+DeteccionMedService <-> ConectorDetecMedService : : @Autowired
 DeteccionMedService -> LoggerConfigProcesos: usa
 
 
-AutoConfigMedController --> ConectorAutoConfigMedService : usa
-AutoConfigMedService -> AutoConfigMedRepository : usa
-AutoConfigMedService <-> ConectorAutoConfigMedService : usa
+AutoConfiguracionController --> AutoConfiguracionService : @Autowired
+AutoConfiguracionService -> MedidoresService : @Autowired
+AutoConfiguracionService --> MedidoresRepository : @Autowired
 
+AutoConfiguracionService -> CanalesPerfilCarga : usa
+AutoConfiguracionService -> CodigosObisCanal : usa
+AutoConfiguracionService -> Medidores : usa
+AutoConfiguracionService -> AutoConfCanalesPerfilCarga : usa
+AutoConfiguracionService -> AutoConfCodigosObisCanal : usa
+AutoConfiguracionService -> AutoconfMedidor : usa
+
+AutoConfiguracionService <-> ConectorAutoConfService : usa
+
+ConectorAutoConfService -> Medidores: usa
+ConectorAutoConfService -> AutoConfCanalesPerfilCarga: usa
+ConectorAutoConfService -> AutoConfCodigosObisCanal: usa
+ConectorAutoConfService -> AutoconfMedidor: usa
+ConectorAutoConfService -> MedidoresService: @Autowired
 
 
 
@@ -342,6 +401,10 @@ Medidores -> CanalesPerfilCarga: contiene
 CanalesPerfilCarga -> CodigosObisCanal: contiene
 CanalesPerfilCarga -> CodigosObisCanal: contiene
 CanalesPerfilCarga -> CodigosObisCanal: contiene
+
+
+AutoconfMedidor -> AutoConfCanalesPerfilCarga: contiene
+AutoConfCanalesPerfilCarga -> AutoConfCodigosObisCanal: contiene
 
 
 @enduml

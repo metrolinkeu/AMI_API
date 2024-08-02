@@ -45,7 +45,7 @@ public class ConectorAutoConfService {
             } else {
                 // Caso donde hay "vcnoSerie" y "vcseriales"
                 System.out.println("Se encontraron 'vcseriales'. Procesar con vcnoSerie y vcseriales.");
-                
+
                 vcserialesNode.forEach(serialNode -> {
                     String vcserie = serialNode.asText();
                     AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
@@ -77,7 +77,7 @@ public class ConectorAutoConfService {
         autoconfMedidor.setVcfechaHoraUltimaLectura(dateTime.format(formatter));
         autoconfMedidor.setVcdíasdeRegDíariosMensuales(String.valueOf(random.nextInt(30) + 1));
         autoconfMedidor.setVcdiasdeEventos(String.valueOf(random.nextInt(20) + 1));
-        autoconfMedidor.setVcperiodoIntegracion(String.valueOf(random.nextInt(60) + 1));
+        int[] opcionesIntegracion = { 15, 30, 60 }; int periodoIntegracion = opcionesIntegracion[random.nextInt(opcionesIntegracion.length)]; autoconfMedidor.setVcperiodoIntegracion(String.valueOf(periodoIntegracion));
         autoconfMedidor.setVcultimoEstadoRele(random.nextBoolean() ? "activo" : "inactivo");
         autoconfMedidor.setVcfirmware("v" + (random.nextInt(2) + 1) + "." + (random.nextInt(9) + 1) + "."
                 + (random.nextInt(9) + 1));

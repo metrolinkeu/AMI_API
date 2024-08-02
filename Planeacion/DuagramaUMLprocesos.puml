@@ -100,7 +100,7 @@ package "com.metrolink.ami_api" {
         package "com.metrolink.ami_api.models.procesos"{
 
             package "com.metrolink.ami_api.models.procesos.primeraLectura"{
-                class AutoconfMedidor{
+                class AutoconfMedidor #fcf0cf{
                     - vcSerie: String
                     + AutoConfCanalesPerfilCarga autoConfcanalesPerfilCarga
                     - vcfechaHoraUltimaLectura: String
@@ -112,13 +112,13 @@ package "com.metrolink.ami_api" {
                 }
 
 
-                class AutoConfCanalesPerfilCarga{
+                class AutoConfCanalesPerfilCarga #fcf0cf{
                     + CodigosObisCanal codigosObisCanal_1
                     + CodigosObisCanal codigosObisCanal_2
                     + CodigosObisCanal codigosObisCanal_3
                 }
 
-                class AutoConfCodigosObisCanal{
+                class AutoConfCodigosObisCanal #fcf0cf{
                     - vcobis_1: String
                     - vcobis_2: String
                     - vcobis_3: String
@@ -139,59 +139,60 @@ package "com.metrolink.ami_api" {
             package "com.metrolink.ami_api.models.procesos.programacionesAmi"{
                 class ProgramacionesAMI  #ffdee8 {
                     - ncodigo : Long
+                    - vcestado: String
                     + GruposMedidores grupoMedidores
                     + ListasPeticiones listaPeticiones
-                    - vcestado: String
                     + ParametrizacionesProg parametrizacionProg
+
+                }
+
+                class ParametrizacionesProg {
+                    - ncodigo : Long
+                    - vctipoDeLectura: String
+                    - vcfechaInicio: String
+                    - vchoraInicio: String
+                    - nreintentos: int
+                    - vcdiasSemana: String
+                    - vcfrecuencia: String
+                }
+
+
+
+                class ListasPeticiones  #ff6b6b {
+                    - ncodigo: Long
+                    - llectura_perfil_1 :  boolean
+                    - leventos : boolean
+                    - lregistros : boolean
+                    - lfactorPotencia : boolean
+                    - linstantaneos : boolean
+                    - vcaccionRele: String
+                    - vcfechaSincronizacion: String
+                    - vchoraSincronizacion: String
                 }
 
                 class AgendaProgramacionesAMI  #e8ffde {
                     - ncodigo : Long
                     + ProgramacionesAMI ProgramacionAMI
                     + EstadosHoy estadoHoy
-                    + Proximos proximo
-
-
                 }
+
 
                 class EstadosHoy{
                     - ncodigo: Long
-                    - EstadosAgenda estadoAgenda
-                    - Proximo: boolean
-                    - fechaProximo: Date
-                    - horaProximo: Date
-                }
-                class EstadosAgenda{
-                    - ncodigo: Long
-                    - estados: String
-
+                    - lproximo: boolean
+                    - vcfechaProximo: String
+                    - vchoraProximo: String
                 }
 
-                class ListasPeticiones  #ff6b6b {
-                    - lectura_perfil_1 :  boolean
-                    - eventos : boolean
-                    - registros : boolean
-                    - factorPotencia : boolean
-                    - instantaneos : boolean
-                    + Rele rele
-                    + SinconizacionReloj sincronizacionReloj
-                }
 
-                class Rele{
-                    - accion: String
-                }
 
-                class SinconizacionReloj{
-                    - fecha: Date
-                    - hora: Date
-                }
             }
 
 
             class GrupoMedidores #6ae7f7{
-                id: long
-                filtro: String
-                SeriesMed: String
+                nid: long
+                vcfiltro: String
+                vcSeriesMed: String
             }
 
 
@@ -385,13 +386,13 @@ ConectorAutoConfService -> MedidoresService: @Autowired
 
 ProgramacionesAMI --> GrupoMedidores: contiene
 ProgramacionesAMI --> ListasPeticiones: contiene
-ListasPeticiones -- Rele: contiene
-ListasPeticiones -- SinconizacionReloj: contiene
+ProgramacionesAMI --> ParametrizacionesProg: contiene
+
 
 
 AgendaProgramacionesAMI -> ProgramacionesAMI: contiene
 AgendaProgramacionesAMI --> EstadosHoy: contiene
-EstadosHoy -> EstadosAgenda: contiene
+
 
 
 Medidores --> AgendaProgramacionesAMI: contiene
@@ -405,6 +406,11 @@ CanalesPerfilCarga -> CodigosObisCanal: contiene
 
 AutoconfMedidor -> AutoConfCanalesPerfilCarga: contiene
 AutoConfCanalesPerfilCarga -> AutoConfCodigosObisCanal: contiene
+AutoConfCanalesPerfilCarga -> AutoConfCodigosObisCanal: contiene
+AutoConfCanalesPerfilCarga -> AutoConfCodigosObisCanal: contiene
+
+
+
 
 
 @enduml

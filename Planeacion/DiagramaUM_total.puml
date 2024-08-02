@@ -1,0 +1,669 @@
+@startuml "API_Combined"
+
+package "com.metrolink.ami_api" {
+
+    package "com.metrolink.ami_api.config" {
+        class LoggerConfigProcesos #05f7c3 {
+            -static final Logger logger
+            +static Logger getLogger()
+        }
+    }
+
+    package "com.metrolink.ami_api.models" {
+
+        package "com.metrolink.ami_api.models.medidor" {
+            class Medidores #FFFFBA {
+                - vcSerie: String
+                - vcidCliente: String
+                - vcdescripcion: String
+                + MarcasMed marcaMed
+                - lisMacro: Boolean
+                - vclongitudLatitud: String
+                - vcfechaInstalacion: String
+                + Estados estado
+                + UbicacionesEnInfra ubicacionEnInfra
+                - vcfechaHoraUltimaLectura: String
+                - vcdíasdeRegDíariosMensuales: String
+                - vcdiasdeEventos: String
+                - vcperiodoIntegracion: String
+                - vcultimoEstadoRele: String
+                - vcfirmware: String
+                + ViasObtencionDatos viaObtencionDatos
+                + Concentradores concentrador
+                + CanalesDeComunicacion CanalDeComunicacion
+                - vcip : String
+                - vcpuerto: String
+                + TiposDeModuloDeCom tipoDeModuloDeCom
+                + ConfiguracionProtocolo configuracionProtocolo
+                + ParamAdvMed paramAdvMed
+                + AgendaProgramacionesAMI AgendaProgramacionAMI
+                - vcsic: String
+                + CanalesPerfilCarga canalesPerfilCarga
+                @Transient
+                - esExistente: Boolean
+            }
+
+            class CanalesPerfilCarga #c1bbc9 {
+                - nid: Long
+                + CodigosObisCanal codigosObisCanal_1
+                + CodigosObisCanal codigosObisCanal_2
+                + CodigosObisCanal codigosObisCanal_3
+            }
+
+            class CodigosObisCanal #c1bbc9 {
+                - nid: Long
+                - vcobis_1: String
+                - vcobis_2: String
+                - vcobis_3: String
+                - vcobis_4: String
+                - vcobis_5: String
+                - vcobis_6: String
+                - vcobis_7: String
+                - vcobis_8: String
+                - vcobis_9: String
+                - vcobis_10: String
+            }
+
+            class TipoParamAdvMed #e0f5c4 {
+                @Id
+                - ncod: Long
+                - vcDescripcion: String
+            }
+
+            class ParamAdvMed {
+                @Id
+                - vcSerieP: String
+                - vcValue: String
+                + TipoParamAdvMed tipoParamAdvMed
+            }
+        }
+
+        package "com.metrolink.ami_api.models.concentrador" #d7f7e6 {
+            class Concentradores #FFB3BA {
+                @Id
+                - vcnoSerie: String
+                --
+                - vcdescripcion: String
+                + Marcas marcas
+                + Empresas Empresas
+                --
+                - vccodigoCaja: String
+                - vclongitudLatitud: String
+                - vcfechaInstalacion: String
+                --
+                + Estados estado
+                + CanalesDeComunicacion CanalDeComunicacion
+                + ConfiguracionProtocolo configuracionProtocolo
+                + ParamTiposDeComunicacion paramTiposDeComunicacion
+                + ParamAdvCon paramAdvCon
+            }
+
+            class ParamAdvCon {
+                @Id
+                - vcSerie: String
+                - vcValue: String
+                + TipoParamAdvCon tipoParamAdvCon
+            }
+
+            class TipoParamAdvCon #c4caf5 {
+                @Id
+                - ncod: Long
+                - vcDescripcion: String
+            }
+
+            class ConfiguracionProtocolo {
+                - nid: Long
+                - vcdireccionFisica: String
+                - vcdireccionLogica: String
+                - vcdireccionCliente: String
+                + NodeBytesdeDireccion nodeBytesdeDireccion
+            }
+        }
+
+        package "com.metrolink.ami_api.models.procesos" {
+
+            package "com.metrolink.ami_api.models.procesos.primeraLectura" {
+                class AutoconfMedidor #fcf0cf {
+                    - vcSerie: String
+                    + AutoConfCanalesPerfilCarga autoConfcanalesPerfilCarga
+                    - vcfechaHoraUltimaLectura: String
+                    - vcdíasdeRegDíariosMensuales: String
+                    - vcdiasdeEventos: String
+                    - vcperiodoIntegra: String
+                    - vcultimoEstadoRe: String
+                    - vcfirmware: String
+                }
+
+                class AutoConfCanalesPerfilCarga #fcf0cf {
+                    + CodigosObisCanal codigosObisCanal_1
+                    + CodigosObisCanal codigosObisCanal_2
+                    + CodigosObisCanal codigosObisCanal_3
+                }
+
+                class AutoConfCodigosObisCanal #fcf0cf {
+                    - vcobis_1: String
+                    - vcobis_2: String
+                    - vcobis_3: String
+                    - vcobis_4: String
+                    - vcobis_5: String
+                    - vcobis_6: String
+                    - vcobis_7: String
+                    - vcobis_8: String
+                    - vcobis_9: String
+                    - vcobis_10: String
+                }
+            }
+
+            package "com.metrolink.ami_api.models.procesos.programacionesAmi" {
+                class ProgramacionesAMI #ffdee8 {
+                    - ncodigo: Long
+                    - vcestado: String
+                    + GruposMedidores grupoMedidores
+                    + ListasPeticiones listaPeticiones
+                    + ParametrizacionesProg parametrizacionProg
+                }
+
+                class ParametrizacionesProg {
+                    - ncodigo: Long
+                    - vctipoDeLectura: String
+                    - vcfechaInicio: String
+                    - vchoraInicio: String
+                    - nreintentos: int
+                    - vcdiasSemana: String
+                    - vcfrecuencia: String
+                }
+
+                class ListasPeticiones #ff6b6b {
+                    - ncodigo: Long
+                    - llectura_perfil_1: boolean
+                    - leventos: boolean
+                    - lregistros: boolean
+                    - lfactorPotencia: boolean
+                    - linstantaneos: boolean
+                    - vcaccionRele: String
+                    - vcfechaSincronizacion: String
+                    - vchoraSincronizacion: String
+                }
+
+                class AgendaProgramacionesAMI #e8ffde {
+                    - ncodigo: Long
+                    + ProgramacionesAMI ProgramacionAMI
+                    + EstadosHoy estadoHoy
+                }
+
+                class EstadosHoy {
+                    - ncodigo: Long
+                    - lproximo: boolean
+                    - vcfechaProximo: String
+                    - vchoraProximo: String
+                }
+            }
+
+            class GrupoMedidores #6ae7f7 {
+                nid: long
+                vcfiltro: String
+                vcSeriesMed: String
+            }
+        }
+
+        package "com.metrolink.ami_api.models.tablasFront" #f5f1e4 {
+            class Marcas #FFB3D9 {
+                - ncodigo: Long
+                - vcmarca: String
+                - vcconcat: String
+            }
+
+            class Empresas #A5D4A5 {
+                - ncodigo: Long
+                - vcempresa: String
+                - vcconcat: String
+            }
+
+            class Estados #D4A5D4 {
+                - ncodigo: Long
+                - vcestado: String
+                - vcconcat: String
+            }
+
+            class CanalesDeComunicacion #D4C9A5 {
+                - ncodigo: Long
+                - vccanalDeComunicacion: String
+                - vcconcat: String
+            }
+
+            class TiposDeComunicacion #A5D4DF {
+                - ncodigo: Long
+                - vctiposDeComunicacion: String
+                - vcconcat: String
+            }
+
+            class ParamTipoDeComunicacion {
+                - vctiposDeComunicacion: String
+                - vcip: String
+                - vcpuerto: String
+                - vcendpoint: String
+            }
+
+            class NodeBytesdeDireccion #c3ed8c {
+                - ncodigo: Long
+                - vcnodeBytesdeDirección: String
+                - vcconcat: String
+            }
+        }
+
+        package "com.metrolink.ami_api.models.tablasFrontMed" #f595c2 {
+            class MarcasMed #7efcf4 {
+                - ncodigo: Long
+                - vcmarcaMed: String
+                - vcconcat: String
+            }
+
+            class UbicacionesEnInfra #bffc7e {}
+
+            class ViasObtencionDatos #fcce7e {
+                - ncodigo: Long
+                - vcviaObtencionDatos: String
+                - vcconcat: String
+            }
+
+            class TiposDeModuloDeCom #fc7e99 {
+                - ncodigo: Long
+                - vctiposDeModuloDeCom: String
+                - vcconcat: String
+            }
+        }
+    }
+
+    package "com.metrolink.ami_api.controllers" #c4eef5 {
+
+        package "com.metrolink.ami_api.controllers.concentrador" #d7f7e6 {
+            class ConcentradoresController #FFB3BA {
+                + ConcentradoresService concentradoresService
+                * createConcentrador(concentrador: Concentrador): Concentrador
+                * getAllConcentradores(): List<Concentrador>
+                * getConcentradorById(id: Long): Concentrador
+                * updateConcentrador(id: Long, concentradorDetails: Concentrador): Concentrador
+                * deleteConcentrador(id: Long): void
+            }
+
+            class TipoParamAdvConController #c4caf5 {
+                + TipoParamAdvConService tipoParamAdvConService
+                * getAllTipoParamAdvCon(): List<TipoParamAdvCon>
+                * getTipoParamAdvConById(id: Long): TipoParamAdvCon
+            }
+        }
+
+        package "com.metrolink.ami_api.controllers.medidor" {
+            class MedidoresController #FFFFBA {
+                + MedidoresService medidoresService
+                * createMedidor(medidores: Medidores): Medidores
+                * getAllMedidores(): List<Medidores>
+                * getMedidorById(vcSerie: String): Medidores
+                * updateMedidor(vcSerie: String, medidorDetails: Medidores): Medidores
+                * deleteMedidor(vcSerie: String): void
+            }
+
+            class TipoParamAdvMedController #c4caf5 {
+                + TipoParamAdvMedService tipoParamAdvMedService
+                * getAllTipoParamAdvMed(): List<TipoParamAdvMed>
+                * getTipoParamAdvMedById(ncod: Long): TipoParamAdvMed
+            }
+        }
+
+        package "com.metrolink.ami_api.controllers.tablasFront" #f5f1e4 {
+            class MarcasController #FFB3D9 {
+                + MarcasService marcasService
+                * createMarca(marcas: Marcas): Marcas
+                * getAllMarcas(): List<Marcas>
+                * getMarcaById(id: Long): Marcas
+                * updateMarca(id: Long, marcaDetails: Marcas): Marcas
+                * deleteMarca(id: Long): void
+            }
+
+            class EmpresasController #A5D4A5 {
+                + EmpresasService empresasService
+                * createEmpresa(empresas: Empresas): Empresas
+                * getAllEmpresas(): List<Empresas>
+                * getEmpresaById(id: Long): Empresas
+                * updateEmpresa(id: Long, empresaDetails: Empresas): Empresas
+                * deleteEmpresa(id: Long): void
+            }
+
+            class EstadosController #D4A5D4 {
+                + EstadosService estadosService
+                * createEstado(estado: Estados): Estados
+                * getAllEstados(): List<Estados>
+                * getEstadoById(id: Long): Estados
+                * updateEstado(id: Long, estadoDetails: Estados): Estados
+                * deleteEstado(id: Long): void
+            }
+
+            class CanalesDeComunicacionController #D4C9A5 {
+                + CanalesDeComunicacionService canalesDeComunicacionService
+                * createCanalDeComunicacion(canal: CanalesDeComunicacion): CanalesDeComunicacion
+                * getAllCanalesDeComunicacion(): List<CanalesDeComunicacion>
+                * getCanalDeComunicacionById(id: Long): CanalesDeComunicacion
+                * updateCanalDeComunicacion(id: Long, canalDetails: CanalesDeComunicacion): CanalesDeComunicacion
+                * deleteCanalDeComunicacion(id: Long): void
+            }
+
+            class TiposDeComunicacionController #A5D4DF {
+                + TiposDeComunicacionService tiposDeComunicacionService
+                * createTiposDeComunicacion(tipo: TiposDeComunicacion): TiposDeComunicacion
+                * getAllTiposDeComunicacion(): List<TiposDeComunicacion>
+                * getTiposDeComunicacionById(id: Long): TiposDeComunicacion
+                * updateTiposDeComunicacion(id: Long, tipoDetails: TiposDeComunicacion): TiposDeComunicacion
+                * deleteTiposDeComunicacion(id: Long): void
+            }
+
+            class NodeBytesdeDireccionController #c3ed8c {
+                + NodeBytesdeDireccionService nodeBytesdeDireccionService
+                * createNodeBytesdeDireccion(nodeBytesdeDireccion: NodeBytesdeDireccion): NodeBytesdeDireccion
+                * getAllNodeBytesdeDireccion(): List<NodeBytesdeDireccion>
+                * getNodeBytesdeDireccionById(id: Long): NodeBytesdeDireccion
+                * updateNodeBytesdeDireccion(id: Long, nodeBytesdeDireccionDetails: NodeBytesdeDireccion): NodeBytesdeDireccion
+                * deleteNodeBytesdeDireccion(id: Long): void
+            }
+        }
+
+        package "com.metrolink.ami_api.controllers.procesos" {
+            package "com.metrolink.ami_api.controllers.procesos.deteccionMed" {
+                class DeteccionMedController #cfd4fc {
+                    + DeteccionMedService deteccionMedService
+                    * recibirConcentrador(request: HttpServletRequest): ResponseEntity<List<Medidores>>
+                }
+            }
+
+            package "com.metrolink.ami_api.controllers.procesos.autoconfiguracion" {
+                class AutoConfiguracionController #fcf0cf {
+                    + AutoConfiguracionService autoConfiguracionService
+                    * recibirConfiguracion(request: HttpServletRequest): ResponseEntity<List<AutoconfMedidor>>
+                }
+            }
+        }
+    }
+
+    package "com.metrolink.ami_api.services" #f5d0d0 {
+
+        package "com.metrolink.ami_api.services.concentrador" #d7f7e6 {
+            class ConcentradoresService #FFB3BA {
+                + ConcentradoresRepository concentradoresRepository
+                * save(concentrador: Concentrador, isUpdate: boolean): Concentrador
+                * findAll(): List<Concentrador>
+                * findById(id: Long): Optional<Concentrador>
+                * update(vcnoSerie: String, concentradorDetails: Concentradores)
+                * deleteById(id: Long): void
+            }
+
+            class TipoParamAdvConService #c4caf5 {
+                + TipoParamAdvConRepository tipoParamAdvConRepository
+                * findAll(): List<TipoParamAdvCon>
+                * findById(ncod: Long): Optional<TipoParamAdvCon>
+            }
+        }
+
+        package "com.metrolink.ami_api.services.medidor" {
+            class MedidoresService #FFFFBA {
+                + MedidoresRepository medidoresRepository
+                * save(medidores: Medidores, isUpdate: boolean): Medidores
+                * findAll(): List<Medidores>
+                * findById(vcSerie: String): Optional<Medidores>
+                * update(vcSerie: String, medidorDetails: Medidores)
+                * deleteById(vcSerie: String): void
+            }
+
+            class TipoParamAdvMedService #c4caf5 {
+                + TipoParamAdvMedRepository tipoParamAdvMedRepository
+                * findAll(): List<TipoParamAdvMed>
+                * findById(ncod: Long): Optional<TipoParamAdvMed>
+            }
+        }
+
+        package "com.metrolink.ami_api.services.procesos" {
+            package "com.metrolink.ami_api.services.procesos.deteccionMed" {
+                class DeteccionMedService #cfd4fc {
+                    + ConectorDetecMedService conectorDetecMedService
+                    + MedidoresService medidoresService
+                    + ConcentradoresService concentradoresService
+                    - static final Logger logger = LoggerConfigProcesos
+                    * procesarDeteccionByCon(json: String): List<Medidores>
+                }
+
+                class ConectorDetecMedService #84f086 {
+                    "Metodo Provicional"
+                    * usarConectorDeteccion(json: String): String
+                }
+            }
+
+            package "com.metrolink.ami_api.services.procesos.autoconfiguracion" {
+                class AutoConfiguracionService #fcf0cf {
+                    + ConectorAutoConfService conectorAutoConfService
+                    + MedidoresRepository medidoresRepository
+                    + MedidoresService medidoresService
+                    * procesarConfiguracion(rootNode: JsonNode): List<AutoconfMedidor>
+                }
+
+                class ConectorAutoConfService #84f086 {
+                    + MedidoresService medidoresService
+                    "Metodos provicionales"
+                    * procesarConfiguracion(json: String): List<AutoconfMedidor>
+                    * crearAutoconfMedidor(vcSerie: String, random: Random): AutoconfMedidor
+                    * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
+                }
+            }
+        }
+
+        package "com.metrolink.ami_api.services.tablasFront" #f5f1e4 {
+            class MarcasService #FFB3D9 {
+                + MarcasRepository marcasRepository
+                * save(marcas: Marcas, boolean isUpdate): Marcas
+                * findAll(): List<Marcas>
+                * findById(id: Long): Optional<Concentrador>
+                * update(id: Long, marcaDetails: Marcas)
+                * deleteById(id: Long): void
+            }
+
+            class EmpresasService #A5D4A5 {
+                + EmpresasRepository empresasRepository
+                * save(empresas: Empresas, boolean isUpdate): Empresas
+                * findAll(): List<Empresas>
+                * findById(id: Long): Optional<Empresas>
+                * update(id: Long, empresaDetails: Empresas)
+                * deleteById(id: Long): void
+            }
+
+            class EstadosService #D4A5D4 {
+                + EstadosRepository estadosRepository
+                * save(estado: Estados, boolean isUpdate): Estados
+                * findAll(): List<Estados>
+                * findById(id: Long): Optional<Estados>
+                * update(id: Long, estadoDetails: Estados)
+                * deleteById(id: Long): void
+            }
+
+            class CanalesDeComunicacionService #D4C9A5 {
+                + CanalesDeComunicacionRepository canalesDeComunicacionRepository
+                * save(canal: CanalesDeComunicacion, boolean isUpdate): CanalesDeComunicacion
+                * findAll(): List<CanalesDeComunicacion>
+                * findById(id: Long): Optional<CanalesDeComunicacion>
+                * update(id: Long, canalDetails: CanalesDeComunicacion)
+                * deleteById(id: Long): void
+            }
+
+            class TiposDeComunicacionService #A5D4DF {
+                + TiposDeComunicacionRepository tiposDeComunicacionRepository
+                * save(tipo: TiposDeComunicacion, boolean isUpdate): TiposDeComunicacion
+                * findAll(): List<TiposDeComunicacion>
+                * findById(id: Long): Optional<TiposDeComunicacion>
+                * update(id: Long, tipoDetails: TiposDeComunicacion)
+                * deleteById(id: Long): void
+            }
+
+            class NodeBytesdeDireccionService #c3ed8c {
+                + NodeBytesdeDireccionRepository nodeBytesdeDireccionRepository
+                * save(nodeBytesdeDireccion: NodeBytesdeDireccion, boolean isUpdate): NodeBytesdeDireccion
+                * findAll(): List<NodeBytesdeDireccion>
+                * findById(id: Long): Optional<NodeBytesdeDireccion>
+                * update(id: Long, nodeBytesdeDireccionDetails: NodeBytesdeDireccion)
+                * deleteById(id: Long): void
+            }
+        }
+    }
+
+    package "com.metrolink.ami_api.comunications" {
+        package "com.metrolink.ami_api.comunications.tcp" {
+            class TcpClientService {
+            }
+        }
+    }
+
+    package "com.metrolink.ami_api.repositories" #fdffd9 {
+        package "com.metrolink.ami_api.repositories.concentrador" #d7f7e6 {
+            interface ConcentradoresRepository #FFB3BA {
+            }
+
+            interface TipoParamAdvConRepository #c4caf5 {
+            }
+        }
+
+        package "com.metrolink.ami_api.repositories.medidor" {
+            interface MedidoresRepository #FFFFBA {
+            }
+
+            interface TipoParamAdvMedRepository #c4caf5 {
+            }
+        }
+
+        package "com.metrolink.ami_api.repositories.tablasFront" #f5f1e4 {
+            interface MarcasRepository #FFB3D9 {
+            }
+
+            interface EmpresasRepository #A5D4A5 {
+            }
+
+            interface NodeBytesdeDireccionRepository #c3ed8c {
+            }
+
+            interface EstadosRepository #D4A5D4 {
+            }
+
+            interface CanalesDeComunicacionRepository #D4C9A5 {
+            }
+
+            interface TiposDeComunicacionRepository #A5D4DF {
+            }
+        }
+    }
+}
+
+Concentradores::vcSerie --> ParamAdvCon::vcSerie #FF6A6D
+Concentradores --> Marcas #FF3A42
+Concentradores --> Empresas #83A083
+Concentradores --> Estados #9C719C
+Concentradores --> CanalesDeComunicacion #A3864D
+Concentradores --> ParamTipoDeComunicacion #61A7B3
+Concentradores --> ConfiguracionProtocolo #A5D4DF
+
+ConcentradoresController --> ConcentradoresService #FF6A6D
+ConcentradoresService --> Concentradores #FF6A6D
+ConcentradoresService --> ConcentradoresRepository #FF6A6D
+
+MarcasController --> MarcasService #FF3A42
+MarcasService -> Marcas #FF3A42
+MarcasService --> MarcasRepository #FF3A42
+
+EmpresasController --> EmpresasService #83A083
+EmpresasService --> Empresas #83A083
+EmpresasService --> EmpresasRepository #83A083
+
+EstadosController --> EstadosService #9C719C
+EstadosService --> Estados #9C719C
+EstadosService --> EstadosRepository #9C719C
+
+CanalesDeComunicacionController --> CanalesDeComunicacionService #A3864D
+CanalesDeComunicacionService --> CanalesDeComunicacion #A3864D
+CanalesDeComunicacionService --> CanalesDeComunicacionRepository #A3864D
+
+TiposDeComunicacionController --> TiposDeComunicacionService #61A7B3
+TiposDeComunicacionService --> TiposDeComunicacion #61A7B3
+TiposDeComunicacionService --> TiposDeComunicacionRepository #61A7B3
+
+NodeBytesdeDireccionController --> NodeBytesdeDireccionService #73905E
+NodeBytesdeDireccionService --> NodeBytesdeDireccion #73905E
+NodeBytesdeDireccionService --> NodeBytesdeDireccionRepository #73905E
+
+ConfiguracionProtocolo -> NodeBytesdeDireccion #73905E
+
+ParamTipoDeComunicacion --> TiposDeComunicacion #61A7B3
+
+TipoParamAdvConController --> TipoParamAdvConService #8689C3
+TipoParamAdvConService -> TipoParamAdvCon #8689C3
+TipoParamAdvConService --> TipoParamAdvConRepository #8689C3
+
+ParamAdvCon --> TipoParamAdvCon #8689C3
+
+Medidores --> Estados #9C719C
+Medidores --> MarcasMed #7DFCF1
+Medidores --> UbicacionesEnInfra #A0B068
+Medidores --> ViasObtencionDatos #EDAF2E
+Medidores --> Concentradores #FF6A6D
+Medidores --> CanalesDeComunicacion #A3864D
+Medidores --> TiposDeModuloDeCom #FC5E7F
+Medidores --> ConfiguracionProtocolo #A5D4DF
+Medidores --> ParamAdvMed #BFFFEA
+ParamAdvMed --> TipoParamAdvMed #8689C3
+
+MedidoresController --> MedidoresService #FF6A6D
+MedidoresService --> Medidores #FF6A6D
+MedidoresService --> MedidoresRepository #FF6A6D
+
+TipoParamAdvMedController --> TipoParamAdvMedService #8689C3
+TipoParamAdvMedService -> TipoParamAdvMed #8689C3
+TipoParamAdvMedService --> TipoParamAdvMedRepository #8689C3
+
+DeteccionMedController -> DeteccionMedService #CFCCFF
+DeteccionMedService -> MedidoresService #FF6A6D
+DeteccionMedService -> ConcentradoresService #FF6A6D
+DeteccionMedService -> Medidores #FF6A6D
+DeteccionMedService -> Concentradores #FF6A6D
+DeteccionMedService <-> ConectorDetecMedService #84f086
+DeteccionMedService -> LoggerConfigProcesos #FCF8D0
+
+AutoConfiguracionController --> AutoConfiguracionService #FCD8AF
+AutoConfiguracionService -> MedidoresService #FF6A6D
+AutoConfiguracionService --> MedidoresRepository #FF6A6D
+AutoConfiguracionService -> CanalesPerfilCarga #C1BBC9
+AutoConfiguracionService -> CodigosObisCanal #C1BBC9
+AutoConfiguracionService -> Medidores #FF6A6D
+AutoConfiguracionService -> AutoConfCanalesPerfilCarga #FCF0CF
+AutoConfiguracionService -> AutoConfCodigosObisCanal #FCF0CF
+AutoConfiguracionService -> AutoconfMedidor #FCF0CF
+AutoConfiguracionService <-> ConectorAutoConfService #84f086
+
+ConectorAutoConfService -> Medidores #FF6A6D
+ConectorAutoConfService -> AutoConfCanalesPerfilCarga #FCF0CF
+ConectorAutoConfService -> AutoConfCodigosObisCanal #FCF0CF
+ConectorAutoConfService -> AutoconfMedidor #FCF0CF
+ConectorAutoConfService -> MedidoresService #FF6A6D
+
+ProgramacionesAMI --> GrupoMedidores #6aceef
+ProgramacionesAMI --> ListasPeticiones #fc9b9b
+ProgramacionesAMI --> ParametrizacionesProg #ff9baf
+
+AgendaProgramacionesAMI -> ProgramacionesAMI #d6fede
+AgendaProgramacionesAMI --> EstadosHoy #d6fede
+
+Medidores --> AgendaProgramacionesAMI #d6fede
+Medidores --> CanalesPerfilCarga #C1BBC9
+CanalesPerfilCarga --> CodigosObisCanal #C1BBC9
+CanalesPerfilCarga --> CodigosObisCanal #C1BBC9
+CanalesPerfilCarga --> CodigosObisCanal #C1BBC9
+
+AutoconfMedidor --> AutoConfCanalesPerfilCarga #fcf0cf
+AutoConfCanalesPerfilCarga --> AutoConfCodigosObisCanal #fcf0cf
+AutoConfCanalesPerfilCarga --> AutoConfCodigosObisCanal #fcf0cf
+AutoConfCanalesPerfilCarga --> AutoConfCodigosObisCanal #fcf0cf
+
+
+
+@enduml

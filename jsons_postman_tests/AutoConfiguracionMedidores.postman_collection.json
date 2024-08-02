@@ -49,7 +49,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcnoSerie\": \"7256\",\r\n    \"vcseriales\": {\r\n        \"vcserie1\": \"38516\",\r\n        \"vcserie2\": \"32470\",\r\n        \"vcserie3\": \"71542\"\r\n       \r\n        \r\n    }\r\n}",
+					"raw": "{\r\n    \"vcnoSerie\": \"7256\",\r\n    \"vcseriales\": {\r\n        \"vcserie1\": \"47722\"\r\n        // \"vcserie2\": \"32470\",\r\n        // \"vcserie3\": \"71542\"\r\n       \r\n        \r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

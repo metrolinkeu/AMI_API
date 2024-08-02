@@ -1,0 +1,164 @@
+{
+	"info": {
+		"_postman_id": "977f1924-3905-4d62-8bab-a42c0000ea2a",
+		"name": "CrudProgramacionesAmi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36280962"
+	},
+	"item": [
+		{
+			"name": "CrearProgramacionAmi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0,\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Por Concentrador\", // Concentrador, sic o lista de medidores\r\n        \"vcnoSerie\" : \"7256\",\r\n        \"vcSeriesMed\": \"12345,67890,11121\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\",  //Activar = Cerrar y Desactivar = Abrir\r\n        \"vcfechaSincronizacion\": \"2024-08-01\",\r\n        \"vchoraSincronizacion\": \"12:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"Lectura única\",  // Lectura única, Lectura frecuente no recurrente y Lectura recurrente \r\n        \"vcfechaInicio\": \"2024-08-01\",\r\n        \"vchoraInicio\": \"14:00\",\r\n        \"nreintentos\": 3,\r\n        \"vcdiasSemana\": \"Lunes,Miércoles,Viernes\",\r\n        \"vcfrecuencia\": \"semanal\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ListarProgramacionesAmi",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar_ProgramacionPorCodigo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/tiposDeModuloDeCom/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"tiposDeModuloDeCom",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actuali_programacion_PorCodigo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Por Concentrador\", // Concentrador, sic o lista de medidores\r\n        \"vcnoSerie\" : \"7256\",\r\n        \"vcSeriesMed\": \"12345,67890,11121\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\",  //Activar = Cerrar y Desactivar = Abrir\r\n        \"vcfechaSincronizacion\": \"2024-08-01\",\r\n        \"vchoraSincronizacion\": \"12:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"Lectura única\",  // Lectura única, Lectura frecuente no recurrente y Lectura recurrente \r\n        \"vcfechaInicio\": \"2024-08-01\",\r\n        \"vchoraInicio\": \"14:00\",\r\n        \"nreintentos\": 3,\r\n        \"vcdiasSemana\": \"Lunes,Miércoles,Viernes\",\r\n        \"vcfrecuencia\": \"Diaria\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Borrar_Programacion_PorCodigo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"marca\": \"MarcaActualizada\",\r\n    \"concat\": \"ConcatenadoActualizado\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

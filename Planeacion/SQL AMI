@@ -20,6 +20,18 @@ DROP TABLE ami_m_medidores CASCADE CONSTRAINTS;
 DROP TABLE ami_m_tipo_param_adv_med CASCADE CONSTRAINTS;
 DROP TABLE ami_mov_param_adv_med CASCADE CONSTRAINTS;
 
+
+DROP TABLE AMI_MOV_PROGRAMACIONESAMI CASCADE CONSTRAINTS;
+DROP TABLE AMI_MOV_GRUPOS_MEDIDORES CASCADE CONSTRAINTS;
+DROP TABLE AMI_MOV_LISTAS_PETICIONES CASCADE CONSTRAINTS;
+DROP TABLE AMI_MOV_PARAMETRIZACIONES_PROG CASCADE CONSTRAINTS;
+
+DROP TABLE AMI_MOV_AGENDA_PROGRAMACIONESAMI CASCADE CONSTRAINTS;
+DROP TABLE AMI_MOV_estados_hoy CASCADE CONSTRAINTS;
+
+
+
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

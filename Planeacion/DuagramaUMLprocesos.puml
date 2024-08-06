@@ -143,6 +143,15 @@ package "com.metrolink.ami_api" {
                 - vcfechaProximo: String
                 - vchoraProximo: String
             }
+
+            class MedidoresAgenda {
+                - vcSerie: String
+                + AgendaProgramacionesAMI enAgendaProgramacionesAMI
+                - estadoEnAgenda: String
+            }
+
+
+            
         }
         !endif
 

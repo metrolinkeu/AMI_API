@@ -1,8 +1,11 @@
 @startuml "API__procesos"
 
 !define SHOW_PART_PROCESOS 1
-
-
+!define SHOW_CONCENTRADOR 1
+!define SHOW_MEDIDOR 1
+!define SHOW_AUTOCONF 1
+!define SHOW_PROGRAMACIONES_AMI 1
+!define SHOW_COMUNCIATIONS 1
 
 package "com.metrolink.ami_api" {
 
@@ -16,10 +19,8 @@ package "com.metrolink.ami_api" {
 
     package "com.metrolink.ami_api.models" #f1f5f0{
 
-
-
-
-        package "com.metrolink.ami_api.models.medidor"{
+        !if SHOW_MEDIDOR
+        package "com.metrolink.ami_api.models.medidor" #fadb9d{
             class Medidores #FFFFBA {
                 - vcSerie: String
                 - vcidCliente: String
@@ -44,20 +45,19 @@ package "com.metrolink.ami_api" {
                 + TiposDeModuloDeCom tipoDeModuloDeCom
                 + ConfiguracionProtocolo configuracionProtocolo
                 + ParamAdvMed paramAdvMed
-                + AgendaProgramacionesAMI AgendaProgramacionAMI
+                + AgendaProgramacionesAMI enAgendaProgramacionesAMI
+                - estadoEnAgenda: String
                 - vcsic: String
                 + CanalesPerfilCarga canalesPerfilCarga
                 @Transient
                 - esExistente: Boolean
-
             }
 
             class CanalesPerfilCarga #c1bbc9 {
                 - nid: Long
                 + CodigosObisCanal codigosObisCanal_1
-                + CodigosObisCanal codigosObisCanal_2
-                + CodigosObisCanal codigosObisCanal_3
-
+                + CodigosObisCanal codigosObiscanal_2
+                + CodigosObisCanal codigosObiscanal_3
             }
 
             class CodigosObisCanal #c1bbc9{
@@ -73,9 +73,10 @@ package "com.metrolink.ami_api" {
                 - vcobis_9: String
                 - vcobis_10: String
             }
-
-
         }
+        !endif
+
+        !if SHOW_CONCENTRADOR
         package "com.metrolink.ami_api.models.concentrador" #d7f7e6{
             class Concentradores #FFB3BA {
                 @Id
@@ -96,119 +97,92 @@ package "com.metrolink.ami_api" {
                 + ParamAdvCon paramAdvCon
             }
         }
+        !endif
 
-        package "com.metrolink.ami_api.models.procesos"{
-
-            package "com.metrolink.ami_api.models.procesos.primeraLectura"{
-                class AutoconfMedidor #fcf0cf{
-                    - vcSerie: String
-                    + AutoConfCanalesPerfilCarga autoConfcanalesPerfilCarga
-                    - vcfechaHoraUltimaLectura: String
-                    - vcdíasdeRegDíariosMensuales: String
-                    - vcdiasdeEventos: String
-                    - vcperiodoIntegra: String
-                    - vcultimoEstadoRe: String
-                    - vcfirmware: String
-                }
-
-
-                class AutoConfCanalesPerfilCarga #fcf0cf{
-                    + CodigosObisCanal codigosObisCanal_1
-                    + CodigosObisCanal codigosObisCanal_2
-                    + CodigosObisCanal codigosObisCanal_3
-                }
-
-                class AutoConfCodigosObisCanal #fcf0cf{
-                    - vcobis_1: String
-                    - vcobis_2: String
-                    - vcobis_3: String
-                    - vcobis_4: String
-                    - vcobis_5: String
-                    - vcobis_6: String
-                    - vcobis_7: String
-                    - vcobis_8: String
-                    - vcobis_9: String
-                    - vcobis_10: String
-                }
-
-
-
+        !if SHOW_PROGRAMACIONES_AMI
+        package "com.metrolink.ami_api.models.procesos.programacionesAmi" #a1c7c9{
+            class ProgramacionesAMI  #ffdee8 {
+                - ncodigo : Long
+                - vcestado: String
+                + GruposMedidores grupoMedidores
+                + ListasPeticiones listaPeticiones
+                + ParametrizacionesProg parametrizacionProg
             }
 
-
-            package "com.metrolink.ami_api.models.procesos.programacionesAmi"{
-                class ProgramacionesAMI  #ffdee8 {
-                    - ncodigo : Long
-                    - vcestado: String
-                    + GruposMedidores grupoMedidores
-                    + ListasPeticiones listaPeticiones
-                    + ParametrizacionesProg parametrizacionProg
-
-                }
-
-                class ParametrizacionesProg {
-                    - ncodigo : Long
-                    - vctipoDeLectura: String
-                    - vcfechaInicio: String
-                    - vchoraInicio: String
-                    - nreintentos: int
-                    - vcdiasSemana: String
-                    - vcfrecuencia: String
-                }
-
-
-
-                class ListasPeticiones  #ff6b6b {
-                    - ncodigo: Long
-                    - llectura_perfil_1 :  boolean
-                    - leventos : boolean
-                    - lregistros : boolean
-                    - lfactorPotencia : boolean
-                    - linstantaneos : boolean
-                    - vcaccionRele: String
-                    - vcfechaSincronizacion: String
-                    - vchoraSincronizacion: String
-                }
-
-                class AgendaProgramacionesAMI  #e8ffde {
-                    - ncodigo : Long
-                    + ProgramacionesAMI ProgramacionAMI
-                    + EstadosHoy estadoHoy
-                }
-
-
-                class EstadosHoy{
-                    - ncodigo: Long
-                    - lproximo: boolean
-                    - vcfechaProximo: String
-                    - vchoraProximo: String
-                }
-
-
-
+            class ParametrizacionesProg {
+                - ncodigo : Long
+                - vctipoDeLectura: String
+                - vcfechaInicio: String
+                - vchoraInicio: String
+                - nreintentos: int
+                - vcdiasSemana: String
+                - vcfrecuencia: String
             }
 
-
-            class GrupoMedidores #6ae7f7{
-                nid: long
-                vcfiltro: String
-                vcSeriesMed: String
+            class ListasPeticiones  #ff6b6b {
+                - ncodigo: Long
+                - llectura_perfil_1 :  boolean
+                - leventos : boolean
+                - lregistros : boolean
+                - lfactorPotencia : boolean
+                - linstantaneos : boolean
+                - vcaccionRele: String
+                - vcfechaSincronizacion: String
+                - vchoraSincronizacion: String
             }
 
+            class AgendaProgramacionesAMI  #e8ffde {
+                - ncodigo : Long
+                + ProgramacionesAMI ProgramacionAMI
+                + EstadosHoy estadoHoy
+            }
 
-        }
-        package "com.metrolink.ami_api.models.tablasFrontMed" #f595c2 {
-            class ViasObtencionDatos #fcce7e{
-                -ncodigo: Long
-                -vcviaObtencionDatos : String
-                -vcconcat : String
+            class EstadosHoy{
+                - ncodigo: Long
+                - lproximo: boolean
+                - vcfechaProximo: String
+                - vchoraProximo: String
             }
         }
+        !endif
+
+        !if SHOW_AUTOCONF
+        package "com.metrolink.ami_api.models.procesos.primeraLectura" #b5eaf5{
+            class AutoconfMedidor #fcf0cf{
+                - vcSerie: String
+                + AutoConfCanalesPerfilCarga autoConfcanalesPerfilCarga
+                - vcfechaHoraUltimaLectura: String
+                - vcdíasdeRegDíariosMensuales: String
+                - vcdiasdeEventos: String
+                - vcperiodoIntegra: String
+                - vcultimoEstadoRe: String
+                - vcfirmware: String
+            }
+
+            class AutoConfCanalesPerfilCarga #fcf0cf{
+                + CodigosObisCanal codigosObisCanal_1
+                + CodigosObisCanal codigosObisCanal_2
+                + CodigosObisCanal codigosObisCanal_3
+            }
+
+            class AutoConfCodigosObisCanal #fcf0cf{
+                - vcobis_1: String
+                - vcobis_2: String
+                - vcobis_3: String
+                - vcobis_4: String
+                - vcobis_5: String
+                - vcobis_6: String
+                - vcobis_7: String
+                - vcobis_8: String
+                - vcobis_9: String
+                - vcobis_10: String
+            }
+        }
+        !endif
     }
 
-
     package "com.metrolink.ami_api.controllers" #c4eef5{
-
+        !if SHOW_CONCENTRADOR
         package "com.metrolink.ami_api.controllers.concentrador" #d7f7e6{
             class ConcentradoresController #FFB3BA  {
                 + ConcentradoresService concentradoresService
@@ -219,8 +193,10 @@ package "com.metrolink.ami_api" {
                 * deleteConcentrador(id: Long) : void
             }
         }
+        !endif
 
-        package "com.metrolink.ami_api.controllers.medidor"{
+        !if SHOW_MEDIDOR
+        package "com.metrolink.ami_api.controllers.medidor" #fadb9d{
             class MedidoresController #FFFFBA{
                 + MedidoresService medidoresService
                 * createMedidor(medidores: Medidores): Medidores
@@ -230,29 +206,55 @@ package "com.metrolink.ami_api" {
                 * deleteMedidor(vcSerie: String) : void
             }
         }
+        !endif
 
         !if SHOW_PART_PROCESOS
-        package "com.metrolink.ami_api.controllers.procesos"{
-            package "com.metrolink.ami_api.controllers.procesos.deteccionMed"{
+        package "com.metrolink.ami_api.controllers.procesos" #a0c8fa{
+            package "com.metrolink.ami_api.controllers.procesos.deteccionMed" #eaebdf{
                 class DeteccionMedController #cfd4fc{
                     + DeteccionMedService deteccionMedService
                     * recibirConcentrador(request: HttpServletRequest): ResponseEntity<List<Medidores>>
-
                 }
             }
-            package "com.metrolink.ami_api.controllers.procesos.autoconfiguracion"{
+
+            !if SHOW_AUTOCONF
+            package "com.metrolink.ami_api.controllers.procesos.autoconfiguracion"#889996{
                 class AutoConfiguracionController #fcf0cf {
                     + AutoConfiguracionService autoConfiguracionService
                     * recibirConfiguracion(request: HttpServletRequest): ResponseEntity<List<AutoconfMedidor>>
-
                 }
             }
+            !endif
+
+            !if SHOW_PROGRAMACIONES_AMI
+            package "com.metrolink.ami_api.controllers.procesos.programacionesAmi" #a1c7c9 {
+                class AgendaProgramacionesAMIController #efd6ff{
+                    + AgendaProgramacionesAMIService agendaProgramacionesAMIService
+                    + AgendaProgramacionesAMI
+                    * createAgendaProgramacionesAMI(agendaProgramacionesAMI: AgendaProgramacionesAMI): AgendaProgramacionesAMI
+                    * getAllAgendaProgramacionesAMI(): List<AgendaProgramacionesAMI>
+                    * getAgendaProgramacionesAMIById(id: Long): AgendaProgramacionesAMI
+                    * updateAgendaProgramacionesAMI(id: Long, agendaProgramacionesAMIDetails: AgendaProgramacionesAMI ): AgendaProgramacionesAMI
+                    * deleteAgendaProgramacionesAMI(id: Long): Void
+                }
+
+                class ProgramacionesAMIController #e6ffd6{
+                    + ProgramacionesAMIService programacionesAMIService
+                    + ProgramacionesAMI
+                    * createProgramacionAMI(programacionAMI: ProgramacionesAMI): ProgramacionesAMI
+                    * getAllProgramacionesAMI(): List<ProgramacionesAMI>
+                    * getProgramacionAMIById(id: Long): ProgramacionesAMI
+                    * updateProgramacionAMI(id: Long, programacionAMIDetails: ProgramacionesAMI): ProgramacionesAMI
+                    * deleteProgramacionAMI(id: Long): Void
+                }
+            }
+            !endif
         }
         !endif
     }
 
     package "com.metrolink.ami_api.services" #f5d0d0 {
-
+        !if SHOW_CONCENTRADOR
         package "com.metrolink.ami_api.services.concentrador" #d7f7e6 {
             class ConcentradoresService #FFB3BA {
                 + ConcentradoresRepository concentradoresRepository
@@ -263,8 +265,10 @@ package "com.metrolink.ami_api" {
                 * deleteById(id : Long): void
             }
         }
+        !endif
 
-        package "com.metrolink.ami_api.services.medidor"  {
+        !if SHOW_MEDIDOR
+        package "com.metrolink.ami_api.services.medidor" #fadb9d  {
             class MedidoresService #FFFFBA {
                 + MedidoresRepository medidoresRepository
                 * save(medidores: Medidores, isUpdate : boolean ): Medidores
@@ -274,10 +278,11 @@ package "com.metrolink.ami_api" {
                 * deleteById(vcSerie : String): void
             }
         }
+        !endif
 
         !if SHOW_PART_PROCESOS
-        package "com.metrolink.ami_api.services.procesos"{
-            package "com.metrolink.ami_api.services.procesos.deteccionMed"{
+        package "com.metrolink.ami_api.services.procesos" #a0c8fa{
+            package "com.metrolink.ami_api.services.procesos.deteccionMed" #eaebdf{
                 class DeteccionMedService #cfd4fc{
                     + ConectorDetecMedService conectorDetecMedService
                     + MedidoresService medidoresService
@@ -290,15 +295,16 @@ package "com.metrolink.ami_api" {
                     * usarConectorDeteccion(json: String): String
                 }
             }
-            package "com.metrolink.ami_api.services.procesos.autoconfiguracion"{
+
+            !if SHOW_AUTOCONF
+            package "com.metrolink.ami_api.services.procesos.autoconfiguracion" #889996{
                 class AutoConfiguracionService #fcf0cf {
                     + ConectorAutoConfService conectorAutoConfService
                     + MedidoresRepository medidoresRepository
                     + MedidoresService medidoresService
                     * procesarConfiguracion(rootNode: JsonNode): List<AutoconfMedidor>
-
-
                 }
+
                 class ConectorAutoConfService #84f086{
                     + MedidoresService medidoresService
                     "Metodos provicionales"
@@ -307,47 +313,80 @@ package "com.metrolink.ami_api" {
                     * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
                 }
             }
+            !endif
+
+            !if SHOW_PROGRAMACIONES_AMI
+            package "com.metrolink.ami_api.services.procesos.programacionesAmi" #a1c7c9{
+                class ProgramacionesAMIService #e6ffd6{
+                    + ProgramacionesAMIRepository programacionesAMIRepository
+                    * save(programacionAMI: ProgramacionesAMI, isUpdate: boolean): ProgramacionesAMI
+                    * findAll(): List<ProgramacionesAMI>
+                    * findById(id: Long): ProgramacionesAMI
+                    * update(id: Long, programacionAMIDetails: ProgramacionesAMI): ProgramacionesAMI
+                    * deleteById(id: Long): Void
+                }
+
+                class AgendaProgramacionesAMIService #efd6ff {
+                    + AgendaProgramacionesAMIRepository agendaProgramacionesAMIRepository
+                    + AsignacionAgendaAMedidores asignacionAgendaAMedidores
+                    * save(agendaProgramacionesAMI: AgendaProgramacionesAMI, isUpdate: boolean): AgendaProgramacionesAMI
+                    * findAll(): List<AgendaProgramacionesAMI>
+                    * findById(id: Long): AgendaProgramacionesAMI
+                    * update(id: Long, agendaProgramacionesAMIDetails: AgendaProgramacionesAMI): AgendaProgramacionesAMI
+                    * deleteById(id: Long): Void
+                }
+
+                class AsignacionAgendaAMedidores #efd6ff {
+                    + ProgramacionesAMIService programacionesAMIService
+                    + MedidoresService medidoresService
+                    * verificarYProcesar(agenda: AgendaProgramacionesAMI): void
+                }
+            }
+            !endif
         }
         !endif
     }
 
+    !if SHOW_COMUNCIATIONS
     package "com.metrolink.ami_api.comunications" {
         package "com.metrolink.ami_api.comunications.tcp" {
             class TcpClientService {
             }
         }
     }
+    !endif
 
     package "com.metrolink.ami_api.repositories" #fdffd9{
-
+        !if SHOW_CONCENTRADOR
         package "com.metrolink.ami_api.repositories.concentrador" #d7f7e6 {
             interface ConcentradoresRepository #FFB3BA {
             }
         }
+        !endif
 
-        package "com.metrolink.ami_api.repositories.medidor"  {
+        !if SHOW_MEDIDOR
+        package "com.metrolink.ami_api.repositories.medidor" #fadb9d {
             interface MedidoresRepository #FFFFBA {
             }
         }
+        !endif
 
-        package "com.metrolink.ami_api.repositories.procesos"  {
-
+        !if SHOW_PROGRAMACIONES_AMI
+        package "com.metrolink.ami_api.repositories.procesos" #a0c8fa {
+            package "com.metrolink.ami_api.repositories.procesos.programacionesAmi" #a1c7c9{
+                interface AgendaProgramacionesAMIRepository #efd6ff{
+                }
+                interface ProgramacionesAMIRepository #e6ffd6{
+                }
+            }
         }
+        !endif
     }
-
 }
-
-
-
-
-
-
-
 
 ConcentradoresController -> ConcentradoresService : usa
 ConcentradoresService --> Concentradores : usa
 ConcentradoresService -> ConcentradoresRepository : usa
-
 
 MedidoresController -> MedidoresService : usa
 MedidoresService --> Medidores : usa
@@ -359,21 +398,18 @@ DeteccionMedService -> MedidoresService : @Autowired
 DeteccionMedService -> ConcentradoresService  : @Autowired
 DeteccionMedService -> Medidores : usa
 DeteccionMedService -> Concentradores : usa
-DeteccionMedService <-> ConectorDetecMedService : : @Autowired
+DeteccionMedService <-> ConectorDetecMedService : @Autowired
 DeteccionMedService -> LoggerConfigProcesos: usa
-
 
 AutoConfiguracionController --> AutoConfiguracionService : @Autowired
 AutoConfiguracionService -> MedidoresService : @Autowired
 AutoConfiguracionService --> MedidoresRepository : @Autowired
-
 AutoConfiguracionService -> CanalesPerfilCarga : usa
 AutoConfiguracionService -> CodigosObisCanal : usa
 AutoConfiguracionService -> Medidores : usa
 AutoConfiguracionService -> AutoConfCanalesPerfilCarga : usa
 AutoConfiguracionService -> AutoConfCodigosObisCanal : usa
 AutoConfiguracionService -> AutoconfMedidor : usa
-
 AutoConfiguracionService <-> ConectorAutoConfService : usa
 
 ConectorAutoConfService -> Medidores: usa
@@ -382,35 +418,34 @@ ConectorAutoConfService -> AutoConfCodigosObisCanal: usa
 ConectorAutoConfService -> AutoconfMedidor: usa
 ConectorAutoConfService -> MedidoresService: @Autowired
 
-
-
 ProgramacionesAMI --> GrupoMedidores: contiene
 ProgramacionesAMI --> ListasPeticiones: contiene
 ProgramacionesAMI --> ParametrizacionesProg: contiene
 
-
-
 AgendaProgramacionesAMI -> ProgramacionesAMI: contiene
 AgendaProgramacionesAMI --> EstadosHoy: contiene
 
-
-
 Medidores --> AgendaProgramacionesAMI: contiene
-
 Medidores -> CanalesPerfilCarga: contiene
 
 CanalesPerfilCarga -> CodigosObisCanal: contiene
 CanalesPerfilCarga -> CodigosObisCanal: contiene
 CanalesPerfilCarga -> CodigosObisCanal: contiene
 
-
 AutoconfMedidor -> AutoConfCanalesPerfilCarga: contiene
 AutoConfCanalesPerfilCarga -> AutoConfCodigosObisCanal: contiene
 AutoConfCanalesPerfilCarga -> AutoConfCodigosObisCanal: contiene
 AutoConfCanalesPerfilCarga -> AutoConfCodigosObisCanal: contiene
 
+ProgramacionesAMIController --> ProgramacionesAMIService: @Autowired
+ProgramacionesAMIService --> ProgramacionesAMIRepository: @Autowired
 
+AgendaProgramacionesAMIController --> AgendaProgramacionesAMIService: @Autowired
 
+AgendaProgramacionesAMIService -> AsignacionAgendaAMedidores: @Autowired
+AgendaProgramacionesAMIService --> AgendaProgramacionesAMIRepository: @Autowired
 
+AsignacionAgendaAMedidores -> ProgramacionesAMIService: @Autowired
+AsignacionAgendaAMedidores -> MedidoresService: @Autowired
 
 @enduml

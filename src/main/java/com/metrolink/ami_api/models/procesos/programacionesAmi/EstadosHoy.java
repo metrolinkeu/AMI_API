@@ -15,6 +15,7 @@ public class EstadosHoy {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long ncodigo;
+    private String vcdescripcion;
     private boolean lproximo;
     private String vcfechaProximo;
     private String vchoraProximo;

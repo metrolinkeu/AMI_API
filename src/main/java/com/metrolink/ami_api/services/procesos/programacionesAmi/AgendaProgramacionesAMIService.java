@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AgendaProgramacionesAMIService {
@@ -15,12 +14,22 @@ public class AgendaProgramacionesAMIService {
     @Autowired
     private AgendaProgramacionesAMIRepository agendaProgramacionesAMIRepository;
 
+    @Autowired
+    private AsignacionAgendaAMedidoresService asignacionAgendaAMedidores;
+
     @Transactional
     public AgendaProgramacionesAMI save(AgendaProgramacionesAMI agendaProgramacionesAMI, boolean isUpdate) {
         if (!isUpdate && agendaProgramacionesAMI.getNcodigo() != null) {
             throw new IllegalArgumentException("ID should be null for new entities.");
         }
-        return agendaProgramacionesAMIRepository.save(agendaProgramacionesAMI);
+
+        // Guardar la agenda en la base de datos
+        AgendaProgramacionesAMI agenda = agendaProgramacionesAMIRepository.save(agendaProgramacionesAMI);
+
+        // Verificar y procesar la agenda mediante AsignacionAgendaAMedidores
+        asignacionAgendaAMedidores.verificarYProcesar(agenda);
+
+        return agenda;
     }
 
     public List<AgendaProgramacionesAMI> findAll() {

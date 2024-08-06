@@ -8,6 +8,7 @@ import javax.persistence.*;
 import com.metrolink.ami_api.models.bl.BlMovConfigActivos;
 import com.metrolink.ami_api.models.concentrador.Concentradores;
 import com.metrolink.ami_api.models.concentrador.ConfiguracionProtocolo;
+import com.metrolink.ami_api.models.procesos.programacionesAmi.AgendaProgramacionesAMI;
 import com.metrolink.ami_api.models.tablasFront.CanalesDeComunicacion;
 import com.metrolink.ami_api.models.tablasFront.Estados;
 import com.metrolink.ami_api.models.tablasFrontMed.MarcasMed;
@@ -79,6 +80,12 @@ public class Medidores {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vcSerieP", referencedColumnName = "vcSerieP")
     private ParamAdvMed paramAdvMed;
+
+    @ManyToOne
+    @JoinColumn(name = "ncodEnAgenda", referencedColumnName = "ncodigo")
+    private AgendaProgramacionesAMI enAgendaProgramacionesAMI;
+
+    private String estadoEnAgenda;
 
 
     private String vcsic;

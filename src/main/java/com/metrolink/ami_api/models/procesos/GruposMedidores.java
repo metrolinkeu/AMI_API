@@ -18,5 +18,7 @@ public class GruposMedidores {
     private Long nid;
 
     private String vcfiltro;
+    private String vcidentificador;
+
     private String vcSeriesMed;
 }

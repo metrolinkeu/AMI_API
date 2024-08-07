@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.List;
 
 import com.metrolink.ami_api.models.procesos.programacionesAmi.MedidoresAgenda;
 import com.metrolink.ami_api.services.procesos.programacionesAmi.MedidoresAgendaService;

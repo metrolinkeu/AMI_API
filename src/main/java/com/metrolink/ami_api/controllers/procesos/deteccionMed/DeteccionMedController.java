@@ -22,8 +22,7 @@ public class DeteccionMedController {
     public ResponseEntity<List<Medidores>> recibirConcentrador(HttpServletRequest request) {
         try {
             // Leer el cuerpo de la solicitud como texto
-            String json = request.getReader().lines()
-                    .reduce("", (accumulator, actual) -> accumulator + actual);
+            String json = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);
             // Procesar el JSON utilizando el servicio
             List<Medidores> MedidoresGuardados = deteccionMedService.procesarDeteccionByCon(json);
             return ResponseEntity.ok(MedidoresGuardados);

@@ -47,7 +47,7 @@ public class Concentradores {
     @JoinColumn(name = "nconfiguracionProtocolo_id", referencedColumnName = "nid")
     private ConfiguracionProtocolo configuracionProtocolo;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "vctipoDeComunicacion", referencedColumnName = "vctiposDeComunicacion")
     private ParamTiposDeComunicacion paramTiposDeComunicacion;
 

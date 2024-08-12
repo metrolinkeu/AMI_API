@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"ncodigo\": 2,\r\n    \"vccanalDeComunicacion\": \"4G\",\r\n    \"vcconcat\": \"2 -4G\"\r\n}",
+					"raw": "{\r\n    \"ncodigo\": 0,\r\n    \"vccanalDeComunicacion\": \"4G\",\r\n    \"vcconcat\": \"2 -4G\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

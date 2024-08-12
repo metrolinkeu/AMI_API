@@ -9,14 +9,42 @@ import java.util.StringJoiner;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import com.metrolink.ami_api.comunications.TcpClientDetecMedService;
+import com.metrolink.ami_api.models.concentrador.Concentradores;
+import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
 
 @Service
 public class ConectorDetecMedService {
 
     @Autowired
-    private TcpClientService tcpClientService; // Asegúrate de tener este servicio disponible
+    private TcpClientDetecMedService tcpClientDetecMedService; // Asegúrate de tener este servicio disponible
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(3); // Crear un pool de 3 threads
+    @Autowired
+    private ConcentradoresService concentradoresService;
+
+    private final ExecutorService executorService = Executors.newSingleThreadExecutor(); // Crear un pool de 1 thread
+    private final LinkedBlockingQueue<Runnable> requestQueue = new LinkedBlockingQueue<>(); // Cola para manejar las
+                                                                                            // solicitudes
+
+    public ConectorDetecMedService() {
+        // Iniciar un hilo que procesará la cola
+        executorService.submit(() -> {
+            while (true) {
+                try {
+                    // Tomar la próxima solicitud de la cola y procesarla
+                    Runnable requestTask = requestQueue.take();
+                    requestTask.run();
+                    // Pausa de 10ms después de procesar cada tarea
+                    Thread.sleep(10); // Puedes ajustar el tiempo según sea necesario
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+    }
 
     public String usarConectorDeteccion(String json) throws IOException {
         // Parsear el JSON para obtener los valores
@@ -24,29 +52,37 @@ public class ConectorDetecMedService {
         JsonNode jsonNode = objectMapper.readTree(json);
         String vcnoSerie = jsonNode.get("vcnoSerie").asText();
 
-        // Imprimir los valores
         System.out.println("vcnoSerie: " + vcnoSerie);
 
-        // Direcciones y puertos de los servidores TCP
-        String[] direcciones = { "190.145.202.42", "192.168.1.11", "192.168.1.11" };
-        int[] puertos = { 60180, 57800, 57900 }; // Reemplaza con los puertos correctos
+        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
 
-        // Bytes a enviar
-        byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x62, 0x00 };
+        System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
 
-        // Enviar los bytes a tres servidores TCP simultáneamente
-        for (int i = 0; i < direcciones.length; i++) {
-            final int index = i;
-            executorService.submit(() -> {
-                String response = tcpClientService.sendBytesToAddressAndPort(bytesToSend, direcciones[index],
-                        puertos[index]);
-                System.out.println(
-                        "\033[47;30m" + // Secuencia ANSI para fondo blanco (47) y texto negro (30)
-                                "Response from TCP server at " +
-                                "\033[0m" + // Reset de color a los valores predeterminados
-                                direcciones[index] + ":" + puertos[index] + ": " + response);
+        if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
 
+            // Direcciones y puertos de los servidores TCP
+            String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
+            int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
+
+            // Obtener direccion cliente y fisica
+            // Contraseña
+
+            // Bytes a enviar
+            byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x62, 0x00 };
+
+            // Enviar los bytes a tres servidores TCP simultáneamente
+
+            // Encolar la tarea para enviar los bytes
+            requestQueue.offer(() -> {
+                String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
+                System.out.println("\033[47;30m" +
+                        "Response from TCP server at " +
+                        "\033[0m" +
+                        direccion + ":" + puerto + ": " + response);
             });
+
+        } else {
+            System.out.println("en construccion");
         }
 
         // Generar medidores aleatorios

@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"2\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"lproximo\": true,\r\n        \"vcfechaProximo\": \"maña{a}\",\r\n        \"vchoraProximo\": \"mañana\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"81\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"vcfechaProximo\": \"por definir\",\r\n        \"vchoraProximo\": \"por definir\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -145,7 +145,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/1",
+					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +154,7 @@
 					"path": [
 						"api",
 						"agendaProgramacionesAMI",
-						"1"
+						"4"
 					]
 				}
 			},

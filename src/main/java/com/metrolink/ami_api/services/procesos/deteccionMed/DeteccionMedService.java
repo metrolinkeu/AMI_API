@@ -43,6 +43,7 @@ public class DeteccionMedService {
         // Imprimir los valores
         System.out.println("vcnoSerie: " + vcnoSerie);
 
+
         // Llamar al conector para procesar el JSON
         String jsonMed = conectorDetecMedService.usarConectorDeteccion(json);
 

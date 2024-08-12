@@ -85,7 +85,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/concentradores/7256",
+					"raw": "http://localhost:8083/api/concentradores/72562",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -94,7 +94,7 @@
 					"path": [
 						"api",
 						"concentradores",
-						"7256"
+						"72562"
 					]
 				}
 			},
@@ -107,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\r\n    \"vcdescripcion\": \" Actualizado\",\r\n    \"marca\": {\r\n        \"ncodigo\": 8\r\n    },\r\n    \"empresa\": {\r\n        \"ncodigo\": 2\r\n    },\r\n    \"vccodigoCaja\": \"1236\",\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"vcfechaInstalacion\": \"2024-07-03\",\r\n    \"estado\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"canalDeComunicacion\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"paramTiposDeComunicacion\": {\r\n        \"vctiposDeComunicacion\": \"Cliente\",\r\n        \"vcip\": \"192.168.81.11\",\r\n        \"vcpuerto\": \"9000\",\r\n        \"vcendpoint\": null,\r\n        \"tiposDeComunicacion\": {\r\n            \"ncodigo\": 1\r\n        }\r\n    },\r\n    \"configuracionProtocolo\": {\r\n        \"vcdireccionFisica\": \"123\",\r\n        \"vcdireccionLogica\": \"456\",\r\n        \"vcdireccionCliente\": \"1818\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 2\r\n        }\r\n    },\r\n   \"paramAdvCon\": {\r\n        \"vcSerie\": \"7256\",\r\n        \"vcValue\": \"0000000000000000002\",\r\n        \"tipoParamAdvCon\": {\r\n            \"ncod\" : 2\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n\r\n    \"vcdescripcion\": \" Actualizado\",\r\n    \"marca\": {\r\n        \"ncodigo\": 8\r\n    },\r\n    \"empresa\": {\r\n        \"ncodigo\": 2\r\n    },\r\n    \"vccodigoCaja\": \"1236\",\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"vcfechaInstalacion\": \"2024-07-03\",\r\n    \"estado\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"canalDeComunicacion\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"paramTiposDeComunicacion\": {\r\n        \"vctiposDeComunicacion\": \"Cliente\",\r\n        \"vcip\": \"192.168.81.11\",\r\n        \"vcpuerto\": \"9000\",\r\n        \"vcendpoint\": null,\r\n        \"tiposDeComunicacion\": {\r\n            \"ncodigo\": 1\r\n        }\r\n    },\r\n    \"configuracionProtocolo\": {\r\n        \"vcdireccionFisica\": \"123\",\r\n        \"vcdireccionLogica\": \"456\",\r\n        \"vcdireccionCliente\": \"1818\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 2\r\n        }\r\n    },\r\n   \"paramAdvCon\": {\r\n        \"vcSerie\": \"7252\",\r\n        \"vcValue\": \"0000000000000000002\",\r\n        \"tipoParamAdvCon\": {\r\n            \"ncod\" : 2\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,7 +115,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/concentradores/7256",
+					"raw": "http://localhost:8083/api/concentradores/7252",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -124,7 +124,7 @@
 					"path": [
 						"api",
 						"concentradores",
-						"7256"
+						"7252"
 					]
 				}
 			},
@@ -145,7 +145,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/concentradores/7252",
+					"raw": "http://localhost:8083/api/concentradores/7256",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +154,7 @@
 					"path": [
 						"api",
 						"concentradores",
-						"7252"
+						"7256"
 					]
 				}
 			},

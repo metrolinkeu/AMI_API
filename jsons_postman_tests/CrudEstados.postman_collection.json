@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"ncodigo\": 3,\r\n    \"vcempresa\": \"Empresay\",\r\n    \"vcconcat\": \"3 - Empresay\"\r\n}\r\n",
+					"raw": "{\r\n    \"ncodigo\": 8,\r\n    \"vcestado\": \"En mantenimiento\",\r\n    \"vcconcat\": \"8 - En mantenimiento \"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcempresa\": \"ActualizacionEmpresaz\",\r\n    \"vcconcat\": \"ActualizacionConcatenación de Empresaz\"\r\n}",
+					"raw": "{\r\n    \"vcestado\": \"En almacen\",\r\n    \"vcconcat\": \"3- En almacen\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,7 +115,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/estados/2",
+					"raw": "http://localhost:8083/api/estados/8",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -124,7 +124,7 @@
 					"path": [
 						"api",
 						"estados",
-						"2"
+						"8"
 					]
 				}
 			},
@@ -145,7 +145,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/estados/1",
+					"raw": "http://localhost:8083/api/estados/8",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +154,7 @@
 					"path": [
 						"api",
 						"estados",
-						"1"
+						"8"
 					]
 				}
 			},

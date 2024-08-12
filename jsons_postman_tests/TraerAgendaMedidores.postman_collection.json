@@ -1,19 +1,19 @@
 {
 	"info": {
-		"_postman_id": "399b9c7e-8bc2-4463-b408-8487085646a1",
-		"name": "DeteccionMedidoresbByCon",
+		"_postman_id": "317aa518-f854-4d26-9e4e-d819c9a82cd7",
+		"name": "TraerAgendaMedidores",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "36280962"
 	},
 	"item": [
 		{
-			"name": "DetectarMedidores",
+			"name": "TraerAgenda",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcnoSerie\": \"005700916\"\r\n}",
+					"raw": "{\r\n    \"vcnoSerie\": \"7256\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

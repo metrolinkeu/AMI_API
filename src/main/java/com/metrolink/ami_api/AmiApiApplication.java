@@ -18,11 +18,18 @@ public class AmiApiApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
+                // registry.addMapping("/**")
+                // .allowedOrigins("http://localhost:8086") // Permite solo este origen
+                // //.allowedOrigins("*") // Permite todos los origenes
+                // .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
+                // .allowedHeaders("*")
+                // .allowCredentials(true);
+
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8086") // Permite solo este origen 
+                        .allowedOrigins("*") // Permitir todos los orígenes
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowedHeaders("*");
+                        //.allowCredentials(true);
             }
         };
     }

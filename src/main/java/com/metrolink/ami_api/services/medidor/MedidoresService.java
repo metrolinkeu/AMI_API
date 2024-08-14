@@ -48,9 +48,9 @@ public class MedidoresService {
         medidor.setMarcaMed(medidorDetails.getMarcaMed());
         medidor.setLisMacro(medidorDetails.isLisMacro());
         medidor.setVclongitudLatitud(medidorDetails.getVclongitudLatitud());
-        medidor.setVcfechaInstalacion(medidorDetails.getVcfechaInstalacion());
+        medidor.setDfechaInstalacion(medidorDetails.getDfechaInstalacion());
         medidor.setEstado(medidorDetails.getEstado());
-        medidor.setVcfechaHoraUltimaLectura(medidorDetails.getVcfechaHoraUltimaLectura());
+        medidor.setDfechaHoraUltimaLectura(medidorDetails.getDfechaHoraUltimaLectura());
         medidor.setVcperiodoIntegracion(medidorDetails.getVcperiodoIntegracion());
         medidor.setVcultimoEstadoRele(medidorDetails.getVcultimoEstadoRele());
         medidor.setVcfirmware(medidorDetails.getVcfirmware());

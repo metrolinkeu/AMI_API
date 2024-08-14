@@ -51,7 +51,7 @@ package "com.metrolink.ami_api" {
          }
 
 
-
+'''''''''''''''''''''''''''''''''''''''''''
 
          package "com.metrolink.ami_api.models.tablasFront" #f5f1e4 {
             class Marcas #FFB3D9{
@@ -99,6 +99,15 @@ package "com.metrolink.ami_api" {
             }
          }
 
+
+
+
+
+
+
+
+
+'''''''''''''''''''''''''''''
          package "com.metrolink.ami_api.models.tablasFrontMed" #f595c2 {
             class MarcasMed #7efcf4{
                -ncodigo: Long
@@ -124,6 +133,8 @@ package "com.metrolink.ami_api" {
 
 
          }
+
+         ''''''''''''''''''''''''''''''''
 
          package "com.metrolink.ami_api.models.concentrador" #d7f7e6{
             class Concentradores #FFB3BA {
@@ -157,8 +168,6 @@ package "com.metrolink.ami_api" {
                @Id
                -ncod : Long
                -vcDescripcion: String
-
-
             }
 
 

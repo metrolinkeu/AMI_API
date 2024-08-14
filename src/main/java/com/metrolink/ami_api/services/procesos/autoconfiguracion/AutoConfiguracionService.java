@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class AutoConfiguracionService {
             // Iterar sobre las autoconfiguraciones para actualizar Medidores
             for (AutoconfMedidor autoconfMedidor : autoConfiguraciones) {
                 String vcSerie = autoconfMedidor.getVcSerie();
-                String vcfechaHoraUltimaLectura = autoconfMedidor.getVcfechaHoraUltimaLectura();
+                Timestamp dfechaHoraUltimaLectura = autoconfMedidor.getDfechaHoraUltimaLectura();
                 String vcdíasdeRegDíariosMensuales = autoconfMedidor.getVcdíasdeRegDíariosMensuales();
                 String vcdiasdeEventos = autoconfMedidor.getVcdiasdeEventos();
                 String vcperiodoIntegracion = autoconfMedidor.getVcperiodoIntegracion();
@@ -123,7 +124,7 @@ public class AutoConfiguracionService {
 
                 if (medidor != null) {
                     // Actualizar el campo vcfirmware
-                    medidor.setVcfechaHoraUltimaLectura(vcfechaHoraUltimaLectura);
+                    medidor.setDfechaHoraUltimaLectura(dfechaHoraUltimaLectura);
                     medidor.setVcdíasdeRegDíariosMensuales(vcdíasdeRegDíariosMensuales);
                     medidor.setVcdiasdeEventos(vcdiasdeEventos);
                     medidor.setVcperiodoIntegracion(vcperiodoIntegracion);

@@ -165,3 +165,8 @@ INSERT INTO "TELESIMEXOCI"."BL_MOV_CONFIG_ACTIVOS" (ID_CONFIGURACION_ACTIVO, TIP
 VALUES('10', 'Transformador', 'Tr10 10MVA', 'Transformador auxiliar', 'Zona Centro', 'Subzona B', 'Subestación 10', 'Barra J', '110 kV', 'Clase J', '10 MVA', '110 kV', '34.5 kV', '13.2 kV');
 
 
+
+Metodo para fitrar por dias de las semana
+SELECT *
+FROM AMI_MOV_PARAMETRIZACIONES_PROG
+WHERE JSON_EXISTS(vcdias_semana_json, '$[*]?(@ == "Martes")');

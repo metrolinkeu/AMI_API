@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -72,9 +72,11 @@ public class ConectorAutoConfService {
         autoconfMedidor.setAutoConfcanalesPerfilCarga(canalesPerfilCarga);
 
         LocalDateTime dateTime = LocalDateTime.now().plusDays(random.nextInt(10)); // Fecha aleatoria cercana
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        // Convertir LocalDateTime a Timestamp
+        Timestamp timestamp = Timestamp.valueOf(dateTime);
+        autoconfMedidor.setDfechaHoraUltimaLectura(timestamp);
 
-        autoconfMedidor.setVcfechaHoraUltimaLectura(dateTime.format(formatter));
+
         autoconfMedidor.setVcdíasdeRegDíariosMensuales(String.valueOf(random.nextInt(30) + 1));
         autoconfMedidor.setVcdiasdeEventos(String.valueOf(random.nextInt(20) + 1));
         int[] opcionesIntegracion = { 15, 30, 60 }; int periodoIntegracion = opcionesIntegracion[random.nextInt(opcionesIntegracion.length)]; autoconfMedidor.setVcperiodoIntegracion(String.valueOf(periodoIntegracion));

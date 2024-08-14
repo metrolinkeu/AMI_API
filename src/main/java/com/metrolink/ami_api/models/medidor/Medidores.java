@@ -15,6 +15,8 @@ import com.metrolink.ami_api.models.tablasFrontMed.MarcasMed;
 import com.metrolink.ami_api.models.tablasFrontMed.TiposDeModuloDeCom;
 import com.metrolink.ami_api.models.tablasFrontMed.ViasObtencionDatos;
 
+import java.sql.Timestamp;
+
 
 
 @Data
@@ -35,7 +37,9 @@ public class Medidores {
 
     private boolean lisMacro;
     private String vclongitudLatitud;
-    private String vcfechaInstalacion;
+
+    @Column(name = "dfechaInstalacion")
+    private Timestamp dfechaInstalacion;
 
     @ManyToOne
     @JoinColumn(name = "ncodEstado", referencedColumnName = "ncodigo")
@@ -46,7 +50,9 @@ public class Medidores {
     private BlMovConfigActivos configuracionActivo;
 
  
-    private String vcfechaHoraUltimaLectura;
+    @Column(name = "dfechaHoraUltimaLectura")
+    private Timestamp dfechaHoraUltimaLectura;
+
     private String vcdíasdeRegDíariosMensuales;
     private String vcdiasdeEventos;
 

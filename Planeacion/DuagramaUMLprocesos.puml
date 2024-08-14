@@ -28,10 +28,10 @@ package "com.metrolink.ami_api" {
                 + MarcasMed marcaMed
                 - lisMacro: Boolean
                 - vclongitudLatitud: String
-                - vcfechaInstalacion: String
+                - dfechaInstalacion: Timestamp
                 + Estados estado
                 + UbicacionesEnInfra ubicacionEnInfra
-                - vcfechaHoraUltimaLectura: String
+                - dfechaHoraUltimaLectura: Timestamp
                 - vcdíasdeRegDíariosMensuales: String
                 - vcdiasdeEventos: String
                 - vcperiodoIntegracion: String
@@ -102,8 +102,6 @@ package "com.metrolink.ami_api" {
         !if SHOW_PROGRAMACIONES_AMI
 
         package "com.metrolink.ami_api.models.procesos" #a0c8fa {
-
-
             package "com.metrolink.ami_api.models.procesos.programacionesAmi" #a1c7c9{
                 class ProgramacionesAMI  #ffdee8 {
                     - ncodigo : Long
@@ -116,10 +114,9 @@ package "com.metrolink.ami_api" {
                 class ParametrizacionesProg {
                     - ncodigo : Long
                     - vctipoDeLectura: String
-                    - vcfechaInicio: String
-                    - vchoraInicio: String
+                    - dfechaHoraInicio: Timestamp
                     - nreintentos: int
-                    - vcdiasSemana: String
+                    - vcdiasSemanaJson: String
                     - vcfrecuencia: String
                 }
 
@@ -131,8 +128,8 @@ package "com.metrolink.ami_api" {
                     - lfactorPotencia : boolean
                     - linstantaneos : boolean
                     - vcaccionRele: String
-                    - vcfechaSincronizacion: String
-                    - vchoraSincronizacion: String
+                    - dfechaHoraSincronizacion: Timestamp
+
                 }
 
                 class AgendaProgramacionesAMI  #e8ffde {
@@ -143,9 +140,10 @@ package "com.metrolink.ami_api" {
 
                 class EstadosHoy{
                     - ncodigo: Long
+                    - vcdescripcion: String
                     - lproximo: boolean
-                    - vcfechaProximo: String
-                    - vchoraProximo: String
+                    - dfechaHoraProximo: Timestamp
+
                 }
 
                 class MedidoresAgenda {
@@ -153,9 +151,13 @@ package "com.metrolink.ami_api" {
                     + AgendaProgramacionesAMI enAgendaProgramacionesAMI
                     - estadoEnAgenda: String
                 }
+            }
 
-
-
+            class GrupoMedidores #6ae7f7 {
+                nid: long
+                vcfiltro: String
+                vcidentificador: String
+                vcSeriesMed: String
             }
             !endif
 
@@ -164,7 +166,7 @@ package "com.metrolink.ami_api" {
                 class AutoconfMedidor #fcf0cf{
                     - vcSerie: String
                     + AutoConfCanalesPerfilCarga autoConfcanalesPerfilCarga
-                    - vcfechaHoraUltimaLectura: String
+                    - dfechaHoraUltimaLectura: Timestamp
                     - vcdíasdeRegDíariosMensuales: String
                     - vcdiasdeEventos: String
                     - vcperiodoIntegra: String
@@ -261,6 +263,11 @@ package "com.metrolink.ami_api" {
                     * updateProgramacionAMI(id: Long, programacionAMIDetails: ProgramacionesAMI): ProgramacionesAMI
                     * deleteProgramacionAMI(id: Long): Void
                 }
+
+                class MedidoresAgendaController{
+                    + MedidoresAgendaService medidoresAgendaService
+                    * recibirMedidores(HttpServletRequest request): <List<MedidoresAgenda>>
+                }
             }
             !endif
         }
@@ -309,7 +316,7 @@ package "com.metrolink.ami_api" {
                     + ConcentradoresService concentradoresService
                     --
                     "Metodo Provicional"
-                    * ConectorDetecMedService()
+                    ** ConectorDetecMedService()
                     * usarConectorDeteccion(json: String): String
                 }
             }
@@ -346,7 +353,7 @@ package "com.metrolink.ami_api" {
 
                 class AgendaProgramacionesAMIService #efd6ff {
                     + AgendaProgramacionesAMIRepository agendaProgramacionesAMIRepository
-                    + AsignacionAgendaAMedidores asignacionAgendaAMedidores
+                    + AsignacionAgendaAMedidores AsignacionAgendaAMedidoresService
                     * save(agendaProgramacionesAMI: AgendaProgramacionesAMI, isUpdate: boolean): AgendaProgramacionesAMI
                     * findAll(): List<AgendaProgramacionesAMI>
                     * findById(id: Long): AgendaProgramacionesAMI
@@ -354,10 +361,15 @@ package "com.metrolink.ami_api" {
                     * deleteById(id: Long): Void
                 }
 
-                class AsignacionAgendaAMedidores #efd6ff {
+                class AsignacionAgendaAMedidoresService #efd6ff {
                     + ProgramacionesAMIService programacionesAMIService
                     + MedidoresService medidoresService
                     * verificarYProcesar(agenda: AgendaProgramacionesAMI): void
+                }
+
+                class MedidoresAgendaService{
+                    + MedidoresAgenda
+                    * procesarMedidoresAgenda(String json): List<MedidoresAgenda> 
                 }
             }
             !endif
@@ -462,14 +474,18 @@ ProgramacionesAMIService --> ProgramacionesAMIRepository: @Autowired
 
 AgendaProgramacionesAMIController --> AgendaProgramacionesAMIService: @Autowired
 
-AgendaProgramacionesAMIService -> AsignacionAgendaAMedidores: @Autowired
+AgendaProgramacionesAMIService -> AsignacionAgendaAMedidoresService: @Autowired
 AgendaProgramacionesAMIService --> AgendaProgramacionesAMIRepository: @Autowired
 
-AsignacionAgendaAMedidores -> ProgramacionesAMIService: @Autowired
-AsignacionAgendaAMedidores -> MedidoresService: @Autowired
+AsignacionAgendaAMedidoresService -> ProgramacionesAMIService: @Autowired
+AsignacionAgendaAMedidoresService -> MedidoresService: @Autowired
 
 
 ConectorDetecMedService --> TcpClientDetecMedService: @Autowired
+
+MedidoresAgendaController --> MedidoresAgendaService: @Autowired
+MedidoresAgendaService --> MedidoresAgenda: usa
+
 !endif
 
 @enduml

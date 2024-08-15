@@ -1,5 +1,7 @@
 package com.metrolink.ami_api.services.procesos.programacionesAmi;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metrolink.ami_api.models.medidor.Medidores;
 import com.metrolink.ami_api.models.procesos.programacionesAmi.AgendaProgramacionesAMI;
 import com.metrolink.ami_api.models.procesos.programacionesAmi.ProgramacionesAMI;
@@ -35,35 +37,38 @@ public class AsignacionAgendaAMedidoresService {
 
         // Verificar si el grupo de medidores y las series de medidores existen
         if (programacionAMI.getGrupoMedidores() == null
-                || programacionAMI.getGrupoMedidores().getVcSeriesMed() == null) {
+                || programacionAMI.getGrupoMedidores().getJsseriesMed() == null) {
             throw new IllegalArgumentException("Grupo de Medidores o Series de Medidores no encontrados.");
         }
 
-        String seriesmed = programacionAMI.getGrupoMedidores().getVcSeriesMed();
+        String seriesmed = programacionAMI.getGrupoMedidores().getJsseriesMed();
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        // Dividir la cadena por comas para obtener cada número de serie individualmente
-        String[] serialNumbers = seriesmed.split(",");
+        try {
+            // Convertir el String JSON a un array de Strings
+            String[] serialNumbers = objectMapper.readValue(seriesmed, String[].class);
 
-        // Recorrer el arreglo resultante y verificar cada número de serie
-        for (String serial : serialNumbers) {
-            System.out.println("Número de serie: " + serial);
-            try {
-                Medidores medidor = medidoresService.findById(serial);
-                if (medidor != null) {
-                    System.out.println("Medidor encontrado: " + medidor.getVcSerie());
+            // Recorrer el arreglo resultante y verificar cada número de serie
+            for (String serial : serialNumbers) {
+                System.out.println("Número de serie: " + serial);
+                try {
+                    Medidores medidor = medidoresService.findById(serial);
+                    if (medidor != null) {
+                        System.out.println("Medidor encontrado: " + medidor.getVcSerie());
 
-                    medidor.setEnAgendaProgramacionesAMI(agenda);
-                    medidor.setEstadoEnAgenda("pendiente");
+                        medidor.setEnAgendaProgramacionesAMI(agenda);
+                        medidor.setEstadoEnAgenda("pendiente");
 
-
-
-
-                } else {
+                    } else {
+                        System.out.println("Medidor no encontrado para el número de serie: " + serial);
+                    }
+                } catch (RuntimeException e) {
                     System.out.println("Medidor no encontrado para el número de serie: " + serial);
                 }
-            } catch (RuntimeException e) {
-                System.out.println("Medidor no encontrado para el número de serie: " + serial);
             }
+        } catch (JsonProcessingException e) {
+            // Manejar la excepción
+            e.printStackTrace();
         }
     }
 }

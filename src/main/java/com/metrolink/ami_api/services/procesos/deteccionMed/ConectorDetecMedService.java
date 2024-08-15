@@ -54,36 +54,36 @@ public class ConectorDetecMedService {
 
         System.out.println("vcnoSerie: " + vcnoSerie);
 
-        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+        //Concentradores concentrador = concentradoresService.findById(vcnoSerie);
 
-        System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
+        // System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
 
-        if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
+        // if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
 
-            // Direcciones y puertos de los servidores TCP
-            String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
-            int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
+        //     // Direcciones y puertos de los servidores TCP
+        //     String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
+        //     int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
 
-            // Obtener direccion cliente y fisica
-            // Contraseña
+        //     // Obtener direccion cliente y fisica
+        //     // Contraseña
 
-            // Bytes a enviar
-            byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x62, 0x00 };
+        //     // Bytes a enviar
+        //     byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x62, 0x00 };
 
-            // Enviar los bytes a tres servidores TCP simultáneamente
+        //     // Enviar los bytes a tres servidores TCP simultáneamente
 
-            // Encolar la tarea para enviar los bytes
-            requestQueue.offer(() -> {
-                String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
-                System.out.println("\033[47;30m" +
-                        "Response from TCP server at " +
-                        "\033[0m" +
-                        direccion + ":" + puerto + ": " + response);
-            });
+        //     // Encolar la tarea para enviar los bytes
+        //     requestQueue.offer(() -> {
+        //         String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
+        //         System.out.println("\033[47;30m" +
+        //                 "Response from TCP server at " +
+        //                 "\033[0m" +
+        //                 direccion + ":" + puerto + ": " + response);
+        //     });
 
-        } else {
-            System.out.println("en construccion");
-        }
+        // } else {
+        //     System.out.println("en construccion");
+        // }
 
         // Generar medidores aleatorios
         Random random = new Random();

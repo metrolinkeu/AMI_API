@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Concentrador\", // Concentrador, sic o lista de medidores\r\n        \"vcidentificador\" : \"7256\", //null si no es por concentrador o sic vcnoSerie/sic\r\n        \"vcSeriesMed\": null\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\",  //Activar = Cerrar y Desactivar = Abrir\r\n        \"vcfechaSincronizacion\": \"2024-08-01\",\r\n        \"vchoraSincronizacion\": \"12:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"Lectura única\",  // Lectura única, Lectura frecuente no recurrente y Lectura recurrente \r\n        \"vcfechaInicio\": \"2024-08-01\",\r\n        \"vchoraInicio\": \"14:00\",\r\n        \"nreintentos\": 3,\r\n        \"vcdiasSemana\": \"Lunes,Miércoles,Viernes\",\r\n        \"vcfrecuencia\": \"semanal\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Concentrador\", // Concentrador, sic o lista de medidores\r\n        \"vcidentificador\": \"11223\", //null si no es por concentrador o sic vcnoSerie/sic\r\n        \"jsseriesMed\": \"[\\\"00014Directo\\\", \\\"002\\\", \\\"003\\\", \\\"004\\\", \\\"005\\\", \\\"006\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n        \r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"Lectura única\", // Lectura única, Lectura frecuente no recurrente y Lectura recurrente \r\n        \"dfechaHoraInicio\": \"2029-07-04T15:36:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Viernes\\\", \\\"Martes\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n        \"vcfrecuencia\": \"semanal\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Por Concentrador\", // Concentrador, sic o lista de medidores\r\n        \"vcnoSerie\" : \"7256\",\r\n        \"vcSeriesMed\": \"12345,67890,11121\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\",  //Activar = Cerrar y Desactivar = Abrir\r\n        \"vcfechaSincronizacion\": \"2024-08-01\",\r\n        \"vchoraSincronizacion\": \"12:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"Lectura única\",  // Lectura única, Lectura frecuente no recurrente y Lectura recurrente \r\n        \"vcfechaInicio\": \"2024-08-01\",\r\n        \"vchoraInicio\": \"14:00\",\r\n        \"nreintentos\": 3,\r\n        \"vcdiasSemana\": \"Lunes,Miércoles,Viernes\",\r\n        \"vcfrecuencia\": \"Diaria\"\r\n    }\r\n}",
+					"raw": "{\r\n\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Concentrador\", // Concentrador, sic o lista de medidores\r\n        \"vcidentificador\": \"11223\", //null si no es por concentrador o sic vcnoSerie/sic\r\n        \"jsseriesMed\": \"[\\\"00014Directo\\\", \\\"002\\\", \\\"003\\\", \\\"004\\\", \\\"005\\\", \\\"006\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n        \r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"Lectura única\", // Lectura única, Lectura frecuente no recurrente y Lectura recurrente \r\n        \"dfechaHoraInicio\": \"2029-07-04T15:36:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Viernes\\\", \\\"Martes\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n        \"vcfrecuencia\": \"semanal\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -115,7 +115,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/programacionesAmi/1",
+					"raw": "http://localhost:8083/api/programacionesAmi/201",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -124,7 +124,7 @@
 					"path": [
 						"api",
 						"programacionesAmi",
-						"1"
+						"201"
 					]
 				}
 			},
@@ -137,7 +137,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"marca\": \"MarcaActualizada\",\r\n    \"concat\": \"ConcatenadoActualizado\"\r\n}\r\n",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -145,7 +145,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/programacionesAmi/1",
+					"raw": "http://localhost:8083/api/programacionesAmi/221",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +154,7 @@
 					"path": [
 						"api",
 						"programacionesAmi",
-						"1"
+						"221"
 					]
 				}
 			},

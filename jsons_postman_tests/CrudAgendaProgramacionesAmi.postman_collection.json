@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"81\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"vcfechaProximo\": \"por definir\",\r\n        \"vchoraProximo\": \"por definir\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"243\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"dfechaHoraProximo\":\"2025-07-04T15:30:00\"  // Formato de Timestamp\r\n\r\n\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -107,7 +107,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcempresa\": \"ActualizacionEmpresaz\",\r\n    \"vcconcat\": \"ActualizacionConcatenación de Empresaz\"\r\n}",
+					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"81\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"dfechaHoraProximo\": \"2024-07-04T15:30:00\"\r\n\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

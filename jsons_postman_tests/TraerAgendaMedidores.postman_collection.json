@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcnoSerie\": \"7256\"\r\n}",
+					"raw": "// {\r\n//     \"vcnoSerie\": \"7256\"\r\n// }\r\n{\r\n    \"vcseriales\": {\r\n        \"vcserie1\": \"47722\",\r\n        \"vcserie2\": \"32470\",\r\n        \"vcserie3\": \"71542\"\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -21,7 +21,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/primeraLectura/detectMed",
+					"raw": "http://localhost:8083/api/medidoresAgenda/mostrarAgenda",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -29,8 +29,8 @@
 					"port": "8083",
 					"path": [
 						"api",
-						"primeraLectura",
-						"detectMed"
+						"medidoresAgenda",
+						"mostrarAgenda"
 					]
 				}
 			},

@@ -42,7 +42,7 @@ public class AgendaProgramacionesAMIController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAgendaProgramacionesAMI(@PathVariable Long id) {
-        agendaProgramacionesAMIService.deleteById(id);
+        agendaProgramacionesAMIService.deleteById(id);  
         return ResponseEntity.noContent().build();
     }
 }

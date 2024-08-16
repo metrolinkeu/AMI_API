@@ -5,6 +5,7 @@ import com.metrolink.ami_api.repositories.procesos.programacionesAmi.AgendaProgr
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -49,6 +50,12 @@ public class AgendaProgramacionesAMIService {
     }
 
     public void deleteById(Long id) {
+
+        AgendaProgramacionesAMI agenda = agendaProgramacionesAMIRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("AgendaProgramacionesAMI not found with id " + id));
+
+        asignacionAgendaAMedidores.verificarYRemover(agenda); // Remueve de los medidores la agenda que se va a eliminar
+
         agendaProgramacionesAMIRepository.deleteById(id);
     }
 }

@@ -54,7 +54,7 @@ public class ConectorDetecMedService {
 
         System.out.println("vcnoSerie: " + vcnoSerie);
 
-        //Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+        // Concentradores concentrador = concentradoresService.findById(vcnoSerie);
 
         // System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
 

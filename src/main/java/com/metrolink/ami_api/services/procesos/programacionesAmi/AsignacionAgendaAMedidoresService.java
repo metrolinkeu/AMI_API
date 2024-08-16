@@ -71,4 +71,41 @@ public class AsignacionAgendaAMedidoresService {
             e.printStackTrace();
         }
     }
+
+
+    public void verificarYRemover(AgendaProgramacionesAMI agenda){
+
+        String seriesmed = agenda.getProgramacionAMI().getGrupoMedidores().getJsseriesMed();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+
+        try {
+            // Convertir el String JSON a un array de Strings
+            String[] serialNumbers = objectMapper.readValue(seriesmed, String[].class);
+
+            // Recorrer el arreglo resultante y verificar cada número de serie
+            for (String serial : serialNumbers) {
+                System.out.println("Número de serie: " + serial);
+                try {
+                    Medidores medidor = medidoresService.findById(serial);
+                    if (medidor != null) {
+                        System.out.println("Medidor encontrado: " + medidor.getVcSerie());
+
+                        medidor.setEnAgendaProgramacionesAMI(null);
+                        medidor.setEstadoEnAgenda(null);
+
+                    } else {
+                        System.out.println("Medidor no encontrado para el número de serie: " + serial);
+                    }
+                } catch (RuntimeException e) {
+                    System.out.println("Medidor no encontrado para el número de serie: " + serial);
+                }
+            }
+        } catch (JsonProcessingException e) {
+            // Manejar la excepción
+            e.printStackTrace();
+        }
+
+
+    }
 }

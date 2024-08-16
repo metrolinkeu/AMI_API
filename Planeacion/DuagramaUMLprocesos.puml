@@ -365,6 +365,7 @@ package "com.metrolink.ami_api" {
                     + ProgramacionesAMIService programacionesAMIService
                     + MedidoresService medidoresService
                     * verificarYProcesar(agenda: AgendaProgramacionesAMI): void
+                    * verificarYRemover(AgendaProgramacionesAMI agenda): void
                 }
 
                 class MedidoresAgendaService{

@@ -6,11 +6,35 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
+
 @SpringBootApplication
 public class AmiApiApplication {
 
     public static void main(String[] args) {
+
+        // Determinar el sistema operativo y crear la carpeta en la ubicación adecuada
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            createFolderIfNotExists("C:\\ApiAmiMetrolink");
+        } else if (os.contains("nix") || os.contains("nux") || os.contains("mac")) {
+            createFolderIfNotExists("/ApiAmiMetrolink");
+        }
+
         SpringApplication.run(AmiApiApplication.class, args);
+    }
+
+    private static void createFolderIfNotExists(String folderPath) {
+        File folder = new File(folderPath);
+        if (!folder.exists()) {
+            if (folder.mkdir()) {
+                System.out.println("Carpeta creada: " + folderPath);
+            } else {
+                System.out.println("No se pudo crear la carpeta: " + folderPath);
+            }
+        } else {
+            System.out.println("La carpeta ya existe: " + folderPath);
+        }
     }
 
     @Bean

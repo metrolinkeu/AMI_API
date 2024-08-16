@@ -8,6 +8,8 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Handler;
 import java.util.logging.LogManager;
+import java.io.File;
+
 
 public class LoggerConfigProcesos {
 
@@ -16,9 +18,21 @@ public class LoggerConfigProcesos {
     static {
         try {
             LogManager.getLogManager().reset();
-            // Specify the file path for the log file
-            String logFilePath = "C:\\Users\\Personal\\Documents\\AMI\\AMI_API\\logs\\procesos\\procesos.log";
+            // Verificar y crear la ruta
+            String logDirPath = "C:\\ApiAmiMetrolink\\logs\\procesos";
+            File logDir = new File(logDirPath);
+            if (!logDir.exists()) {
+                if (logDir.mkdirs()) {
+                    System.out.println("Directorio de logs creado: " + logDirPath);
+                } else {
+                    System.err.println("No se pudo crear el directorio de logs: " + logDirPath);
+                }
+            }
+            // Ruta completa al archivo de log
+            String logFilePath = logDirPath + "\\procesos.log";
             FileHandler fileHandler = new FileHandler(logFilePath, true);
+
+
             SimpleFormatter formatter = new SimpleFormatter() {
                 private static final String format = "[%1$tF %1$tT] [%2$s] %3$s %n";
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/primeraLectura")
@@ -19,7 +20,7 @@ public class DeteccionMedController {
     private DeteccionMedService deteccionMedService;
 
     @PostMapping("/detectMed")
-    public ResponseEntity<List<Medidores>> recibirConcentrador(HttpServletRequest request) {
+    public ResponseEntity<List<Medidores>> recibirConcentrador(HttpServletRequest request) throws ExecutionException, InterruptedException {
         try {
             // Leer el cuerpo de la solicitud como texto
             String json = request.getReader().lines().reduce("", (accumulator, actual) -> accumulator + actual);

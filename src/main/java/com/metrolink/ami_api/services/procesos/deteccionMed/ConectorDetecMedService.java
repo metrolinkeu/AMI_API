@@ -15,18 +15,22 @@ import com.metrolink.ami_api.comunications.TcpClientDetecMedService;
 import com.metrolink.ami_api.models.concentrador.Concentradores;
 import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 @Service
 public class ConectorDetecMedService {
 
     @Autowired
-    private TcpClientDetecMedService tcpClientDetecMedService; // Asegúrate de tener este servicio disponible
+    private TcpClientDetecMedService tcpClientDetecMedService;
 
     @Autowired
     private ConcentradoresService concentradoresService;
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor(); // Crear un pool de 1 thread
-    private final LinkedBlockingQueue<Runnable> requestQueue = new LinkedBlockingQueue<>(); // Cola para manejar las
-                                                                                            // solicitudes
+    private final LinkedBlockingQueue<CompletableFutureTask> requestQueue = new LinkedBlockingQueue<>(); // Cola para
+                                                                                                         // manejar las
+                                                                                                         // solicitudes
 
     public ConectorDetecMedService() {
         // Iniciar un hilo que procesará la cola
@@ -34,10 +38,10 @@ public class ConectorDetecMedService {
             while (true) {
                 try {
                     // Tomar la próxima solicitud de la cola y procesarla
-                    Runnable requestTask = requestQueue.take();
-                    requestTask.run();
-                    // Pausa de 10ms después de procesar cada tarea
-                    Thread.sleep(10); // Puedes ajustar el tiempo según sea necesario
+                    CompletableFutureTask task = requestQueue.take();
+                    String result = processRequest(task.getJson()); // Procesa la tarea con el JSON
+                    task.getFuture().complete(result); // Completa el CompletableFuture con el resultado
+                    Thread.sleep(10); // Pausa de 10ms después de procesar cada tarea
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -46,62 +50,73 @@ public class ConectorDetecMedService {
         });
     }
 
-    public String usarConectorDeteccion(String json) throws IOException {
-        // Parsear el JSON para obtener los valores
+    public String usarConectorDeteccion(String json) throws IOException, ExecutionException, InterruptedException {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        requestQueue.offer(new CompletableFutureTask(future, json)); // Encolar la tarea con el JSON
+        return future.get(); // Esto bloquea hasta que la tarea se complete
+    }
+
+    private String processRequest(String json) {
+        // Procesar el JSON como lo hacías antes
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(json);
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = objectMapper.readTree(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String vcnoSerie = jsonNode.get("vcnoSerie").asText();
-
         System.out.println("vcnoSerie: " + vcnoSerie);
+        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+        System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
 
-        // Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+        if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
+            // Direcciones y puertos de los servidores TCP
+            String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
+            int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
 
-        // System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
+            // Bytes a enviar
+            byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+                    0x02, 0x62, 0x00 };
 
-        // if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
+            // Enviar los bytes
+            String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
+            System.out.println("Response from TCP server at " + direccion + ":" + puerto + ": " + response);
 
-        //     // Direcciones y puertos de los servidores TCP
-        //     String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
-        //     int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
+        } else {
+            System.out.println("en construccion");
+            return "en construcción";
+        }
 
-        //     // Obtener direccion cliente y fisica
-        //     // Contraseña
-
-        //     // Bytes a enviar
-        //     byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x62, 0x00 };
-
-        //     // Enviar los bytes a tres servidores TCP simultáneamente
-
-        //     // Encolar la tarea para enviar los bytes
-        //     requestQueue.offer(() -> {
-        //         String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
-        //         System.out.println("\033[47;30m" +
-        //                 "Response from TCP server at " +
-        //                 "\033[0m" +
-        //                 direccion + ":" + puerto + ": " + response);
-        //     });
-
-        // } else {
-        //     System.out.println("en construccion");
-        // }
-
-        // Generar medidores aleatorios
+        // Procesar la respuesta y crear el JSON final
         Random random = new Random();
-        // int cantidadMedidores = random.nextInt(3) + 1; // Generar entre 1 y 10
-        // medidores
         int cantidadMedidores = 1;
         StringJoiner medidoresJoiner = new StringJoiner(", ");
-
         for (int i = 1; i <= cantidadMedidores; i++) {
             String numeroSerie = String.format("%05d", random.nextInt(99999)); // Número de serie de 5 dígitos
             medidoresJoiner.add("\"Medidor" + i + "\": \"" + numeroSerie + "\"");
         }
-
         String newJson = "{ \"Medidores\": { " + medidoresJoiner.toString() + " } }";
-
-        System.out.println("Recibido: " + json);
-
-        // Devolver el JSON procesado
+        System.out.println("Procesado: " + newJson);
         return newJson;
+    }
+
+    // Clase auxiliar para encapsular la tarea y el JSON
+    private static class CompletableFutureTask {
+        private final CompletableFuture<String> future;
+        private final String json;
+
+        public CompletableFutureTask(CompletableFuture<String> future, String json) {
+            this.future = future;
+            this.json = json;
+        }
+
+        public CompletableFuture<String> getFuture() {
+            return future;
+        }
+
+        public String getJson() {
+            return json;
+        }
     }
 }

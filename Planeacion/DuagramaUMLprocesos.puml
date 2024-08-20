@@ -7,6 +7,19 @@
 !define SHOW_PROGRAMACIONES_AMI 1
 !define SHOW_COMUNCIATIONS 1
 
+package "C:\ApiAmiMetrolink" {
+    package "logs" {
+        package "procesos" {
+            class procesos_log {
+                "procesos.log"
+
+                note "Esto representa un archivo .log"
+            }
+        }
+    }
+}
+
+
 package "com.metrolink.ami_api" {
 
     package "com.metrolink.ami_api.config"{
@@ -370,7 +383,7 @@ package "com.metrolink.ami_api" {
 
                 class MedidoresAgendaService{
                     + MedidoresAgenda
-                    * procesarMedidoresAgenda(String json): List<MedidoresAgenda> 
+                    * procesarMedidoresAgenda(String json): List<MedidoresAgenda>
                 }
             }
             !endif
@@ -486,6 +499,8 @@ ConectorDetecMedService --> TcpClientDetecMedService: @Autowired
 
 MedidoresAgendaController --> MedidoresAgendaService: @Autowired
 MedidoresAgendaService --> MedidoresAgenda: usa
+
+LoggerConfigProcesos --> procesos_log
 
 !endif
 

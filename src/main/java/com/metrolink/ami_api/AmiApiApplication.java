@@ -13,6 +13,8 @@ public class AmiApiApplication {
 
     public static void main(String[] args) {
 
+        System.out.println("cambio de prueba");
+
         // Determinar el sistema operativo y crear la carpeta en la ubicación adecuada
         String os = System.getProperty("os.name").toLowerCase();
         if (os.contains("win")) {

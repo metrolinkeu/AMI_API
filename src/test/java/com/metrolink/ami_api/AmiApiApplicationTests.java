@@ -1,4 +1,4 @@
-package com.MetroLink.AMI_API;
+package com.metrolink.ami_api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

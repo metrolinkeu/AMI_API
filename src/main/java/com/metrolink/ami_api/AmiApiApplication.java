@@ -14,7 +14,7 @@ public class AmiApiApplication {
 
     public static void main(String[] args) {
 
-        // Establecer la zona horaria globalmente a Colombia
+        // Establecer la zona horaria globalmente a  Colombia
         TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
         System.out.println("Zona horaria establecida en: " + TimeZone.getDefault().getID());
 

@@ -9,19 +9,32 @@ import com.metrolink.ami_api.services.medidor.MedidoresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.metrolink.ami_api.services.shared.SharedTaskQueue;
+
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 @Service
-public class ConectorAutoConfService {
+public class ConectorAutoConfService implements SharedTaskQueue.TaskProcessor {
 
     @Autowired
     private MedidoresService medidoresService;
 
-    public List<AutoconfMedidor> procesarConfiguracion(JsonNode rootNode) {
+    @Autowired
+    private SharedTaskQueue sharedTaskQueue; // Inyectar la cola compartida
+
+    public List<AutoconfMedidor> procesarConfiguracion(JsonNode rootNode)
+            throws ExecutionException, InterruptedException {
+
+        // Enviar "Hola Mundo" a la cola
+        enviarHolaMundoATarea();
+
         List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
         Random random = new Random();
 
@@ -32,6 +45,8 @@ public class ConectorAutoConfService {
 
             // Verificar si existe el nodo "vcseriales"
             JsonNode vcserialesNode = rootNode.path("vcseriales");
+
+            
 
             if (vcserialesNode.isMissingNode()) {
                 // Caso donde solo hay "vcnoSerie"
@@ -60,6 +75,13 @@ public class ConectorAutoConfService {
         return autoconfMedidores;
     }
 
+    private void enviarHolaMundoATarea() throws ExecutionException, InterruptedException {
+        CompletableFuture<String> future = new CompletableFuture<>();
+        sharedTaskQueue.submitTask(new SharedTaskQueue.CompletableFutureTask(future, "{}", this));
+        future.get(); // Espera a que la tarea se complete (opcional, dependiendo si necesitas
+                      // bloquear o no)
+    }
+
     private AutoconfMedidor crearAutoconfMedidor(String vcSerie, Random random) {
         AutoconfMedidor autoconfMedidor = new AutoconfMedidor();
         autoconfMedidor.setVcSerie(vcSerie);
@@ -76,10 +98,11 @@ public class ConectorAutoConfService {
         Timestamp timestamp = Timestamp.valueOf(dateTime);
         autoconfMedidor.setDfechaHoraUltimaLectura(timestamp);
 
-
         autoconfMedidor.setVcdíasdeRegDíariosMensuales(String.valueOf(random.nextInt(30) + 1));
         autoconfMedidor.setVcdiasdeEventos(String.valueOf(random.nextInt(20) + 1));
-        int[] opcionesIntegracion = { 15, 30, 60 }; int periodoIntegracion = opcionesIntegracion[random.nextInt(opcionesIntegracion.length)]; autoconfMedidor.setVcperiodoIntegracion(String.valueOf(periodoIntegracion));
+        int[] opcionesIntegracion = { 15, 30, 60 };
+        int periodoIntegracion = opcionesIntegracion[random.nextInt(opcionesIntegracion.length)];
+        autoconfMedidor.setVcperiodoIntegracion(String.valueOf(periodoIntegracion));
         autoconfMedidor.setVcultimoEstadoRele(random.nextBoolean() ? "activo" : "inactivo");
         autoconfMedidor.setVcfirmware("v" + (random.nextInt(2) + 1) + "." + (random.nextInt(9) + 1) + "."
                 + (random.nextInt(9) + 1));
@@ -100,5 +123,12 @@ public class ConectorAutoConfService {
         codigosObisCanal.setVcobis_9("1-0:7.0." + random.nextInt(10));
         codigosObisCanal.setVcobis_10("1-0:8.0." + random.nextInt(10));
         return codigosObisCanal;
+    }
+
+    @Override
+    public String processRequest(String json) {
+        System.out.println("Hola Mundo");
+        return "Hola Mundo";
+
     }
 }

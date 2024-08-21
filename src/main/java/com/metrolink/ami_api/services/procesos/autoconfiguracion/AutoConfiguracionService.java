@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class AutoConfiguracionService {
@@ -31,8 +32,11 @@ public class AutoConfiguracionService {
     @Autowired
     private MedidoresService medidoresService;
 
-    public List<AutoconfMedidor> procesarConfiguracion(String json) {
+    public List<AutoconfMedidor> procesarConfiguracion(String json) throws ExecutionException, InterruptedException {
         System.out.println(json);
+
+        
+
 
         // Crear ObjectMapper para trabajar con JSON
         ObjectMapper mapper = new ObjectMapper();

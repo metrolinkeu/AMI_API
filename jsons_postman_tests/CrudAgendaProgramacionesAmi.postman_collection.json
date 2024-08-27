@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"243\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"dfechaHoraProximo\":\"2025-07-04T15:30:00\"  // Formato de Timestamp\r\n\r\n\r\n    }\r\n}",
+					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"402\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"dfechaHoraProximo\":\"2025-07-04T15:30:00\"  // Formato de Timestamp\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -85,7 +85,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/1",
+					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/281",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -94,7 +94,7 @@
 					"path": [
 						"api",
 						"agendaProgramacionesAMI",
-						"1"
+						"281"
 					]
 				}
 			},
@@ -145,7 +145,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/4",
+					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/249",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +154,7 @@
 					"path": [
 						"api",
 						"agendaProgramacionesAMI",
-						"4"
+						"249"
 					]
 				}
 			},

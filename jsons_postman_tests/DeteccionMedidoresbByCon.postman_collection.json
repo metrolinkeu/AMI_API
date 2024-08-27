@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcnoSerie\": \"005700916\"\r\n}",
+					"raw": "{\r\n    \"vcnoSerie\": \"6060\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

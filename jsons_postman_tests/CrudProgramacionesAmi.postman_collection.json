@@ -7,13 +7,332 @@
 	},
 	"item": [
 		{
-			"name": "CrearProgramacionAmi",
+			"name": "CrearProgramacionAmi 1",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Concentrador\", // Concentrador, sic o lista de medidores\r\n        \"vcidentificador\": \"11223\", //null si no es por concentrador o sic vcnoSerie/sic\r\n        \"jsseriesMed\": \"[\\\"00014Directo\\\", \\\"002\\\", \\\"003\\\", \\\"004\\\", \\\"005\\\", \\\"006\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n        \r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"Lectura única\", // Lectura única, Lectura frecuente no recurrente y Lectura recurrente \r\n        \"dfechaHoraInicio\": \"2029-07-04T15:36:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Viernes\\\", \\\"Martes\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n        \"vcfrecuencia\": \"semanal\"\r\n    }\r\n}",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Concentrador\",\r\n        \"vcidentificador\": \"8888\",\r\n        \"jsseriesMed\": null\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"única\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": null,\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 2",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"ConcentradorYmedidores\",\r\n        \"vcidentificador\": \"8888\",\r\n        \"jsseriesMed\": \"[\\\"55875\\\", \\\"90035\\\", \\\"87838\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"única\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": null,\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 3",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Medidores\",\r\n        \"vcidentificador\": null,\r\n        \"jsseriesMed\": \"[\\\"00015Directo\\\", \\\"00016Directo\\\", \\\"00017Directo\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"única\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": null,\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 4",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Frontera SIC\",\r\n        \"vcidentificador\": \"987\",\r\n        \"jsseriesMed\": null\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"única\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": null,\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 5",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Concentrador\",\r\n        \"vcidentificador\": \"9999\",\r\n        \"jsseriesMed\": null\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"frecuente no recurrente\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 6",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"ConcentradorYmedidores\",\r\n        \"vcidentificador\": \"1010\",\r\n        \"jsseriesMed\": \"[\\\"20905\\\", \\\"08531\\\", \\\"41044\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"frecuente no recurrente\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 7",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Medidores\",\r\n        \"vcidentificador\": null,\r\n        \"jsseriesMed\": \"[\\\"2020Directo\\\", \\\"2021Directo\\\", \\\"2022Directo\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"frecuente no recurrente\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 8",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Frontera SIC\",\r\n        \"vcidentificador\": \"456\",\r\n        \"jsseriesMed\": null\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n        \"vctipoDeLectura\": \"frecuente no recurrente\",\r\n        \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n        \"nreintentos\": 3,\r\n        \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n        \"jsfrecuenciaLecturaLote\": null\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 9",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Concentrador\",\r\n        \"vcidentificador\": \"4040\",\r\n        \"jsseriesMed\": null\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n            \"ncodigo\": 205,\r\n            \"vctipoDeLectura\": \"recurrente\",\r\n            \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n            \"nreintentos\": 3,\r\n            \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n            \"jsfrecuenciaLecturaLote\": \"{\\\"Lunes\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Miércoles\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Jueves\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Sabado\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}}\"\r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 10",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"ConcentradorYmedidores\",\r\n        \"vcidentificador\": \"5050\",\r\n        \"jsseriesMed\": \"[\\\"26485\\\", \\\"66883\\\", \\\"33335\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n            \"ncodigo\": 205,\r\n            \"vctipoDeLectura\": \"recurrente\",\r\n            \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n            \"nreintentos\": 3,\r\n            \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n            \"jsfrecuenciaLecturaLote\": \"{\\\"Lunes\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Miércoles\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Jueves\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Sabado\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}}\"\r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 11",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Medidores\",\r\n        \"vcidentificador\": null,\r\n        \"jsseriesMed\": \"[\\\"89887\\\", \\\"04105\\\", \\\"35092\\\"]\"\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n            \"ncodigo\": 205,\r\n            \"vctipoDeLectura\": \"recurrente\",\r\n            \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n            \"nreintentos\": 3,\r\n            \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n            \"jsfrecuenciaLecturaLote\": \"{\\\"Lunes\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Miércoles\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Jueves\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Sabado\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}}\"\r\n        }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/programacionesAmi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"programacionesAmi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CrearProgramacionAmi 12",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ncodigo\": 0, //No cambiar este cero, la base de datos genera automaticamente esto\r\n    \"vcestado\": \"No iniciada\", // En proceso, Pendiente, Finalizado\r\n    \"grupoMedidores\": {\r\n        \"vcfiltro\": \"Frontera SIC\",\r\n        \"vcidentificador\": 258,\r\n        \"jsseriesMed\": null\r\n    },\r\n    \"listaPeticiones\": {\r\n        \"llectura_perfil_1\": true,\r\n        \"leventos\": false,\r\n        \"lregistros\": true,\r\n        \"lfactorPotencia\": false,\r\n        \"linstantaneos\": true,\r\n        \"vcaccionRele\": \"Activar\", //Activar = Cerrar y Desactivar = Abrir\r\n        \"dfechaHoraSincronizacion\": \"2025-07-04T15:30:00\"\r\n    },\r\n    \"parametrizacionProg\": {\r\n            \"ncodigo\": 205,\r\n            \"vctipoDeLectura\": \"recurrente\",\r\n            \"dfechaHoraInicio\": \"2024-08-16T19:28:00.000-05:00\",\r\n            \"nreintentos\": 3,\r\n            \"jsdiasSemana\": \"[\\\"Lunes\\\", \\\"Miércoles\\\", \\\"Jueves\\\", \\\"Sabado\\\"]\",\r\n            \"jsfrecuenciaLecturaLote\": \"{\\\"Lunes\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Miércoles\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Jueves\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}, \\\"Sabado\\\": {\\\"horaInicio\\\": \\\"05:00am\\\", \\\"horaFin\\\": \\\"10:00am\\\"}}\"\r\n        }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -145,7 +464,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/programacionesAmi/221",
+					"raw": "http://localhost:8083/api/programacionesAmi/261",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +473,7 @@
 					"path": [
 						"api",
 						"programacionesAmi",
-						"221"
+						"261"
 					]
 				}
 			},

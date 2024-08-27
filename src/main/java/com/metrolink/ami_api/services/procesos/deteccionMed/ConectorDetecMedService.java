@@ -11,14 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.metrolink.ami_api.comunications.TcpClientDetecMedService;
 import com.metrolink.ami_api.models.concentrador.Concentradores;
 import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
+import com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador.SharedTaskQueueConc;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-import com.metrolink.ami_api.services.shared.SharedTaskQueue;
-
 @Service
-public class ConectorDetecMedService implements SharedTaskQueue.TaskProcessor {
+public class ConectorDetecMedService implements SharedTaskQueueConc.TaskProcessor<String> {
 
     @Autowired
     private TcpClientDetecMedService tcpClientDetecMedService;
@@ -27,13 +26,17 @@ public class ConectorDetecMedService implements SharedTaskQueue.TaskProcessor {
     private ConcentradoresService concentradoresService;
 
     @Autowired
-    private SharedTaskQueue sharedTaskQueue; // Inyectar la cola compartida
+    private SharedTaskQueueConc sharedTaskQueue; // Inyectar la cola compartida
 
     public String usarConectorDeteccion(String json) throws IOException, ExecutionException, InterruptedException {
+        // Crear CompletableFuture para la tarea
         CompletableFuture<String> future = new CompletableFuture<>();
-        sharedTaskQueue.submitTask(new SharedTaskQueue.CompletableFutureTask(future, json, this)); // Encolar la tarea
-                                                                                                   // con el JSON
-        return future.get(); // Esto bloquea hasta que la tarea se complete
+
+        // Encolar la tarea
+        sharedTaskQueue.submitTask(new SharedTaskQueueConc.CompletableFutureTask<>(future, json, this));
+
+        // Esperar a que la tarea se complete y devolver el resultado
+        return future.get();
     }
 
     @Override
@@ -48,22 +51,27 @@ public class ConectorDetecMedService implements SharedTaskQueue.TaskProcessor {
         }
         String vcnoSerie = jsonNode.get("vcnoSerie").asText();
         System.out.println("vcnoSerie: " + vcnoSerie);
-        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
-        System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
 
-        if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
-            String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
-            int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // parte para pruebas de conexion con socket ///////////////////////////////////////////////////////////////
+        // Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+        // System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
 
-            byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
-                    0x02, 0x62, 0x00 };
+        // if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
+        //     String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
+        //     int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
 
-            String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
-            System.out.println("Response from TCP server at " + direccion + ":" + puerto + ": " + response);
-        } else {
-            System.out.println("en construccion");
-            return "en construcción";
-        }
+        //     byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        //             0x02, 0x62, 0x00 };
+
+        //     String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
+        //     System.out.println("Response from TCP server at " + direccion + ":" + puerto + ": " + response);
+        // } else {
+        //     System.out.println("en construccion");
+        
+        // }
+        // parte para pruebas de conexion con socket ///////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         Random random = new Random();
         int cantidadMedidores = 1;

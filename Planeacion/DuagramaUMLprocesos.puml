@@ -289,6 +289,12 @@ package "com.metrolink.ami_api" {
 
     package "com.metrolink.ami_api.services" #ff5252 {
         !if SHOW_CONCENTRADOR
+
+
+
+
+
+
         package "com.metrolink.ami_api.services.concentrador" #d7f7e6 {
             class ConcentradoresService #FFB3BA {
                 + ConcentradoresRepository concentradoresRepository
@@ -297,6 +303,16 @@ package "com.metrolink.ami_api" {
                 * findById(id: Long) : Optional<Concentrador>
                 * update(vcnoSerie: String, concentradorDetails: Concentradores  )
                 * deleteById(id : Long): void
+            }
+
+            package "com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador"{
+                class SharedTaskQueueConc{
+                    * SharedTaskQueueConc()
+                    * submitTask(CompletableFutureTask<?> task): void
+                    * interface TaskProcessor<T>
+
+                }
+
             }
         }
         !endif
@@ -327,10 +343,12 @@ package "com.metrolink.ami_api" {
                 class ConectorDetecMedService #84f086{
                     + TcpClientDetecMedService tcpClientDetecMedService
                     + ConcentradoresService concentradoresService
+                    + SharedTaskQueue sharedTaskQueue
                     --
                     "Metodo Provicional"
                     ** ConectorDetecMedService()
                     * usarConectorDeteccion(json: String): String
+                    * @Override  processRequest(String json): String
                 }
             }
 
@@ -345,8 +363,11 @@ package "com.metrolink.ami_api" {
 
                 class ConectorAutoConfService #84f086{
                     + MedidoresService medidoresService
+                    + SharedTaskQueue sharedTaskQueue
                     "Metodos provicionales"
                     * procesarConfiguracion(json: String): List<AutoconfMedidor>
+                    * @Override processRequest(String json): List<AutoconfMedidor>
+                    * procesarConfiguracionInterna(JsonNode rootNode): List<AutoconfMedidor>
                     * crearAutoconfMedidor(vcSerie: String, random: Random): AutoconfMedidor
                     * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
                 }
@@ -501,6 +522,11 @@ MedidoresAgendaController --> MedidoresAgendaService: @Autowired
 MedidoresAgendaService --> MedidoresAgenda: usa
 
 LoggerConfigProcesos --> procesos_log
+
+
+ConectorDetecMedService -> SharedTaskQueueConc
+
+ConectorAutoConfService -> SharedTaskQueueConc
 
 !endif
 

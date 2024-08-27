@@ -31,5 +31,6 @@ public class ParametrizacionesProg {
     @Column(columnDefinition = "CLOB")
     private String jsdiasSemana; // Almacenar el JSON como String en un CLOB
 
-    private String vcfrecuencia;
+    @Column(columnDefinition = "CLOB")
+    private String jsfrecuenciaLecturaLote;
 }

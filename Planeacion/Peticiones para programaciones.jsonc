@@ -1,0 +1,210 @@
+
+//CASO LECTURA UNICA   y   CASO CONCENTRADOR 
+
+{
+    "ncodigo": 281,
+    "programacionAMI": {
+        "ncodigo": 285,
+        "vcestado": "???",
+        "grupoMedidores": {
+            "nid": 225,
+            "vcfiltro": "Concentrador",
+            "vcidentificador": "11223",
+            "jsseriesMed": null
+        },
+        "listaPeticiones": {
+            "ncodigo": 225,
+            "llectura_perfil_1": true,
+            "leventos": false,
+            "lregistros": true,
+            "lfactorPotencia": false,
+            "linstantaneos": true,
+            "vcaccionRele": "Activar",
+            "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+        },
+        "parametrizacionProg": {
+            "ncodigo": 205,
+            "vctipoDeLectura": "única",
+            "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+            "nreintentos": 3,
+            "jsdiasSemana": null,
+            "jsfrecuenciaLecturaLote": null
+        }
+    },
+    "estadoHoy": {
+        "ncodigo": 261,
+        "vcdescripcion": "En proceso",
+        "lproximo": false,
+        "dfechaHoraProximo": "2025-07-04T15:30:00.000-05:00"
+    }
+}
+
+
+//CASO LECTURA UNICA   y   CASO CONCENTRADOR con Medidores especificos del concentrador 
+
+{
+    "ncodigo": 281,
+    "programacionAMI": {
+        "ncodigo": 285,
+        "vcestado": "???",
+        "grupoMedidores": {
+            "nid": 225,
+            "vcfiltro": "ConcentradorYmedidores",
+            "vcidentificador": "11223",
+            "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+        },
+        "listaPeticiones": {
+            "ncodigo": 225,
+            "llectura_perfil_1": true,
+            "leventos": false,
+            "lregistros": true,
+            "lfactorPotencia": false,
+            "linstantaneos": true,
+            "vcaccionRele": "Activar",
+            "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+        },
+        "parametrizacionProg": {
+            "ncodigo": 205,
+            "vctipoDeLectura": "única",
+            "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+            "nreintentos": 3,
+            "jsdiasSemana": null,
+            "jsfrecuenciaLecturaLote": null
+        }
+    },
+    "estadoHoy": {
+        "ncodigo": 261,
+        "vcdescripcion": "En proceso",
+        "lproximo": false,
+        "dfechaHoraProximo": "2025-07-04T15:30:00.000-05:00"
+    }
+}
+
+
+//CASO LECTURA UNICA   y   CASO CASO MEDIDORES   
+
+{
+    "ncodigo": 281,
+    "programacionAMI": {
+        "ncodigo": 285,
+        "vcestado": "???",
+        "grupoMedidores": {
+            "nid": 225,
+            "vcfiltro": "Medidores",
+            "vcidentificador": null,
+            "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+        },
+        "listaPeticiones": {
+            "ncodigo": 225,
+            "llectura_perfil_1": true,
+            "leventos": false,
+            "lregistros": true,
+            "lfactorPotencia": false,
+            "linstantaneos": true,
+            "vcaccionRele": "Activar",
+            "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+        },
+        "parametrizacionProg": {
+            "ncodigo": 205,
+            "vctipoDeLectura": "única",
+            "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+            "nreintentos": 3,
+            "jsdiasSemana": null,
+            "jsfrecuenciaLecturaLote": null
+        }
+    },
+    "estadoHoy": {
+        "ncodigo": 261,
+        "vcdescripcion": "En proceso",
+        "lproximo": false,
+        "dfechaHoraProximo": "2025-07-04T15:30:00.000-05:00"
+    }
+}
+
+
+//CASO LECTURA UNICA   y   CASO FRONTERA SIC   
+
+{
+    "ncodigo": 281,
+    "programacionAMI": {
+        "ncodigo": 285,
+        "vcestado": "???",
+        "grupoMedidores": {
+            "nid": 225,
+            "vcfiltro": "Frontera SIC",
+            "vcidentificador": 987,
+            "jsseriesMed": null
+        },
+        "listaPeticiones": {
+            "ncodigo": 225,
+            "llectura_perfil_1": true,
+            "leventos": false,
+            "lregistros": true,
+            "lfactorPotencia": false,
+            "linstantaneos": true,
+            "vcaccionRele": "Activar",
+            "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+        },
+        "parametrizacionProg": {
+            "ncodigo": 205,
+            "vctipoDeLectura": "única",
+            "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+            "nreintentos": 3,
+            "jsdiasSemana": null,
+            "jsfrecuenciaLecturaLote": null
+        }
+    },
+    "estadoHoy": {
+        "ncodigo": 261,
+        "vcdescripcion": "En proceso",
+        "lproximo": false,
+        "dfechaHoraProximo": "2025-07-04T15:30:00.000-05:00"
+    }
+}
+
+
+
+
+
+
+
+
+//CASO LECTURA UNICA   y   CASO CONCENTRADOR 
+
+{
+    "ncodigo": 281,
+    "programacionAMI": {
+        "ncodigo": 285,
+        "vcestado": "???",
+        "grupoMedidores": {
+            "nid": 225,
+            "vcfiltro": "Concentrador",
+            "vcidentificador": "11223",
+            "jsseriesMed": null
+        },
+        "listaPeticiones": {
+            "ncodigo": 225,
+            "llectura_perfil_1": true,
+            "leventos": false,
+            "lregistros": true,
+            "lfactorPotencia": false,
+            "linstantaneos": true,
+            "vcaccionRele": "Activar",
+            "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+        },
+        "parametrizacionProg": {
+            "ncodigo": 205,
+            "vctipoDeLectura": "única",
+            "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+            "nreintentos": 3,
+            "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Viernes\", \"Martes\", \"Jueves\", \"Sabado\"]",
+            "jsfrecuenciaLecturaLote": "{\"Lunes\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Miércoles\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Jueves\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Sabado\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}}"
+        }
+    },
+    "estadoHoy": {
+        "ncodigo": 261,
+        "vcdescripcion": "En proceso",
+        "lproximo": false,
+        "dfechaHoraProximo": "2025-07-04T15:30:00.000-05:00"
+    }
+}

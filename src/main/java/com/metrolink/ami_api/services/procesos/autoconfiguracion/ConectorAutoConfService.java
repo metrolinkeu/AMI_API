@@ -1,66 +1,122 @@
 package com.metrolink.ami_api.services.procesos.autoconfiguracion;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.metrolink.ami_api.comunications.TcpClientDetecMedService;
+import com.metrolink.ami_api.models.concentrador.Concentradores;
 import com.metrolink.ami_api.models.medidor.Medidores;
 import com.metrolink.ami_api.models.primeraLectura.AutoConfCanalesPerfilCarga;
 import com.metrolink.ami_api.models.primeraLectura.AutoConfCodigosObisCanal;
 import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
+import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
+import com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador.SharedTaskQueueConc;
 import com.metrolink.ami_api.services.medidor.MedidoresService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.metrolink.ami_api.services.shared.SharedTaskQueue;
-
 import java.time.LocalDateTime;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
-public class ConectorAutoConfService implements SharedTaskQueue.TaskProcessor {
+public class ConectorAutoConfService implements SharedTaskQueueConc.TaskProcessor<List<AutoconfMedidor>> {
 
     @Autowired
     private MedidoresService medidoresService;
 
     @Autowired
-    private SharedTaskQueue sharedTaskQueue; // Inyectar la cola compartida
+    private ConcentradoresService concentradoresService;
+
+    @Autowired
+    private TcpClientDetecMedService tcpClientDetecMedService;
+
+    @Autowired
+    private SharedTaskQueueConc sharedTaskQueue; // Inyectar la cola compartida
 
     public List<AutoconfMedidor> procesarConfiguracion(JsonNode rootNode)
             throws ExecutionException, InterruptedException {
 
-        // Enviar "Hola Mundo" a la cola
-        enviarHolaMundoATarea();
+        // Convertir el JsonNode a JSON String para encolarlo
+        ObjectMapper mapper = new ObjectMapper();
+        String json = "";
+        try {
+            json = mapper.writeValueAsString(rootNode);
+        } catch (JsonProcessingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        // Crear CompletableFuture para la tarea
+        CompletableFuture<List<AutoconfMedidor>> future = new CompletableFuture<>();
+
+        // Encolar la tarea
+        sharedTaskQueue.submitTask(new SharedTaskQueueConc.CompletableFutureTask<>(future, json, this));
+
+        // Esperar a que la tarea se complete y devolver el resultado
+        return future.get();
+
+    }
+
+    @Override
+    public List<AutoconfMedidor> processRequest(String json) {
+        // Convertir el JSON a JsonNode y procesar la configuración
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = null;
+        try {
+            rootNode = objectMapper.readTree(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Llama al método interno para procesar la configuración
+        return procesarConfiguracionInterna(rootNode);
+    }
+
+    private List<AutoconfMedidor> procesarConfiguracionInterna(JsonNode rootNode) {
 
         List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
         Random random = new Random();
 
         try {
-            // Obtener el valor de vcnoSerie
             String vcnoSerie = rootNode.path("vcnoSerie").asText();
             System.out.println("vcnoSerie: " + vcnoSerie);
 
-            // Verificar si existe el nodo "vcseriales"
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // parte para pruebas de conexion con socket ///////////////////////////////////////////////////////////////
+            Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+            System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
+
+            if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
+                String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
+                int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
+
+                byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+                        0x02, 0x62, 0x00 };
+
+                String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
+                System.out.println("Response from TCP server at " + direccion + ":" + puerto + ": " + response);
+            } else {
+                System.out.println("en construccion");
+
+            }
+            // parte para pruebas de conexion con socket ///////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
             JsonNode vcserialesNode = rootNode.path("vcseriales");
 
-            
-
             if (vcserialesNode.isMissingNode()) {
-                // Caso donde solo hay "vcnoSerie"
-                System.out.println("No se encontraron 'vcseriales'. Procesar solo con vcnoSerie.");
                 List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
-
                 for (Medidores medidor : medidores) {
                     AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
                     autoconfMedidores.add(autoconfMedidor);
                 }
             } else {
-                // Caso donde hay "vcnoSerie" y "vcseriales"
-                System.out.println("Se encontraron 'vcseriales'. Procesar con vcnoSerie y vcseriales.");
-
                 vcserialesNode.forEach(serialNode -> {
                     String vcserie = serialNode.asText();
                     AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
@@ -73,13 +129,6 @@ public class ConectorAutoConfService implements SharedTaskQueue.TaskProcessor {
         }
 
         return autoconfMedidores;
-    }
-
-    private void enviarHolaMundoATarea() throws ExecutionException, InterruptedException {
-        CompletableFuture<String> future = new CompletableFuture<>();
-        sharedTaskQueue.submitTask(new SharedTaskQueue.CompletableFutureTask(future, "{}", this));
-        future.get(); // Espera a que la tarea se complete (opcional, dependiendo si necesitas
-                      // bloquear o no)
     }
 
     private AutoconfMedidor crearAutoconfMedidor(String vcSerie, Random random) {
@@ -125,10 +174,4 @@ public class ConectorAutoConfService implements SharedTaskQueue.TaskProcessor {
         return codigosObisCanal;
     }
 
-    @Override
-    public String processRequest(String json) {
-        System.out.println("Hola Mundo");
-        return "Hola Mundo";
-
-    }
 }

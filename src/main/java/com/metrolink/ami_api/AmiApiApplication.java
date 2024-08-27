@@ -7,13 +7,16 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.File;
+import java.util.TimeZone;
 
 @SpringBootApplication
 public class AmiApiApplication {
 
     public static void main(String[] args) {
 
-        System.out.println("cambio de prueba");
+        // Establecer la zona horaria globalmente a  Colombia
+        TimeZone.setDefault(TimeZone.getTimeZone("America/Bogota"));
+        System.out.println("Zona horaria establecida en: " + TimeZone.getDefault().getID());
 
         // Determinar el sistema operativo y crear la carpeta en la ubicación adecuada
         String os = System.getProperty("os.name").toLowerCase();

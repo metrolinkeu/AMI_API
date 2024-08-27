@@ -3,9 +3,13 @@ package com.metrolink.ami_api.services.procesos.programacionesAmi;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metrolink.ami_api.models.medidor.Medidores;
+import com.metrolink.ami_api.services.medidor.MedidorUtils;
+
 import com.metrolink.ami_api.models.procesos.programacionesAmi.AgendaProgramacionesAMI;
 import com.metrolink.ami_api.models.procesos.programacionesAmi.ProgramacionesAMI;
 import com.metrolink.ami_api.services.medidor.MedidoresService;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,9 @@ public class AsignacionAgendaAMedidoresService {
     private MedidoresService medidoresService;
 
     public void verificarYProcesar(AgendaProgramacionesAMI agenda) {
+
+        String seriesmed = "";
+
         // Verificar que la agenda se haya guardado correctamente
         if (agenda == null || agenda.getNcodigo() == null) {
             throw new RuntimeException("Error al guardar la agenda. La operación de guardado no fue exitosa.");
@@ -36,12 +43,39 @@ public class AsignacionAgendaAMedidoresService {
         }
 
         // Verificar si el grupo de medidores y las series de medidores existen
-        if (programacionAMI.getGrupoMedidores() == null
-                || programacionAMI.getGrupoMedidores().getJsseriesMed() == null) {
-            throw new IllegalArgumentException("Grupo de Medidores o Series de Medidores no encontrados.");
+        if (programacionAMI.getGrupoMedidores() != null) {
+            if ("Concentrador".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {
+
+                List<Medidores> medidores = medidoresService
+                        .findByConcentradorVcnoSerie(programacionAMI.getGrupoMedidores().getVcidentificador());
+                seriesmed = MedidorUtils.obtenerStringDeVcSerie(medidores);
+
+            } else if ("ConcentradorYmedidores".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {// aqui
+                                                                                                            // falta
+                                                                                                            // indicar
+                                                                                                            // que
+                                                                                                            // tienen
+                                                                                                            // una
+                                                                                                            // relacon
+                                                                                                            // con el
+                                                                                                            // medidor
+
+                seriesmed = programacionAMI.getGrupoMedidores().getJsseriesMed();
+
+            } else if ("Medidores".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {
+                seriesmed = programacionAMI.getGrupoMedidores().getJsseriesMed();
+
+            } else if ("Frontera SIC".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {
+                List<Medidores> medidores = medidoresService
+                        .findByVcsic(programacionAMI.getGrupoMedidores().getVcidentificador());
+                seriesmed = MedidorUtils.obtenerStringDeVcSerie(medidores);
+
+            } else {
+                throw new IllegalArgumentException("Filtro no encontrado.");
+            }
+
         }
 
-        String seriesmed = programacionAMI.getGrupoMedidores().getJsseriesMed();
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
@@ -72,12 +106,10 @@ public class AsignacionAgendaAMedidoresService {
         }
     }
 
-
-    public void verificarYRemover(AgendaProgramacionesAMI agenda){
+    public void verificarYRemover(AgendaProgramacionesAMI agenda) {
 
         String seriesmed = agenda.getProgramacionAMI().getGrupoMedidores().getJsseriesMed();
         ObjectMapper objectMapper = new ObjectMapper();
-
 
         try {
             // Convertir el String JSON a un array de Strings
@@ -105,7 +137,6 @@ public class AsignacionAgendaAMedidoresService {
             // Manejar la excepción
             e.printStackTrace();
         }
-
 
     }
 }

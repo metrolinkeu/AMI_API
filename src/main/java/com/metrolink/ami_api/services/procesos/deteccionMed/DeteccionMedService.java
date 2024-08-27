@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class DeteccionMedService {
 
     private static final Logger logger = LoggerConfigProcesos.getLogger();
 
-    public List<Medidores> procesarDeteccionByCon(String json) throws IOException {
+    public List<Medidores> procesarDeteccionByCon(String json) throws IOException, ExecutionException, InterruptedException {
 
         // Parsear el JSON para obtener los valores
         ObjectMapper objectMapperCon = new ObjectMapper();

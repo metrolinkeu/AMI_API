@@ -29,7 +29,7 @@
 	</scm>
 	<properties>
 		<java.version>1.8</java.version>
-		<maven.test.skip>true</maven.test.skip>
+		<skipTests>false</skipTests>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -42,10 +42,17 @@
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		 <!-- Spring Boot Starter Test incluye JUnit 5 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<dependency>
@@ -86,6 +93,17 @@
 	<build>
         <finalName>Ami_Api</finalName>
         <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version> <!-- Asegúrate de tener una versión compatible con JUnit 5 -->
+				<configuration>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/autoconfiguracion")
@@ -20,7 +21,7 @@ public class AutoConfiguracionController {
     private AutoConfiguracionService autoConfiguracionService;
 
     @GetMapping("/ObtenerConfig")
-    public ResponseEntity<List<AutoconfMedidor>> recibirConfiguracion(HttpServletRequest request) {
+    public ResponseEntity<List<AutoconfMedidor>> recibirConfiguracion(HttpServletRequest request) throws ExecutionException, InterruptedException {
         try {
             // Leer el cuerpo de la solicitud como texto
             String json = request.getReader().lines()

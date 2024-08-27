@@ -7,101 +7,81 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.StringJoiner;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import com.metrolink.ami_api.comunications.TcpClientDetecMedService;
 import com.metrolink.ami_api.models.concentrador.Concentradores;
 import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
+import com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador.SharedTaskQueueConc;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
-public class ConectorDetecMedService {
+public class ConectorDetecMedService implements SharedTaskQueueConc.TaskProcessor<String> {
 
     @Autowired
-    private TcpClientDetecMedService tcpClientDetecMedService; // Asegúrate de tener este servicio disponible
+    private TcpClientDetecMedService tcpClientDetecMedService;
 
     @Autowired
     private ConcentradoresService concentradoresService;
 
-    private final ExecutorService executorService = Executors.newSingleThreadExecutor(); // Crear un pool de 1 thread
-    private final LinkedBlockingQueue<Runnable> requestQueue = new LinkedBlockingQueue<>(); // Cola para manejar las
-                                                                                            // solicitudes
+    @Autowired
+    private SharedTaskQueueConc sharedTaskQueue; // Inyectar la cola compartida
 
-    public ConectorDetecMedService() {
-        // Iniciar un hilo que procesará la cola
-        executorService.submit(() -> {
-            while (true) {
-                try {
-                    // Tomar la próxima solicitud de la cola y procesarla
-                    Runnable requestTask = requestQueue.take();
-                    requestTask.run();
-                    // Pausa de 10ms después de procesar cada tarea
-                    Thread.sleep(10); // Puedes ajustar el tiempo según sea necesario
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
-            }
-        });
+    public String usarConectorDeteccion(String json) throws IOException, ExecutionException, InterruptedException {
+        // Crear CompletableFuture para la tarea
+        CompletableFuture<String> future = new CompletableFuture<>();
+
+        // Encolar la tarea
+        sharedTaskQueue.submitTask(new SharedTaskQueueConc.CompletableFutureTask<>(future, json, this));
+
+        // Esperar a que la tarea se complete y devolver el resultado
+        return future.get();
     }
 
-    public String usarConectorDeteccion(String json) throws IOException {
-        // Parsear el JSON para obtener los valores
+    @Override
+    public String processRequest(String json) {
+        // Procesar el JSON como antes
         ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(json);
+        JsonNode jsonNode = null;
+        try {
+            jsonNode = objectMapper.readTree(json);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String vcnoSerie = jsonNode.get("vcnoSerie").asText();
-
         System.out.println("vcnoSerie: " + vcnoSerie);
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // parte para pruebas de conexion con socket ///////////////////////////////////////////////////////////////
         // Concentradores concentrador = concentradoresService.findById(vcnoSerie);
-
         // System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
 
         // if ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion())) {
-
-        //     // Direcciones y puertos de los servidores TCP
         //     String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
         //     int puerto = Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
 
-        //     // Obtener direccion cliente y fisica
-        //     // Contraseña
+        //     byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        //             0x02, 0x62, 0x00 };
 
-        //     // Bytes a enviar
-        //     byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x62, 0x00 };
-
-        //     // Enviar los bytes a tres servidores TCP simultáneamente
-
-        //     // Encolar la tarea para enviar los bytes
-        //     requestQueue.offer(() -> {
-        //         String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
-        //         System.out.println("\033[47;30m" +
-        //                 "Response from TCP server at " +
-        //                 "\033[0m" +
-        //                 direccion + ":" + puerto + ": " + response);
-        //     });
-
+        //     String response = tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion, puerto);
+        //     System.out.println("Response from TCP server at " + direccion + ":" + puerto + ": " + response);
         // } else {
         //     System.out.println("en construccion");
+        
         // }
+        // parte para pruebas de conexion con socket ///////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Generar medidores aleatorios
         Random random = new Random();
-        // int cantidadMedidores = random.nextInt(3) + 1; // Generar entre 1 y 10
-        // medidores
         int cantidadMedidores = 1;
         StringJoiner medidoresJoiner = new StringJoiner(", ");
-
         for (int i = 1; i <= cantidadMedidores; i++) {
             String numeroSerie = String.format("%05d", random.nextInt(99999)); // Número de serie de 5 dígitos
             medidoresJoiner.add("\"Medidor" + i + "\": \"" + numeroSerie + "\"");
         }
-
         String newJson = "{ \"Medidores\": { " + medidoresJoiner.toString() + " } }";
-
-        System.out.println("Recibido: " + json);
-
-        // Devolver el JSON procesado
+        System.out.println("Procesado: " + newJson);
         return newJson;
     }
 }

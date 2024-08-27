@@ -1,0 +1,492 @@
+// //CASO 1 = LECTURA UNICA Y FILTRO POR CONCENTRADOR 
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Concentrador",
+//             "vcidentificador": "11223",
+//             "jsseriesMed": null
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "única",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": null,
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": false,
+//         "dfechaHoraProximo": null
+//     }
+// }
+
+
+// //CASO 2: LECTURA UNICA y FILTRO POR CONCENTRADORyMEDIDORES 
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "ConcentradorYmedidores",
+//             "vcidentificador": "11223",
+//             "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "única",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": null,
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": false,
+//         "dfechaHoraProximo": null
+//     }
+// }
+
+
+// //CASO 3: LECTURA UNICA y FILTRO POR MEDIDORES   
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Medidores",
+//             "vcidentificador": null,
+//             "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "única",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": null,
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": false,
+//         "dfechaHoraProximo": null
+//     }
+// }
+
+
+// //CASO 4: LECTURA UNICA y CASO FRONTERA SIC   
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Frontera SIC",
+//             "vcidentificador": 987,
+//             "jsseriesMed": null
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "única",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": null,
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": false,
+//         "dfechaHoraProximo": null
+//     }
+// }
+
+
+// //CASO 5:  LECTURA FRECUENTE NO RECURRENTE Y FILTRO POR CONCENTRADOR
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Concentrador",
+//             "vcidentificador": "11223",
+//             "jsseriesMed": null
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "frecuente no recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+
+// //CASO 6: LECTURA FRECUENTE NO RECURRENTE y FILTRO POR CONCENTRADORyMEDIDORES 
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "ConcentradorYmedidores",
+//             "vcidentificador": "11223",
+//             "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "frecuente no recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+
+// //CASO 7: LECTURA FRECUENTE NO RECURRENTE y FILTRO POR MEDIDORES   
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Medidores",
+//             "vcidentificador": null,
+//             "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "frecuente no recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+
+// //CASO 8: LECTURA FRECUENTE NO RECURRENTE y CASO FRONTERA SIC   
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Frontera SIC",
+//             "vcidentificador": "987",
+//             "jsseriesMed": null
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "frecuente no recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": null
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+
+// //CASO 9:  LECTURA RECURRENTE Y FILTRO POR CONCENTRADOR
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Concentrador",
+//             "vcidentificador": "4040",
+//             "jsseriesMed": null
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": "{\"Lunes\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Miércoles\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Jueves\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Sabado\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}}"
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+
+// //CASO 10: LECTURA RECURRENTE y FILTRO POR CONCENTRADORyMEDIDORES 
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "ConcentradorYmedidores",
+//             "vcidentificador": "11223",
+//             "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": "{\"Lunes\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Miércoles\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Jueves\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Sabado\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}}"
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+
+// //CASO 11: LECTURA RECURRENTE y FILTRO POR MEDIDORES   
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Medidores",
+//             "vcidentificador": null,
+//             "jsseriesMed": "[\"001\", \"002\", \"003\", \"004\", \"005\", \"006\"]"
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": "{\"Lunes\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Miércoles\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Jueves\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Sabado\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}}"
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+
+// //CASO 12: LECTURA FRECUENTE NO RECURRENTE y CASO FRONTERA SIC   
+
+// {
+//     "ncodigo": 281,
+//     "programacionAMI": {
+//         "ncodigo": 285,
+//         "vcestado": "???",
+//         "grupoMedidores": {
+//             "nid": 225,
+//             "vcfiltro": "Frontera SIC",
+//             "vcidentificador": 987,
+//             "jsseriesMed": null
+//         },
+//         "listaPeticiones": {
+//             "ncodigo": 225,
+//             "llectura_perfil_1": true,
+//             "leventos": false,
+//             "lregistros": true,
+//             "lfactorPotencia": false,
+//             "linstantaneos": true,
+//             "vcaccionRele": "Activar",
+//             "dfechaHoraSincronizacion": "2025-07-04T15:30:00.000-05:00"
+//         },
+//         "parametrizacionProg": {
+//             "ncodigo": 205,
+//             "vctipoDeLectura": "recurrente",
+//             "dfechaHoraInicio": "2024-08-16T19:28:00.000-05:00",
+//             "nreintentos": 3,
+//             "jsdiasSemana": "[\"Lunes\", \"Miércoles\", \"Jueves\", \"Sabado\"]",
+//             "jsfrecuenciaLecturaLote": "{\"Lunes\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Miércoles\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Jueves\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}, \"Sabado\": {\"horaInicio\": \"05:00am\", \"horaFin\": \"10:00am\"}}"
+//         }
+//     },
+//     "estadoHoy": {
+//         "ncodigo": 261,
+//         "vcdescripcion": "En proceso",
+//         "lproximo": true,
+//         "dfechaHoraProximo": "2024-08-16T19:28:00.000-05:00"
+//     }
+// }
+
+

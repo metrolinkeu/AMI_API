@@ -36,81 +36,49 @@ public class AgendaProgramacionesAMIService {
             throw new IllegalArgumentException("ID should be null for new entities.");
         }
 
-        // Guardar la agenda en la base de datos
-        AgendaProgramacionesAMI agenda = agendaProgramacionesAMIRepository.save(agendaProgramacionesAMI);
-
-        // Verificar y procesar la agenda mediante AsignacionAgendaAMedidores
-        asignacionAgendaAMedidores.verificarYProcesar(agenda);
-
-        Long ncodigo = agenda.getProgramacionAMI().getNcodigo();
-        System.out.println(ncodigo);
-
-        ProgramacionesAMI programacionAMI = programacionesAMIService.findById(agenda.getProgramacionAMI().getNcodigo());
-        String tipoLectura = programacionAMI.getParametrizacionProg().getVctipoDeLectura();
-        String filtro = programacionAMI.getGrupoMedidores().getVcfiltro();
-        boolean isRecurrente = "recurrente".equalsIgnoreCase(tipoLectura);
-        boolean isFrecuenteNoRecurrente = "frecuente no recurrente".equalsIgnoreCase(tipoLectura);
-        boolean isUnica = "única".equalsIgnoreCase(tipoLectura);
-
-        if (isUnica && "Concentrador".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 1: LECTURA ÚNICA Y FILTRO POR CONCENTRADOR");
-        } else if (isUnica && "ConcentradorYmedidores".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 2: LECTURA ÚNICA Y FILTRO POR CONCENTRADOR Y MEDIDORES");
-        } else if (isUnica && "Medidores".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 3: LECTURA ÚNICA Y FILTRO POR MEDIDORES");
-        } else if (isUnica && "Frontera SIC".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 4: LECTURA ÚNICA Y CASO FRONTERA SIC");
-        } else if (isFrecuenteNoRecurrente && "Concentrador".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 5: LECTURA FRECUENTE NO RECURRENTE Y FILTRO POR CONCENTRADOR");
-        } else if (isFrecuenteNoRecurrente && "ConcentradorYmedidores".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 6: LECTURA FRECUENTE NO RECURRENTE Y FILTRO POR CONCENTRADOR Y MEDIDORES");
-        } else if (isFrecuenteNoRecurrente && "Medidores".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 7: LECTURA FRECUENTE NO RECURRENTE Y FILTRO POR MEDIDORES");
-        } else if (isFrecuenteNoRecurrente && "Frontera SIC".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 8: LECTURA FRECUENTE NO RECURRENTE Y CASO FRONTERA SIC");
-        } else if (isRecurrente && "Concentrador".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 9: LECTURA RECURRENTE Y FILTRO POR CONCENTRADOR");
-        } else if (isRecurrente && "ConcentradorYmedidores".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 10: LECTURA RECURRENTE Y FILTRO POR CONCENTRADOR Y MEDIDORES");
-        } else if (isRecurrente && "Medidores".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 11: LECTURA RECURRENTE Y FILTRO POR MEDIDORES");
-        } else if (isRecurrente && "Frontera SIC".equalsIgnoreCase(filtro)) {
-            System.out.println("CASO 12: LECTURA RECURRENTE Y CASO FRONTERA SIC");
-        } else {
-            System.out.println("CASO NO DEFINIDO");
+        // Intentar guardar la agenda en la base de datos
+        AgendaProgramacionesAMI agenda;
+        try {
+            agenda = agendaProgramacionesAMIRepository.save(agendaProgramacionesAMI);
+        } catch (Exception e) {
+            // Si hay una excepción al guardar, manejarla aquí
+            System.err.println("Error al guardar la agenda: " + e.getMessage());
+            return null; // Devuelve null o lanza una excepción personalizada si prefieres
         }
 
+        // Verificar si el guardado fue exitoso
+        if (agenda == null) {
+            System.out.println("Fallo en la creación de la agenda.");
+            return null; // O lanza una excepción personalizada
+        }
 
+        // Verificar y procesar la agenda mediante AsignacionAgendaAMedidores; esto
+        // relacionla la agenda con cada medidor incluido en la programacion
+        asignacionAgendaAMedidores.verificarYProcesar(agenda);
 
+        // Inicio de proceso de puesta en marcha de la programación de acuerdo a
+        // cualquiera de los doce casos
+        ProgramacionesAMI programacionAMI = programacionesAMIService.findById(agenda.getProgramacionAMI().getNcodigo());
 
+        // Usar la nueva clase para manejar la lógica de los casos
+        ProgramacionHandler.manejarProgramacion(programacionAMI);
 
-
-
-        // Timestamp tiempoInicio = programacionAMI.getParametrizacionProg().getDfechaHoraInicio();
+        // Timestamp tiempoInicio =
+        // programacionAMI.getParametrizacionProg().getDfechaHoraInicio();
 
         // System.out.println(tiempoInicio);
 
         // Instant ahora = Instant.now();
         // long delay = Duration.between(ahora, tiempoInicio.toInstant()).toMillis();
 
-     
-
-
-
-
-
-
-
-
-
-
         // if (delay > 0) {
-        //     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        //     scheduler.schedule(() -> {
-        //         System.out.println("Hola Mundo");
-        //     }, delay, TimeUnit.MILLISECONDS);
+        // ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        // scheduler.schedule(() -> {
+        // System.out.println("Hola Mundo");
+        // }, delay, TimeUnit.MILLISECONDS);
         // } else {
-        //     System.out.println("La fecha y hora ya han pasado, no se puede programar la tarea.");
+        // System.out.println("La fecha y hora ya han pasado, no se puede programar la
+        // tarea.");
         // }
 
         return agenda;

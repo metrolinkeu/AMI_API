@@ -17,10 +17,21 @@ public class AgendaProgramacionesAMIController {
     private AgendaProgramacionesAMIService agendaProgramacionesAMIService;
 
     @PostMapping
-    public ResponseEntity<AgendaProgramacionesAMI> createAgendaProgramacionesAMI(@RequestBody AgendaProgramacionesAMI agendaProgramacionesAMI) {
-        AgendaProgramacionesAMI createdAgendaProgramacionesAMI = agendaProgramacionesAMIService.save(agendaProgramacionesAMI, false);
+    public ResponseEntity<?> createAgendaProgramacionesAMI(
+            @RequestBody AgendaProgramacionesAMI agendaProgramacionesAMI) {
+        AgendaProgramacionesAMI createdAgendaProgramacionesAMI = agendaProgramacionesAMIService
+                .save(agendaProgramacionesAMI, false);
+
+        if (createdAgendaProgramacionesAMI == null) {
+            // Si la agenda no se pudo crear, devuelve un mensaje de error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear la agenda de programación AMI. Por favor, intente de nuevo.");
+        }
+
         return new ResponseEntity<>(createdAgendaProgramacionesAMI, HttpStatus.CREATED);
     }
+
+    
 
     @GetMapping
     public ResponseEntity<List<AgendaProgramacionesAMI>> getAllAgendaProgramacionesAMI() {
@@ -35,14 +46,16 @@ public class AgendaProgramacionesAMIController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AgendaProgramacionesAMI> updateAgendaProgramacionesAMI(@PathVariable Long id, @RequestBody AgendaProgramacionesAMI agendaProgramacionesAMIDetails) {
-        AgendaProgramacionesAMI updatedAgendaProgramacionesAMI = agendaProgramacionesAMIService.update(id, agendaProgramacionesAMIDetails);
+    public ResponseEntity<AgendaProgramacionesAMI> updateAgendaProgramacionesAMI(@PathVariable Long id,
+            @RequestBody AgendaProgramacionesAMI agendaProgramacionesAMIDetails) {
+        AgendaProgramacionesAMI updatedAgendaProgramacionesAMI = agendaProgramacionesAMIService.update(id,
+                agendaProgramacionesAMIDetails);
         return ResponseEntity.ok(updatedAgendaProgramacionesAMI);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAgendaProgramacionesAMI(@PathVariable Long id) {
-        agendaProgramacionesAMIService.deleteById(id);  
+        agendaProgramacionesAMIService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

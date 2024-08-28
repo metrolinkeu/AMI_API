@@ -108,7 +108,49 @@ public class AsignacionAgendaAMedidoresService {
 
     public void verificarYRemover(AgendaProgramacionesAMI agenda) {
 
-        String seriesmed = agenda.getProgramacionAMI().getGrupoMedidores().getJsseriesMed();
+        String seriesmed = "";
+
+        // Verificar que la agenda se haya guardado correctamente
+        if (agenda == null || agenda.getNcodigo() == null) {
+            throw new RuntimeException("Error al guardar la agenda. La operación de guardado no fue exitosa.");
+        }
+
+        if (agenda.getProgramacionAMI() == null || agenda.getProgramacionAMI().getNcodigo() == null) {
+            throw new IllegalArgumentException("Programación AMI no puede ser nulo.");
+        }
+
+        // Buscar la programación AMI asociada
+        ProgramacionesAMI programacionAMI = programacionesAMIService.findById(agenda.getProgramacionAMI().getNcodigo());
+        if (programacionAMI == null) {
+            throw new IllegalArgumentException("Programación AMI no encontrada.");
+        }
+
+        // Verificar si el grupo de medidores y las series de medidores existen
+        if (programacionAMI.getGrupoMedidores() != null) {
+            if ("Concentrador".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {
+
+                List<Medidores> medidores = medidoresService
+                        .findByConcentradorVcnoSerie(programacionAMI.getGrupoMedidores().getVcidentificador());
+                seriesmed = MedidorUtils.obtenerStringDeVcSerie(medidores);
+
+            } else if ("ConcentradorYmedidores".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {
+
+                seriesmed = programacionAMI.getGrupoMedidores().getJsseriesMed();
+
+            } else if ("Medidores".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {
+                seriesmed = programacionAMI.getGrupoMedidores().getJsseriesMed();
+
+            } else if ("Frontera SIC".equals(programacionAMI.getGrupoMedidores().getVcfiltro())) {
+                List<Medidores> medidores = medidoresService
+                        .findByVcsic(programacionAMI.getGrupoMedidores().getVcidentificador());
+                seriesmed = MedidorUtils.obtenerStringDeVcSerie(medidores);
+
+            } else {
+                throw new IllegalArgumentException("Filtro no encontrado.");
+            }
+
+        }
+
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {

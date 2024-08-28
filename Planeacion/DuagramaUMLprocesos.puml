@@ -129,8 +129,8 @@ package "com.metrolink.ami_api" {
                     - vctipoDeLectura: String
                     - dfechaHoraInicio: Timestamp
                     - nreintentos: int
-                    - vcdiasSemanaJson: String
-                    - vcfrecuencia: String
+                    - jsdiasSemanaJson: String
+                    - jsfrecuenciaLecturaLote: String
                 }
 
                 class ListasPeticiones  #ff6b6b {
@@ -306,10 +306,11 @@ package "com.metrolink.ami_api" {
             }
 
             package "com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador"{
-                class SharedTaskQueueConc{
+                class SharedTaskQueueConc #66f2d4 {
                     * SharedTaskQueueConc()
                     * submitTask(CompletableFutureTask<?> task): void
                     * interface TaskProcessor<T>
+                    + ClassAux CompletableFutureTask<T>
 
                 }
 
@@ -327,6 +328,10 @@ package "com.metrolink.ami_api" {
                 * update(vcSerie: String, medidorDetails: Medidores)
                 * deleteById(vcSerie : String): void
             }
+
+            class MedidorUtils{
+                * obtenerStringDeVcSerie(List<Medidores> medidores): String 
+            }
         }
         !endif
 
@@ -340,7 +345,7 @@ package "com.metrolink.ami_api" {
                     - static final Logger logger = LoggerConfigProcesos
                     * procesarDeteccionByCon(json: String): List<Medidores>
                 }
-                class ConectorDetecMedService #84f086{
+                class ConectorDetecMedService<implements SharedTaskQueueConc.TaskProcessor<String>> #84f086{
                     + TcpClientDetecMedService tcpClientDetecMedService
                     + ConcentradoresService concentradoresService
                     + SharedTaskQueue sharedTaskQueue
@@ -361,13 +366,15 @@ package "com.metrolink.ami_api" {
                     * procesarConfiguracion(rootNode: JsonNode): List<AutoconfMedidor>
                 }
 
-                class ConectorAutoConfService #84f086{
+                class ConectorAutoConfService<imp_SharedTaskQueueConc_TaskProcessor<List<AutoconfMedidor>>>   #84f086{
                     + MedidoresService medidoresService
                     + SharedTaskQueue sharedTaskQueue
+                    + ConcentradoresService concentradoresService
+                    + TcpClientDetecMedService tcpClientDetecMedService
                     "Metodos provicionales"
-                    * procesarConfiguracion(json: String): List<AutoconfMedidor>
-                    * @Override processRequest(String json): List<AutoconfMedidor>
-                    * procesarConfiguracionInterna(JsonNode rootNode): List<AutoconfMedidor>
+                    * procesarConfiguracion(JsonNode rootNode): List<AutoconfMedidor>
+                    * @override processRequest(String json): List<AutoconfMedidor>
+                    * procesarConfiguracionInterna(JsonNode rootNode): List<AutoconfMedidor> 
                     * crearAutoconfMedidor(vcSerie: String, random: Random): AutoconfMedidor
                     * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
                 }
@@ -524,9 +531,11 @@ MedidoresAgendaService --> MedidoresAgenda: usa
 LoggerConfigProcesos --> procesos_log
 
 
-ConectorDetecMedService -> SharedTaskQueueConc
+ConectorDetecMedService -> SharedTaskQueueConc: implementa
 
-ConectorAutoConfService -> SharedTaskQueueConc
+ConectorAutoConfService -> SharedTaskQueueConc: implementa
+
+AsignacionAgendaAMedidores -> MedidorUtils::obtenerStringDeVcSerie
 
 !endif
 

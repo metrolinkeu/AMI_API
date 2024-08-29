@@ -10,6 +10,7 @@ import com.metrolink.ami_api.models.primeraLectura.AutoConfCodigosObisCanal;
 import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
 import com.metrolink.ami_api.repositories.medidor.MedidoresRepository;
 import com.metrolink.ami_api.services.medidor.MedidoresService;
+import com.metrolink.ami_api.services.procesos.conectorGeneral.ConectorGeneralService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ public class AutoConfiguracionService {
 
     @Autowired
     private ConectorAutoConfService conectorAutoConfService;
+
+    @Autowired
+    private ConectorGeneralService conectorGeneralService;
 
     @Autowired
     private MedidoresRepository medidoresRepository;
@@ -45,7 +49,9 @@ public class AutoConfiguracionService {
             // Leer el JSON como árbol de nodos
             JsonNode rootNode = mapper.readTree(json);
 
-            List<AutoconfMedidor> autoConfiguraciones = conectorAutoConfService.procesarConfiguracion(rootNode);
+            //List<AutoconfMedidor> autoConfiguraciones = conectorAutoConfService.procesarConfiguracion(rootNode);
+            
+            List<AutoconfMedidor> autoConfiguraciones = conectorGeneralService.UsarConectorAutoConfMed(rootNode);
 
             // Iterar sobre las autoconfiguraciones para actualizar Medidores
             for (AutoconfMedidor autoconfMedidor : autoConfiguraciones) {

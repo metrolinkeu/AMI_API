@@ -305,16 +305,16 @@ package "com.metrolink.ami_api" {
                 * deleteById(id : Long): void
             }
 
-            package "com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador"{
-                class SharedTaskQueueConc #66f2d4 {
-                    * SharedTaskQueueConc()
-                    * submitTask(CompletableFutureTask<?> task): void
-                    * interface TaskProcessor<T>
-                    + ClassAux CompletableFutureTask<T>
+            ' package "com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador"{
+            '     class SharedTaskQueueConc #66f2d4 {
+            '         * SharedTaskQueueConc()
+            '         * submitTask(CompletableFutureTask<?> task): void
+            '         * interface TaskProcessor<T>
+            '         + ClassAux CompletableFutureTask<T>
 
-                }
+            '     }
 
-            }
+            ' }
         }
         !endif
 
@@ -337,6 +337,14 @@ package "com.metrolink.ami_api" {
 
         !if SHOW_PART_PROCESOS
         package "com.metrolink.ami_api.services.procesos" #a0c8fa{
+
+            package "com.metrolink.ami_api.services.procesos.conectorGeneral"{
+                class ConectorGeneral #84f086 {
+
+                }
+            }
+
+
             package "com.metrolink.ami_api.services.procesos.deteccionMed" #eaebdf{
                 class DeteccionMedService #cfd4fc{
                     + ConectorDetecMedService conectorDetecMedService
@@ -345,16 +353,16 @@ package "com.metrolink.ami_api" {
                     - static final Logger logger = LoggerConfigProcesos
                     * procesarDeteccionByCon(json: String): List<Medidores>
                 }
-                class ConectorDetecMedService<implements SharedTaskQueueConc.TaskProcessor<String>> #84f086{
-                    + TcpClientDetecMedService tcpClientDetecMedService
-                    + ConcentradoresService concentradoresService
-                    + SharedTaskQueue sharedTaskQueue
-                    --
-                    "Metodo Provicional"
-                    ** ConectorDetecMedService()
-                    * usarConectorDeteccion(json: String): String
-                    * @Override  processRequest(String json): String
-                }
+                ' class ConectorDetecMedService<implements SharedTaskQueueConc.TaskProcessor<String>> #84f086{
+                '     + TcpClientDetecMedService tcpClientDetecMedService
+                '     + ConcentradoresService concentradoresService
+                '     + SharedTaskQueue sharedTaskQueue
+                '     --
+                '     "Metodo Provicional"
+                '     ** ConectorDetecMedService()
+                '     * usarConectorDeteccion(json: String): String
+                '     * @Override  processRequest(String json): String
+                ' }
             }
 
             !if SHOW_AUTOCONF
@@ -366,18 +374,18 @@ package "com.metrolink.ami_api" {
                     * procesarConfiguracion(rootNode: JsonNode): List<AutoconfMedidor>
                 }
 
-                class ConectorAutoConfService<imp_SharedTaskQueueConc_TaskProcessor<List<AutoconfMedidor>>>   #84f086{
-                    + MedidoresService medidoresService
-                    + SharedTaskQueue sharedTaskQueue
-                    + ConcentradoresService concentradoresService
-                    + TcpClientDetecMedService tcpClientDetecMedService
-                    "Metodos provicionales"
-                    * procesarConfiguracion(JsonNode rootNode): List<AutoconfMedidor>
-                    * @override processRequest(String json): List<AutoconfMedidor>
-                    * procesarConfiguracionInterna(JsonNode rootNode): List<AutoconfMedidor> 
-                    * crearAutoconfMedidor(vcSerie: String, random: Random): AutoconfMedidor
-                    * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
-                }
+                ' class ConectorAutoConfService<imp_SharedTaskQueueConc_TaskProcessor<List<AutoconfMedidor>>>   #84f086{
+                '     + MedidoresService medidoresService
+                '     + SharedTaskQueue sharedTaskQueue
+                '     + ConcentradoresService concentradoresService
+                '     + TcpClientDetecMedService tcpClientDetecMedService
+                '     "Metodos provicionales"
+                '     * procesarConfiguracion(JsonNode rootNode): List<AutoconfMedidor>
+                '     * @override processRequest(String json): List<AutoconfMedidor>
+                '     * procesarConfiguracionInterna(JsonNode rootNode): List<AutoconfMedidor> 
+                '     * crearAutoconfMedidor(vcSerie: String, random: Random): AutoconfMedidor
+                '     * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
+                ' }
             }
             !endif
 
@@ -472,7 +480,7 @@ DeteccionMedService -> MedidoresService : @Autowired
 DeteccionMedService -> ConcentradoresService  : @Autowired
 DeteccionMedService -> Medidores : usa
 DeteccionMedService -> Concentradores : usa
-DeteccionMedService <-> ConectorDetecMedService : @Autowired
+' DeteccionMedService <-> ConectorDetecMedService : @Autowired
 DeteccionMedService -> LoggerConfigProcesos: usa
 
 AutoConfiguracionController --> AutoConfiguracionService : @Autowired
@@ -484,13 +492,13 @@ AutoConfiguracionService -> Medidores : usa
 AutoConfiguracionService -> AutoConfCanalesPerfilCarga : usa
 AutoConfiguracionService -> AutoConfCodigosObisCanal : usa
 AutoConfiguracionService -> AutoconfMedidor : usa
-AutoConfiguracionService <-> ConectorAutoConfService : usa
+' AutoConfiguracionService <-> ConectorAutoConfService : usa
 
-ConectorAutoConfService -> Medidores: usa
-ConectorAutoConfService -> AutoConfCanalesPerfilCarga: usa
-ConectorAutoConfService -> AutoConfCodigosObisCanal: usa
-ConectorAutoConfService -> AutoconfMedidor: usa
-ConectorAutoConfService -> MedidoresService: @Autowired
+' ConectorAutoConfService -> Medidores: usa
+' ConectorAutoConfService -> AutoConfCanalesPerfilCarga: usa
+' ConectorAutoConfService -> AutoConfCodigosObisCanal: usa
+' ConectorAutoConfService -> AutoconfMedidor: usa
+' ConectorAutoConfService -> MedidoresService: @Autowired
 
 ProgramacionesAMI --> GrupoMedidores: contiene
 ProgramacionesAMI --> ListasPeticiones: contiene
@@ -516,14 +524,14 @@ ProgramacionesAMIService --> ProgramacionesAMIRepository: @Autowired
 
 AgendaProgramacionesAMIController --> AgendaProgramacionesAMIService: @Autowired
 
-AgendaProgramacionesAMIService -> AsignacionAgendaAMedidoresService: @Autowired
+AgendaProgramacionesAMIService -> AsignacionAgendaAMedidoresService #e6ffd6: @Autowired 
 AgendaProgramacionesAMIService --> AgendaProgramacionesAMIRepository: @Autowired
 
 AsignacionAgendaAMedidoresService -> ProgramacionesAMIService: @Autowired
 AsignacionAgendaAMedidoresService -> MedidoresService: @Autowired
 
 
-ConectorDetecMedService --> TcpClientDetecMedService: @Autowired
+' ConectorDetecMedService --> TcpClientDetecMedService: @Autowired
 
 MedidoresAgendaController --> MedidoresAgendaService: @Autowired
 MedidoresAgendaService --> MedidoresAgenda: usa
@@ -531,11 +539,16 @@ MedidoresAgendaService --> MedidoresAgenda: usa
 LoggerConfigProcesos --> procesos_log
 
 
-ConectorDetecMedService -> SharedTaskQueueConc: implementa
+' ConectorDetecMedService -> SharedTaskQueueConc: implementa
 
-ConectorAutoConfService -> SharedTaskQueueConc: implementa
+' ConectorAutoConfService -> SharedTaskQueueConc: implementa
 
-AsignacionAgendaAMedidores -> MedidorUtils::obtenerStringDeVcSerie
+AsignacionAgendaAMedidoresService -> MedidorUtils::obtenerStringDeVcSerie
+
+AutoConfiguracionService -> ConectorGeneral #f50707
+
+DeteccionMedService -> ConectorGeneral #f50707
+
 
 !endif
 

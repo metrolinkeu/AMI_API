@@ -30,6 +30,9 @@ public class AgendaProgramacionesAMIService {
     @Autowired
     private ProgramacionesAMIService programacionesAMIService;
 
+    @Autowired
+    private ProgramacionHandlerService programacionHandler;
+
     @Transactional
     public AgendaProgramacionesAMI save(AgendaProgramacionesAMI agendaProgramacionesAMI, boolean isUpdate) {
         if (!isUpdate && agendaProgramacionesAMI.getNcodigo() != null) {
@@ -60,26 +63,10 @@ public class AgendaProgramacionesAMIService {
         // cualquiera de los doce casos
         ProgramacionesAMI programacionAMI = programacionesAMIService.findById(agenda.getProgramacionAMI().getNcodigo());
 
-        // Usar la nueva clase para manejar la lógica de los casos
-        ProgramacionHandler.manejarProgramacion(programacionAMI);
+        // Usar la  clase para manejar la lógica de los casos
+        programacionHandler.manejarProgramacion(programacionAMI);
 
-        // Timestamp tiempoInicio =
-        // programacionAMI.getParametrizacionProg().getDfechaHoraInicio();
-
-        // System.out.println(tiempoInicio);
-
-        // Instant ahora = Instant.now();
-        // long delay = Duration.between(ahora, tiempoInicio.toInstant()).toMillis();
-
-        // if (delay > 0) {
-        // ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        // scheduler.schedule(() -> {
-        // System.out.println("Hola Mundo");
-        // }, delay, TimeUnit.MILLISECONDS);
-        // } else {
-        // System.out.println("La fecha y hora ya han pasado, no se puede programar la
-        // tarea.");
-        // }
+   
 
         return agenda;
 

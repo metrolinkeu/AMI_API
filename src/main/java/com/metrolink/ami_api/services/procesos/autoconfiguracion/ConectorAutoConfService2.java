@@ -5,25 +5,25 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import org.springframework.stereotype.Service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.metrolink.ami_api.models.concentrador.Concentradores;
+
 import com.metrolink.ami_api.models.medidor.Medidores;
 import com.metrolink.ami_api.models.primeraLectura.AutoConfCanalesPerfilCarga;
 import com.metrolink.ami_api.models.primeraLectura.AutoConfCodigosObisCanal;
 import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
-import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
+
 import com.metrolink.ami_api.services.medidor.MedidoresService;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ConectorAutoConfService2 {
 
-    @Autowired
-    private ConcentradoresService concentradoresService;
 
-     @Autowired
+
+    @Autowired
     private MedidoresService medidoresService;
 
     public List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode) {

@@ -305,16 +305,7 @@ package "com.metrolink.ami_api" {
                 * deleteById(id : Long): void
             }
 
-            ' package "com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador"{
-            '     class SharedTaskQueueConc #66f2d4 {
-            '         * SharedTaskQueueConc()
-            '         * submitTask(CompletableFutureTask<?> task): void
-            '         * interface TaskProcessor<T>
-            '         + ClassAux CompletableFutureTask<T>
 
-            '     }
-
-            ' }
         }
         !endif
 
@@ -330,7 +321,7 @@ package "com.metrolink.ami_api" {
             }
 
             class MedidorUtils{
-                * obtenerStringDeVcSerie(List<Medidores> medidores): String 
+                * obtenerStringDeVcSerie(List<Medidores> medidores): String
             }
         }
         !endif
@@ -339,7 +330,25 @@ package "com.metrolink.ami_api" {
         package "com.metrolink.ami_api.services.procesos" #a0c8fa{
 
             package "com.metrolink.ami_api.services.procesos.conectorGeneral"{
-                class ConectorGeneral #84f086 {
+                class ConectorGeneralService #84f086 {
+
+                    + ConectorDetecMedService2 conectorDetecMedService2
+                    + ConectorAutoConfService2 conectorAutoConfService2
+                    * public String usarConectorDeteccion(String json)
+                    * public List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode)
+
+                }
+            }
+
+            package "com.metrolink.ami_api.services.procesos.generadorDeColas"{
+                class GeneradorDeColas #9e3dff {
+
+                    + ConcentradoresService concentradoresService
+                    * private String obtenerClave(String ip, String puerto)
+                    * public <T> CompletableFuture<T> encolarSolicitud(String vcnoSerie, Callable<T> tarea)
+                    * private void procesarCola(String clave)
+                    * private <T> void completarFuture(CompletableFuture<?> future, T result)
+                    * private static class Pair<K, V> <Clase Auxiliar>
 
                 }
             }
@@ -347,45 +356,37 @@ package "com.metrolink.ami_api" {
 
             package "com.metrolink.ami_api.services.procesos.deteccionMed" #eaebdf{
                 class DeteccionMedService #cfd4fc{
-                    + ConectorDetecMedService conectorDetecMedService
+                    + ConectorGeneralService conectorGeneralService
+                    + GeneradorDeColas generadorDeColas
                     + MedidoresService medidoresService
                     + ConcentradoresService concentradoresService
                     - static final Logger logger = LoggerConfigProcesos
                     * procesarDeteccionByCon(json: String): List<Medidores>
                 }
-                ' class ConectorDetecMedService<implements SharedTaskQueueConc.TaskProcessor<String>> #84f086{
-                '     + TcpClientDetecMedService tcpClientDetecMedService
-                '     + ConcentradoresService concentradoresService
-                '     + SharedTaskQueue sharedTaskQueue
-                '     --
-                '     "Metodo Provicional"
-                '     ** ConectorDetecMedService()
-                '     * usarConectorDeteccion(json: String): String
-                '     * @Override  processRequest(String json): String
-                ' }
+                class ConectorDetecMedService2 #84f086{
+                    * String usarConectorDeteccion(String json)
+
+                }
             }
 
             !if SHOW_AUTOCONF
             package "com.metrolink.ami_api.services.procesos.autoconfiguracion" #889996{
                 class AutoConfiguracionService #fcf0cf {
-                    + ConectorAutoConfService conectorAutoConfService
+                    + ConectorGeneralService conectorGeneralService
                     + MedidoresRepository medidoresRepository
                     + MedidoresService medidoresService
-                    * procesarConfiguracion(rootNode: JsonNode): List<AutoconfMedidor>
+                    + GeneradorDeColas generadorDeColas
+                    * procesarConfiguracion(String json) : List<AutoconfMedidor>
                 }
 
-                ' class ConectorAutoConfService<imp_SharedTaskQueueConc_TaskProcessor<List<AutoconfMedidor>>>   #84f086{
-                '     + MedidoresService medidoresService
-                '     + SharedTaskQueue sharedTaskQueue
-                '     + ConcentradoresService concentradoresService
-                '     + TcpClientDetecMedService tcpClientDetecMedService
-                '     "Metodos provicionales"
-                '     * procesarConfiguracion(JsonNode rootNode): List<AutoconfMedidor>
-                '     * @override processRequest(String json): List<AutoconfMedidor>
-                '     * procesarConfiguracionInterna(JsonNode rootNode): List<AutoconfMedidor> 
-                '     * crearAutoconfMedidor(vcSerie: String, random: Random): AutoconfMedidor
-                '     * crearCodigosObisCanal(random: Random): AutoConfCodigosObisCanal
-                ' }
+                class ConectorAutoConfService2  #84f086{
+
+                    + MedidoresService medidoresService
+                    * List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode)
+                    * private AutoconfMedidor crearAutoconfMedidor(String vcSerie, Random random)
+                    * private AutoConfCodigosObisCanal crearCodigosObisCanal(Random random)
+
+                }
             }
             !endif
 
@@ -476,11 +477,11 @@ MedidoresService -> MedidoresRepository : usa
 !if SHOW_PART_PROCESOS
 DeteccionMedController -> DeteccionMedService : usa
 
-DeteccionMedService -> MedidoresService : @Autowired
-DeteccionMedService -> ConcentradoresService  : @Autowired
-DeteccionMedService -> Medidores : usa
-DeteccionMedService -> Concentradores : usa
-' DeteccionMedService <-> ConectorDetecMedService : @Autowired
+DeteccionMedService -> MedidoresService #f50707: @Autowired
+DeteccionMedService -> ConcentradoresService #f50707  : @Autowired
+DeteccionMedService -> Medidores #f50707: usa
+DeteccionMedService -> Concentradores #f50707: usa
+
 DeteccionMedService -> LoggerConfigProcesos: usa
 
 AutoConfiguracionController --> AutoConfiguracionService : @Autowired
@@ -492,7 +493,7 @@ AutoConfiguracionService -> Medidores : usa
 AutoConfiguracionService -> AutoConfCanalesPerfilCarga : usa
 AutoConfiguracionService -> AutoConfCodigosObisCanal : usa
 AutoConfiguracionService -> AutoconfMedidor : usa
-' AutoConfiguracionService <-> ConectorAutoConfService : usa
+
 
 ' ConectorAutoConfService -> Medidores: usa
 ' ConectorAutoConfService -> AutoConfCanalesPerfilCarga: usa
@@ -524,7 +525,7 @@ ProgramacionesAMIService --> ProgramacionesAMIRepository: @Autowired
 
 AgendaProgramacionesAMIController --> AgendaProgramacionesAMIService: @Autowired
 
-AgendaProgramacionesAMIService -> AsignacionAgendaAMedidoresService #e6ffd6: @Autowired 
+AgendaProgramacionesAMIService -> AsignacionAgendaAMedidoresService #e6ffd6: @Autowired
 AgendaProgramacionesAMIService --> AgendaProgramacionesAMIRepository: @Autowired
 
 AsignacionAgendaAMedidoresService -> ProgramacionesAMIService: @Autowired
@@ -545,9 +546,20 @@ LoggerConfigProcesos --> procesos_log
 
 AsignacionAgendaAMedidoresService -> MedidorUtils::obtenerStringDeVcSerie
 
-AutoConfiguracionService -> ConectorGeneral #f50707
+AutoConfiguracionService --> ConectorGeneralService #f507FF
+AutoConfiguracionService -> GeneradorDeColas #f507FF
 
-DeteccionMedService -> ConectorGeneral #f50707
+
+DeteccionMedService -> ConectorGeneralService #f50707
+
+DeteccionMedService --> GeneradorDeColas #f50707
+
+
+ConectorGeneralService ---> ConectorDetecMedService2
+ConectorGeneralService ---> ConectorAutoConfService2
+
+GeneradorDeColas -> ConcentradoresService
+
 
 
 !endif

@@ -13,6 +13,8 @@ import com.metrolink.ami_api.services.procesos.autoconfiguracion.ConectorAutoCon
 
 import com.metrolink.ami_api.services.procesos.deteccionMed.ConectorDetecMedService2;
 
+import com.metrolink.ami_api.services.procesos.programacionesAmi.ConectorProgramacionService;
+
 @Service
 public class ConectorGeneralService {
 
@@ -21,6 +23,11 @@ public class ConectorGeneralService {
 
     @Autowired
     private ConectorAutoConfService2 conectorAutoConfService2;
+
+    @Autowired
+    private ConectorProgramacionService conectorProgramacionService;
+
+
 
     public String usarConectorDeteccion(String json) {
         System.out.println("entre a usarconector detectcion");
@@ -31,5 +38,12 @@ public class ConectorGeneralService {
     public List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode) {
         List<AutoconfMedidor> autoconfMedidores = conectorAutoConfService2.UsarConectorAutoConfMed(rootNode);
         return autoconfMedidores;
+    }
+
+    public String usarConectorProgramacion(String mensaje) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacion(mensaje);
+
+        
+        return  Impreso; // Retorna el mensaje para confirmar la ejecución
     }
 }

@@ -3,7 +3,8 @@
 		"_postman_id": "977f1924-3905-4d62-8bab-a42c0000ea2a",
 		"name": "CrudProgramacionesAmi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36280962"
+		"_exporter_id": "36280962",
+		"_collection_link": "https://metrolink-6641.postman.co/workspace/Ami_Api~cd4f0c0e-c05d-4938-86ed-6b60c47cb078/collection/36280962-977f1924-3905-4d62-8bab-a42c0000ea2a?action=share&source=collection_link&creator=36280962"
 	},
 	"item": [
 		{

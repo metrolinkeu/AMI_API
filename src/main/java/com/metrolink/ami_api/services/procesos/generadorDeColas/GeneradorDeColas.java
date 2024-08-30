@@ -14,15 +14,15 @@ public class GeneradorDeColas {
     @Autowired
     private ConcentradoresService concentradoresService;
 
-    // Cambiar la cola para almacenar Pares de Callable y CompletableFuture
-    private final Map<String, BlockingQueue<Pair<Callable<String>, CompletableFuture<String>>>> colasPorDireccion = new ConcurrentHashMap<>();
+    // Cambiar la cola para almacenar Pares de Callable y CompletableFuture usando generics
+    private final Map<String, BlockingQueue<Pair<Callable<?>, CompletableFuture<?>>>> colasPorDireccion = new ConcurrentHashMap<>();
     private final Map<String, ExecutorService> procesadoresPorDireccion = new ConcurrentHashMap<>();
 
     private String obtenerClave(String ip, String puerto) {
         return ip + ":" + puerto;
     }
 
-    public CompletableFuture<String> encolarSolicitud(String vcnoSerie, Callable<String> tarea) {
+    public <T> CompletableFuture<T> encolarSolicitud(String vcnoSerie, Callable<T> tarea) {
         Concentradores concentrador = concentradoresService.findById(vcnoSerie);
 
         if (concentrador != null) {
@@ -38,8 +38,8 @@ public class GeneradorDeColas {
                 return executor;
             });
 
-            CompletableFuture<String> future = new CompletableFuture<>();
-            BlockingQueue<Pair<Callable<String>, CompletableFuture<String>>> cola = colasPorDireccion.get(clave);
+            CompletableFuture<T> future = new CompletableFuture<>();
+            BlockingQueue<Pair<Callable<?>, CompletableFuture<?>>> cola = colasPorDireccion.get(clave);
 
             // Añadir la tarea y el CompletableFuture a la cola como un par
             cola.offer(new Pair<>(tarea, future));
@@ -51,18 +51,18 @@ public class GeneradorDeColas {
     }
 
     private void procesarCola(String clave) {
-        BlockingQueue<Pair<Callable<String>, CompletableFuture<String>>> cola = colasPorDireccion.get(clave);
+        BlockingQueue<Pair<Callable<?>, CompletableFuture<?>>> cola = colasPorDireccion.get(clave);
         while (true) {
             try {
-                Pair<Callable<String>, CompletableFuture<String>> pair = cola.take();
-                Callable<String> tarea = pair.getKey();
-                CompletableFuture<String> future = pair.getValue();
+                Pair<Callable<?>, CompletableFuture<?>> pair = cola.take();
+                Callable<?> tarea = pair.getKey();
+                CompletableFuture<?> future = pair.getValue();
 
                 try {
                     // Ejecutar la tarea y obtener el resultado
-                    String result = tarea.call();
+                    Object result = tarea.call();
                     // Completar el CompletableFuture con el resultado de la tarea
-                    future.complete(result);
+                    completarFuture(future, result);
                 } catch (Exception e) {
                     // Si ocurre una excepción, completar el future excepcionalmente
                     future.completeExceptionally(e);
@@ -73,6 +73,11 @@ public class GeneradorDeColas {
                 break;
             }
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void completarFuture(CompletableFuture<?> future, T result) {
+        ((CompletableFuture<T>) future).complete(result);
     }
 
     // Clase Pair para almacenar pares de Callable y CompletableFuture

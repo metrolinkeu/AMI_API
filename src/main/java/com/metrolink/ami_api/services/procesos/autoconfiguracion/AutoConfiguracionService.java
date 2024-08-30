@@ -11,6 +11,7 @@ import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
 import com.metrolink.ami_api.repositories.medidor.MedidoresRepository;
 import com.metrolink.ami_api.services.medidor.MedidoresService;
 import com.metrolink.ami_api.services.procesos.conectorGeneral.ConectorGeneralService;
+import com.metrolink.ami_api.services.procesos.generadorDeColas.GeneradorDeColas;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -36,11 +38,11 @@ public class AutoConfiguracionService {
     @Autowired
     private MedidoresService medidoresService;
 
+    @Autowired
+    private GeneradorDeColas generadorDeColas;
+
     public List<AutoconfMedidor> procesarConfiguracion(String json) throws ExecutionException, InterruptedException {
         System.out.println(json);
-
-        
-
 
         // Crear ObjectMapper para trabajar con JSON
         ObjectMapper mapper = new ObjectMapper();
@@ -49,9 +51,18 @@ public class AutoConfiguracionService {
             // Leer el JSON como árbol de nodos
             JsonNode rootNode = mapper.readTree(json);
 
-            //List<AutoconfMedidor> autoConfiguraciones = conectorAutoConfService.procesarConfiguracion(rootNode);
-            
-            List<AutoconfMedidor> autoConfiguraciones = conectorGeneralService.UsarConectorAutoConfMed(rootNode);
+            // Obtener el número de serie del concentrador desde el JSON
+            String vcnoSerie = rootNode.get("vcnoSerie").asText();
+
+            // Usar CompletableFuture para esperar el resultado
+        CompletableFuture<List<AutoconfMedidor>> futureAutoConf = generadorDeColas.encolarSolicitud(vcnoSerie, () -> {
+            System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService)");
+            return conectorGeneralService.UsarConectorAutoConfMed(rootNode);
+        });
+
+        // Esperar a que se complete la tarea y obtener el resultado
+        List<AutoconfMedidor> autoConfiguraciones = futureAutoConf.get(); // Este método bloquea hasta que autoConfiguraciones esté disponible
+
 
             // Iterar sobre las autoconfiguraciones para actualizar Medidores
             for (AutoconfMedidor autoconfMedidor : autoConfiguraciones) {
@@ -64,7 +75,6 @@ public class AutoConfiguracionService {
                 String vcfirmware = autoconfMedidor.getVcfirmware();
 
                 AutoConfCanalesPerfilCarga autoConfcanalesPerfilCarga = autoconfMedidor.getAutoConfcanalesPerfilCarga();
-
 
                 // Crear una nueva instancia de CanalesPerfilCarga
                 CanalesPerfilCarga canalesPerfilCarga = new CanalesPerfilCarga();

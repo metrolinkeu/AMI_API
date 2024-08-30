@@ -35,7 +35,7 @@ public class DeteccionMedControllerTest {
         IntStream.range(0, numRequests).forEach(i -> {
             futures.add(CompletableFuture.supplyAsync(() -> {
                 try {
-                    String jsonRequest = "{ \"vcnoSerie\": \"005700916\" }"; // Cambiar según sea necesario
+                    String jsonRequest = "{ \"vcnoSerie\": \"82567\" }"; // Cambiar según sea necesario
 
                     return mockMvc.perform(post("/api/primeraLectura/detectMed")
                             .contentType(MediaType.APPLICATION_JSON)

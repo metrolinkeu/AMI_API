@@ -26,8 +26,7 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class AutoConfiguracionService {
 
-    @Autowired
-    private ConectorAutoConfService conectorAutoConfService;
+
 
     @Autowired
     private ConectorGeneralService conectorGeneralService;

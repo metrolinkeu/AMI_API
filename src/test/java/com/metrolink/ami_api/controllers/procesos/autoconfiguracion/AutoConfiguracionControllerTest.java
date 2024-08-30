@@ -35,7 +35,7 @@ public class AutoConfiguracionControllerTest {
         IntStream.range(0, numRequests).forEach(i -> {
             futures.add(CompletableFuture.supplyAsync(() -> {
                 try {
-                    String jsonRequest = "{ \"vcnoSerie\": \"7256\" }"; // Cambiar según sea necesario
+                    String jsonRequest = "{ \"vcnoSerie\": \"82567\" }"; // Cambiar según sea necesario
 
                     return mockMvc.perform(get("/api/autoconfiguracion/ObtenerConfig")
                             .contentType(MediaType.APPLICATION_JSON)

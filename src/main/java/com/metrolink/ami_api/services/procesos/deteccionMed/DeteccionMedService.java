@@ -27,8 +27,6 @@ import java.util.logging.Logger;
 @Service
 public class DeteccionMedService {
 
-    @Autowired
-    private ConectorDetecMedService conectorDetecMedService;
 
     @Autowired
     private ConectorGeneralService conectorGeneralService;

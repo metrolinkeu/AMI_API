@@ -39,7 +39,7 @@ public class GeneradorDeColas {
             }
 
             return procesarTarea(tarea, concentrador.getParamTiposDeComunicacion().getVcip(),
-                                 concentrador.getParamTiposDeComunicacion().getVcpuerto());
+                    concentrador.getParamTiposDeComunicacion().getVcpuerto());
 
         } else if (Serie.startsWith("M_")) {
             nSerie = Serie.substring(2); // Extrae el número después de "M_"
@@ -50,7 +50,16 @@ public class GeneradorDeColas {
                 throw new RuntimeException("Medidor no encontrado para vcnoSerie: " + nSerie);
             }
 
-            return procesarTarea(tarea, medidor.getVcip(), medidor.getVcpuerto());
+            if (medidor.getConcentrador() != null) {
+                String vcnoSerie = medidor.getConcentrador().getVcnoSerie();
+                Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+
+                return procesarTarea(tarea, concentrador.getParamTiposDeComunicacion().getVcip(),
+                        concentrador.getParamTiposDeComunicacion().getVcpuerto());
+
+            } else {
+                return procesarTarea(tarea, medidor.getVcip(), medidor.getVcpuerto());
+            }
 
         } else {
             System.out.println("La serie no empieza ni con C_ ni con M_.");
@@ -60,6 +69,8 @@ public class GeneradorDeColas {
 
     private <T> CompletableFuture<T> procesarTarea(Callable<T> tarea, String ip, String puerto) {
         String clave = obtenerClave(ip, puerto);
+
+        System.out.println("Esta es la clave de la cola: " + clave);
 
         // Inicializar la cola y el procesador para la clave si no existen
         colasPorDireccion.computeIfAbsent(clave, k -> new LinkedBlockingQueue<>());

@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 @Service
 public class DeteccionMedService {
 
-
     @Autowired
     private ConectorGeneralService conectorGeneralService;
 
@@ -53,7 +52,7 @@ public class DeteccionMedService {
         System.out.println("vcnoSerie: " + vcnoSerie);
 
         // Usar CompletableFuture para esperar el resultado
-        CompletableFuture<String> futureJsonMed = generadorDeColas.encolarSolicitud(vcnoSerie, () -> {
+        CompletableFuture<String> futureJsonMed = generadorDeColas.encolarSolicitud("C_" + vcnoSerie, () -> {
             System.out.println("estoy en la tareas para enconlar");
             return conectorGeneralService.usarConectorDeteccion(json);
         });

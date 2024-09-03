@@ -334,8 +334,10 @@ package "com.metrolink.ami_api" {
 
                     + ConectorDetecMedService2 conectorDetecMedService2
                     + ConectorAutoConfService2 conectorAutoConfService2
+                    + ConectorProgramacionService conectorProgramacionService
                     * public String usarConectorDeteccion(String json)
                     * public List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode)
+                    * public String usarConectorProgramacion(String mensaje)
 
                 }
             }
@@ -344,11 +346,15 @@ package "com.metrolink.ami_api" {
                 class GeneradorDeColas #9e3dff {
 
                     + ConcentradoresService concentradoresService
+                    + MedidoresService medidoresService
                     * private String obtenerClave(String ip, String puerto)
-                    * public <T> CompletableFuture<T> encolarSolicitud(String vcnoSerie, Callable<T> tarea)
+                    * public <T> CompletableFuture<T> encolarSolicitud(String Serie, Callable<T> tarea)
+                    * private <T> CompletableFuture<T> procesarTarea(Callable<T> tarea, String ip, String puerto)
                     * private void procesarCola(String clave)
                     * private <T> void completarFuture(CompletableFuture<?> future, T result)
                     * private static class Pair<K, V> <Clase Auxiliar>
+                    
+               
 
                 }
             }
@@ -383,6 +389,7 @@ package "com.metrolink.ami_api" {
 
                     + MedidoresService medidoresService
                     * List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode)
+                    * public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie)
                     * private AutoconfMedidor crearAutoconfMedidor(String vcSerie, Random random)
                     * private AutoConfCodigosObisCanal crearCodigosObisCanal(Random random)
 
@@ -421,6 +428,15 @@ package "com.metrolink.ami_api" {
                 class MedidoresAgendaService{
                     + MedidoresAgenda
                     * procesarMedidoresAgenda(String json): List<MedidoresAgenda>
+                }
+
+                class ConectorProgramacionService {
+                    * public String UsarConectorProgramacion (String mensaje)
+                }
+                class ProgramacionHandlerService{
+                    + ConectorGeneralService conectorGeneralService
+                    + GeneradorDeColas generadorDeColas
+                    * public void manejarProgramacion(ProgramacionesAMI programacionAMI)
                 }
             }
             !endif
@@ -525,10 +541,10 @@ ProgramacionesAMIService --> ProgramacionesAMIRepository: @Autowired
 
 AgendaProgramacionesAMIController --> AgendaProgramacionesAMIService: @Autowired
 
-AgendaProgramacionesAMIService -> AsignacionAgendaAMedidoresService #e6ffd6: @Autowired
+AgendaProgramacionesAMIService --> AsignacionAgendaAMedidoresService #e6ffd6: @Autowired
 AgendaProgramacionesAMIService --> AgendaProgramacionesAMIRepository: @Autowired
 
-AsignacionAgendaAMedidoresService -> ProgramacionesAMIService: @Autowired
+AsignacionAgendaAMedidoresService --> ProgramacionesAMIService: @Autowired
 AsignacionAgendaAMedidoresService -> MedidoresService: @Autowired
 
 
@@ -550,15 +566,19 @@ AutoConfiguracionService --> ConectorGeneralService #f507FF
 AutoConfiguracionService -> GeneradorDeColas #f507FF
 
 
-DeteccionMedService -> ConectorGeneralService #f50707
+DeteccionMedService --> ConectorGeneralService #f50707
 
 DeteccionMedService --> GeneradorDeColas #f50707
 
 
 ConectorGeneralService ---> ConectorDetecMedService2
 ConectorGeneralService ---> ConectorAutoConfService2
+ConectorGeneralService -> ConectorProgramacionService
 
 GeneradorDeColas -> ConcentradoresService
+
+ProgramacionHandlerService -> ConectorGeneralService
+ProgramacionHandlerService --> GeneradorDeColas
 
 
 

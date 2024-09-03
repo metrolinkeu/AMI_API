@@ -2,9 +2,9 @@ package com.metrolink.ami_api.services.procesos.programacionesAmi;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.metrolink.ami_api.models.concentrador.Concentradores;
+
 import com.metrolink.ami_api.models.procesos.programacionesAmi.ProgramacionesAMI;
-import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
+
 import com.metrolink.ami_api.services.procesos.conectorGeneral.ConectorGeneralService;
 import com.metrolink.ami_api.services.procesos.generadorDeColas.GeneradorDeColas;
 
@@ -22,8 +22,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class ProgramacionHandlerService {
 
-    @Autowired
-    private ConcentradoresService concentradoresService;
+
 
     @Autowired
     private ConectorGeneralService conectorGeneralService;

@@ -26,8 +26,6 @@ import java.util.concurrent.ExecutionException;
 @Service
 public class AutoConfiguracionService {
 
-
-
     @Autowired
     private ConectorGeneralService conectorGeneralService;
 
@@ -45,23 +43,73 @@ public class AutoConfiguracionService {
 
         // Crear ObjectMapper para trabajar con JSON
         ObjectMapper mapper = new ObjectMapper();
+        List<AutoconfMedidor> autoConfiguraciones = new ArrayList<>();
 
         try {
             // Leer el JSON como árbol de nodos
             JsonNode rootNode = mapper.readTree(json);
 
-            // Obtener el número de serie del concentrador desde el JSON
-            String vcnoSerie = rootNode.get("vcnoSerie").asText();
+            JsonNode vcnoSerieNode = rootNode.path("vcnoSerie");
+            String vcnoSerie = rootNode.path("vcnoSerie").asText();
 
-            // Usar CompletableFuture para esperar el resultado
-        CompletableFuture<List<AutoconfMedidor>> futureAutoConf = generadorDeColas.encolarSolicitud(vcnoSerie, () -> {
-            System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService)");
-            return conectorGeneralService.UsarConectorAutoConfMed(rootNode);
-        });
+            JsonNode vcserialesNode = rootNode.path("vcseriales");
 
-        // Esperar a que se complete la tarea y obtener el resultado
-        List<AutoconfMedidor> autoConfiguraciones = futureAutoConf.get(); // Este método bloquea hasta que autoConfiguraciones esté disponible
+            JsonNode vcSICNode = rootNode.path("SIC");
 
+            if (!vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode()) {
+
+                // Usar CompletableFuture para esperar el resultado
+                CompletableFuture<List<AutoconfMedidor>> futureAutoConf = generadorDeColas.encolarSolicitud(
+                        "C_" + vcnoSerie,
+                        () -> {
+                            System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService)");
+                            return conectorGeneralService.UsarConectorAutoConfMed(rootNode);
+                        });
+
+                // Esperar a que se complete la tarea y obtener el resultado
+                autoConfiguraciones = futureAutoConf.get(); // Este método bloquea hasta que
+                                                            // autoConfiguraciones esté disponible
+
+            } else if (!vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode()) {
+
+                // Crear una lista para almacenar los CompletableFutures
+                List<CompletableFuture<AutoconfMedidor>> futuresList = new ArrayList<>();
+
+                vcserialesNode.forEach(serialNode -> {
+                    String vcserie = serialNode.asText();
+                    System.out.println(vcserie);
+
+                    // Encolar la solicitud y obtener un CompletableFuture
+                    CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
+                            "M_" + vcserie,
+                            () -> {
+                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService2)");
+                                return conectorGeneralService.UsarConectorAutoConfMed2(vcserie);
+                            });
+
+                    // Agregar el CompletableFuture a la lista de futuros
+                    futuresList.add(futureAutoConf);
+                });
+
+                // Esperar a que todos los futuros se completen y recoger los resultados
+                for (CompletableFuture<AutoconfMedidor> future : futuresList) {
+                    try {
+                        // Obtener el resultado de cada future y agregarlo a la lista
+                        // autoConfiguraciones
+                        AutoconfMedidor autoconfMedidor = future.get(); // Este método bloquea hasta que el resultado
+                                                                        // esté disponible
+                        autoConfiguraciones.add(autoconfMedidor);
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                        // Manejar excepciones según sea necesario
+                    }
+                }
+
+            } else if (!vcSICNode.isMissingNode()) {
+
+            } else {
+
+            }
 
             // Iterar sobre las autoconfiguraciones para actualizar Medidores
             for (AutoconfMedidor autoconfMedidor : autoConfiguraciones) {

@@ -40,6 +40,13 @@ public class ConectorGeneralService {
         return autoconfMedidores;
     }
 
+    public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie) {
+        AutoconfMedidor autoconfMedidor = conectorAutoConfService2.UsarConectorAutoConfMed_solo(vcserie);
+        return autoconfMedidor;
+    }
+
+
+
     public String usarConectorProgramacion(String mensaje) {
         String Impreso = conectorProgramacionService.UsarConectorProgramacion(mensaje);
 

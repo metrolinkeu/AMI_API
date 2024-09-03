@@ -1,7 +1,9 @@
 package com.metrolink.ami_api.services.procesos.generadorDeColas;
 
 import com.metrolink.ami_api.models.concentrador.Concentradores;
+import com.metrolink.ami_api.models.medidor.Medidores;
 import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
+import com.metrolink.ami_api.services.medidor.MedidoresService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,9 @@ public class GeneradorDeColas {
     @Autowired
     private ConcentradoresService concentradoresService;
 
-    // Cambiar la cola para almacenar Pares de Callable y CompletableFuture usando generics
+    @Autowired
+    private MedidoresService medidoresService;
+
     private final Map<String, BlockingQueue<Pair<Callable<?>, CompletableFuture<?>>>> colasPorDireccion = new ConcurrentHashMap<>();
     private final Map<String, ExecutorService> procesadoresPorDireccion = new ConcurrentHashMap<>();
 
@@ -22,32 +26,56 @@ public class GeneradorDeColas {
         return ip + ":" + puerto;
     }
 
-    public <T> CompletableFuture<T> encolarSolicitud(String vcnoSerie, Callable<T> tarea) {
-        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+    public <T> CompletableFuture<T> encolarSolicitud(String Serie, Callable<T> tarea) {
+        String nSerie = "";
 
-        if (concentrador != null) {
-            String ip = concentrador.getParamTiposDeComunicacion().getVcip();
-            String puerto = concentrador.getParamTiposDeComunicacion().getVcpuerto();
-            String clave = obtenerClave(ip, puerto);
+        if (Serie.startsWith("C_")) {
+            nSerie = Serie.substring(2); // Extrae el número después de "C_"
+            System.out.println("La serie empieza con C_. Número extraído: " + nSerie);
 
-            // Inicializar la cola y el procesador para la clave si no existen
-            colasPorDireccion.computeIfAbsent(clave, k -> new LinkedBlockingQueue<>());
-            procesadoresPorDireccion.computeIfAbsent(clave, k -> {
-                ExecutorService executor = Executors.newSingleThreadExecutor();
-                executor.submit(() -> procesarCola(clave));
-                return executor;
-            });
+            Concentradores concentrador = concentradoresService.findById(nSerie);
+            if (concentrador == null) {
+                throw new RuntimeException("Concentrador no encontrado para vcnoSerie: " + nSerie);
+            }
 
-            CompletableFuture<T> future = new CompletableFuture<>();
-            BlockingQueue<Pair<Callable<?>, CompletableFuture<?>>> cola = colasPorDireccion.get(clave);
+            return procesarTarea(tarea, concentrador.getParamTiposDeComunicacion().getVcip(),
+                                 concentrador.getParamTiposDeComunicacion().getVcpuerto());
 
-            // Añadir la tarea y el CompletableFuture a la cola como un par
-            cola.offer(new Pair<>(tarea, future));
+        } else if (Serie.startsWith("M_")) {
+            nSerie = Serie.substring(2); // Extrae el número después de "M_"
+            System.out.println("La serie empieza con M_. Número extraído: " + nSerie);
 
-            return future;
+            Medidores medidor = medidoresService.findById(nSerie);
+            if (medidor == null) {
+                throw new RuntimeException("Medidor no encontrado para vcnoSerie: " + nSerie);
+            }
+
+            return procesarTarea(tarea, medidor.getVcip(), medidor.getVcpuerto());
+
         } else {
-            throw new RuntimeException("Concentrador no encontrado para vcnoSerie: " + vcnoSerie);
+            System.out.println("La serie no empieza ni con C_ ni con M_.");
+            return CompletableFuture.completedFuture(null);
         }
+    }
+
+    private <T> CompletableFuture<T> procesarTarea(Callable<T> tarea, String ip, String puerto) {
+        String clave = obtenerClave(ip, puerto);
+
+        // Inicializar la cola y el procesador para la clave si no existen
+        colasPorDireccion.computeIfAbsent(clave, k -> new LinkedBlockingQueue<>());
+        procesadoresPorDireccion.computeIfAbsent(clave, k -> {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.submit(() -> procesarCola(clave));
+            return executor;
+        });
+
+        CompletableFuture<T> future = new CompletableFuture<>();
+        BlockingQueue<Pair<Callable<?>, CompletableFuture<?>>> cola = colasPorDireccion.get(clave);
+
+        // Añadir la tarea y el CompletableFuture a la cola como un par
+        cola.offer(new Pair<>(tarea, future));
+
+        return future;
     }
 
     private void procesarCola(String clave) {
@@ -59,12 +87,9 @@ public class GeneradorDeColas {
                 CompletableFuture<?> future = pair.getValue();
 
                 try {
-                    // Ejecutar la tarea y obtener el resultado
                     Object result = tarea.call();
-                    // Completar el CompletableFuture con el resultado de la tarea
                     completarFuture(future, result);
                 } catch (Exception e) {
-                    // Si ocurre una excepción, completar el future excepcionalmente
                     future.completeExceptionally(e);
                 }
 

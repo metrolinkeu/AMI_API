@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ConectorAutoConfService2 {
 
-
-
     @Autowired
     private MedidoresService medidoresService;
 
@@ -34,6 +32,7 @@ public class ConectorAutoConfService2 {
         try {
             String vcnoSerie = rootNode.path("vcnoSerie").asText();
             System.out.println("vcnoSerie: " + vcnoSerie);
+            JsonNode vcnoSerieNode = rootNode.path("vcnoSerie");
 
             // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // // parte para pruebas de conexion con socket
@@ -65,9 +64,23 @@ public class ConectorAutoConfService2 {
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             JsonNode vcserialesNode = rootNode.path("vcseriales");
+            JsonNode vcSICNode = rootNode.path("SIC");
+            String vcsic = rootNode.path("SIC").asText();
 
-            if (vcserialesNode.isMissingNode()) {
+            if (!vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode()) {
                 List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
+                for (Medidores medidor : medidores) {
+                    AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
+                    autoconfMedidores.add(autoconfMedidor);
+                }
+            } else if (!vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode()) {
+                vcserialesNode.forEach(serialNode -> {
+                    String vcserie = serialNode.asText();
+                    AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
+                    autoconfMedidores.add(autoconfMedidor);
+                });
+            } else if (!vcSICNode.isMissingNode()) {
+                List<Medidores> medidores = medidoresService.findByVcsic(vcsic);
                 for (Medidores medidor : medidores) {
                     AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
                     autoconfMedidores.add(autoconfMedidor);
@@ -85,7 +98,13 @@ public class ConectorAutoConfService2 {
         }
 
         return autoconfMedidores;
+    }
 
+    public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie) {
+        Random random = new Random();
+        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
+
+        return autoconfMedidor;
     }
 
     private AutoconfMedidor crearAutoconfMedidor(String vcSerie, Random random) {

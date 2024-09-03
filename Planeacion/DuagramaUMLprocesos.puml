@@ -336,7 +336,8 @@ package "com.metrolink.ami_api" {
                     + ConectorAutoConfService2 conectorAutoConfService2
                     + ConectorProgramacionService conectorProgramacionService
                     * public String usarConectorDeteccion(String json)
-                    * public List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode)
+                    * public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie)
+                    * public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode) 
                     * public String usarConectorProgramacion(String mensaje)
 
                 }
@@ -388,8 +389,9 @@ package "com.metrolink.ami_api" {
                 class ConectorAutoConfService2  #84f086{
 
                     + MedidoresService medidoresService
-                    * List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode)
-                    * public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie)
+                    * List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie)
+                    *  public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC,
+            JsonNode vcserialesNode)
                     * private AutoconfMedidor crearAutoconfMedidor(String vcSerie, Random random)
                     * private AutoConfCodigosObisCanal crearCodigosObisCanal(Random random)
 

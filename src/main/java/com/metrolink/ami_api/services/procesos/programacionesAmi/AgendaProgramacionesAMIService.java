@@ -9,13 +9,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import java.util.List;
 
 @Service
@@ -63,10 +56,8 @@ public class AgendaProgramacionesAMIService {
         // cualquiera de los doce casos
         ProgramacionesAMI programacionAMI = programacionesAMIService.findById(agenda.getProgramacionAMI().getNcodigo());
 
-        // Usar la  clase para manejar la lógica de los casos
+        // Usar la clase para manejar la lógica de los casos
         programacionHandler.manejarProgramacion(programacionAMI);
-
-   
 
         return agenda;
 

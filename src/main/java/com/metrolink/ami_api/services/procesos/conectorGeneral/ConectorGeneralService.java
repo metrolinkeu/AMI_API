@@ -35,13 +35,13 @@ public class ConectorGeneralService {
         return newJson;
     }
 
-    public List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode) {
-        List<AutoconfMedidor> autoconfMedidores = conectorAutoConfService2.UsarConectorAutoConfMed(rootNode);
+    public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie) {
+        List<AutoconfMedidor> autoconfMedidores = conectorAutoConfService2.UsarConectorAutoConfMed(vcnoSerie);
         return autoconfMedidores;
     }
 
-    public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie) {
-        AutoconfMedidor autoconfMedidor = conectorAutoConfService2.UsarConectorAutoConfMed_solo(vcserie);
+    public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode) {
+        AutoconfMedidor autoconfMedidor = conectorAutoConfService2.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC, vcserialesNode);
         return autoconfMedidor;
     }
 

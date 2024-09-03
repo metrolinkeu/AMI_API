@@ -24,15 +24,14 @@ public class ConectorAutoConfService2 {
     @Autowired
     private MedidoresService medidoresService;
 
-    public List<AutoconfMedidor> UsarConectorAutoConfMed(JsonNode rootNode) {
+    public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie) {
+
+        System.out.println("Caso 1: vcnoSerie.");
 
         List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
         Random random = new Random();
 
         try {
-            String vcnoSerie = rootNode.path("vcnoSerie").asText();
-            System.out.println("vcnoSerie: " + vcnoSerie);
-            JsonNode vcnoSerieNode = rootNode.path("vcnoSerie");
 
             // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // // parte para pruebas de conexion con socket
@@ -63,34 +62,10 @@ public class ConectorAutoConfService2 {
             // ///////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            JsonNode vcserialesNode = rootNode.path("vcseriales");
-            JsonNode vcSICNode = rootNode.path("SIC");
-            String vcsic = rootNode.path("SIC").asText();
-
-            if (!vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode()) {
-                List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
-                for (Medidores medidor : medidores) {
-                    AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
-                    autoconfMedidores.add(autoconfMedidor);
-                }
-            } else if (!vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode()) {
-                vcserialesNode.forEach(serialNode -> {
-                    String vcserie = serialNode.asText();
-                    AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
-                    autoconfMedidores.add(autoconfMedidor);
-                });
-            } else if (!vcSICNode.isMissingNode()) {
-                List<Medidores> medidores = medidoresService.findByVcsic(vcsic);
-                for (Medidores medidor : medidores) {
-                    AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
-                    autoconfMedidores.add(autoconfMedidor);
-                }
-            } else {
-                vcserialesNode.forEach(serialNode -> {
-                    String vcserie = serialNode.asText();
-                    AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
-                    autoconfMedidores.add(autoconfMedidor);
-                });
+            List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
+            for (Medidores medidor : medidores) {
+                AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
+                autoconfMedidores.add(autoconfMedidor);
             }
 
         } catch (Exception e) {
@@ -100,7 +75,31 @@ public class ConectorAutoConfService2 {
         return autoconfMedidores;
     }
 
-    public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie) {
+    public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC,
+            JsonNode vcserialesNode) {
+
+        // Verificar y manejar el caso 2: vcnoSerie y vcseriales están presentes
+        if (vcserialesNode != null && !vcserialesNode.isEmpty() && vcnoSerie != null && !vcnoSerie.equals("")
+                && (vcSIC == null || vcSIC.equals(""))) {
+            System.out.println("Caso 2: vcnoSerie y vcseriales están presentes.");
+        }
+        // Verificar y manejar el caso 3: Solo vcseriales está presente
+        else if (vcserialesNode != null && !vcserialesNode.isEmpty() && (vcnoSerie == null || vcnoSerie.equals(""))
+                && (vcSIC == null || vcSIC.equals(""))) {
+            System.out.println("Caso 3: Solo vcseriales está presente.");
+        }
+        // Verificar y manejar el caso 4: vcnoSerie y SIC están presentes
+        else if ((vcserialesNode == null || vcserialesNode.isEmpty()) && vcnoSerie != null && !vcnoSerie.equals("")
+                && vcSIC != null
+                && !vcSIC.equals("")) {
+            System.out.println("Caso 4: vcnoSerie y SIC están presentes.");
+        }
+        // Verificar y manejar el caso 5: Solo SIC está presente
+        else if ((vcserialesNode == null || vcserialesNode.isEmpty()) && (vcnoSerie == null || vcnoSerie.equals(""))
+                && vcSIC != null
+                && !vcSIC.equals("")) {
+            System.out.println("Caso 5: Solo SIC está presente.");
+        }
         Random random = new Random();
         AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
 

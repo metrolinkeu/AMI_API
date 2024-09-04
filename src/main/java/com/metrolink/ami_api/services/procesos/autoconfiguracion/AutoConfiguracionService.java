@@ -106,9 +106,7 @@ public class AutoConfiguracionService {
                     }
                 }
 
-            }
-
-            else if (vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode() && vcSICNode.isMissingNode()) {
+            } else if (vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode() && vcSICNode.isMissingNode()) {
 
                 // Crear una lista para almacenar los CompletableFutures
                 List<CompletableFuture<AutoconfMedidor>> futuresList = new ArrayList<>();

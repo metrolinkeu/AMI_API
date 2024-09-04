@@ -51,6 +51,9 @@ public class DeteccionMedService {
         // Imprimir los valores
         System.out.println("vcnoSerie: " + vcnoSerie);
 
+
+
+
         // Usar CompletableFuture para esperar el resultado
         CompletableFuture<String> futureJsonMed = generadorDeColas.encolarSolicitud("C_" + vcnoSerie, () -> {
             System.out.println("estoy en la tareas para enconlar");
@@ -60,6 +63,11 @@ public class DeteccionMedService {
         // Esperar a que se complete la tarea y obtener el resultado
         String jsonMed = futureJsonMed.get(); // Este método bloquea hasta que jsonMed esté disponible
 
+
+
+
+
+        
         logger.info("JSON Devuelto: " + jsonMed);
 
         // Parsear el JSON devuelto para extraer los medidores

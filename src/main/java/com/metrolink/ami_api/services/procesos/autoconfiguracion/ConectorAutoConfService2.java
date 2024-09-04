@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.metrolink.ami_api.models.medidor.Medidores;

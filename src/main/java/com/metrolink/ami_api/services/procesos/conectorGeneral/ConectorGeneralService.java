@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
-
+import com.metrolink.ami_api.models.procesos.programacionesAmi.ProgramacionesAMI;
 import com.metrolink.ami_api.services.procesos.autoconfiguracion.ConectorAutoConfService2;
 
 import com.metrolink.ami_api.services.procesos.deteccionMed.ConectorDetecMedService2;
@@ -47,8 +47,8 @@ public class ConectorGeneralService {
 
 
 
-    public String usarConectorProgramacion(String mensaje) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacion(mensaje);
+    public String usarConectorProgramacion(String mensaje, ProgramacionesAMI programacionAMI ) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionTEST(mensaje, programacionAMI);
 
         
         return  Impreso; // Retorna el mensaje para confirmar la ejecución

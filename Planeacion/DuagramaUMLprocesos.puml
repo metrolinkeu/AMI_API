@@ -338,7 +338,7 @@ package "com.metrolink.ami_api" {
                     * public String usarConectorDeteccion(String json)
                     * public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie)
                     * public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode) 
-                    * public String usarConectorProgramacion(String mensaje)
+                    * public String usarConectorProgramacion(String mensaje, ProgramacionesAMI programacionAMI )
 
                 }
             }
@@ -433,12 +433,15 @@ package "com.metrolink.ami_api" {
                 }
 
                 class ConectorProgramacionService {
-                    * public String UsarConectorProgramacion (String mensaje)
+                    + MedidoresService medidoresService
+                    * public String UsarConectorProgramacionTEST(String mensaje, ProgramacionesAMI programacionAMI)
                 }
                 class ProgramacionHandlerService{
                     + ConectorGeneralService conectorGeneralService
                     + GeneradorDeColas generadorDeColas
-                    * public void manejarProgramacion(ProgramacionesAMI programacionAMI)
+                    * public String manejarProgramacion(ProgramacionesAMI programacionAMI)
+                    * private String manejarFiltro(String filtro, ProgramacionesAMI programacionAMI)
+                    * private void programarTarea(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI, long delay)
                 }
             }
             !endif

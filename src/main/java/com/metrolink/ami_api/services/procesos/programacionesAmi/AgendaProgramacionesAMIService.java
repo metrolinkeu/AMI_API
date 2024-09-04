@@ -57,7 +57,9 @@ public class AgendaProgramacionesAMIService {
         ProgramacionesAMI programacionAMI = programacionesAMIService.findById(agenda.getProgramacionAMI().getNcodigo());
 
         // Usar la clase para manejar la lógica de los casos
-        programacionHandler.manejarProgramacion(programacionAMI);
+        String ResultadoDelManejo = programacionHandler.manejarProgramacion(programacionAMI);
+
+        System.out.println(ResultadoDelManejo);
 
         return agenda;
 

@@ -48,9 +48,16 @@ public class ConectorGeneralService {
 
 
     public String usarConectorProgramacion(String mensaje, ProgramacionesAMI programacionAMI ) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionTEST(mensaje, programacionAMI);
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso1(mensaje, programacionAMI);
 
         
         return  Impreso; // Retorna el mensaje para confirmar la ejecución
+    }
+
+    public String usarConectorProgramacionFaltantes(String mensaje, ProgramacionesAMI programacionAMI, String medidoresFaltantesPorLeer_ ) {
+        String resultadoEjecucionConect = conectorProgramacionService.UsarConectorProgramacionFaltantesCaso1(mensaje, programacionAMI, medidoresFaltantesPorLeer_);
+
+        
+        return  resultadoEjecucionConect; // Retorna el mensaje para confirmar la ejecución
     }
 }

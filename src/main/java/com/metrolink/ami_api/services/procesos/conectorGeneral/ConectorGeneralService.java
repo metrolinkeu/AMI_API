@@ -27,8 +27,6 @@ public class ConectorGeneralService {
     @Autowired
     private ConectorProgramacionService conectorProgramacionService;
 
-
-
     public String usarConectorDeteccion(String json) {
         System.out.println("entre a usarconector detectcion");
         String newJson = conectorDetecMedService2.usarConectorDeteccion(json);
@@ -40,24 +38,39 @@ public class ConectorGeneralService {
         return autoconfMedidores;
     }
 
-    public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode) {
-        AutoconfMedidor autoconfMedidor = conectorAutoConfService2.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC, vcserialesNode);
+    public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC,
+            JsonNode vcserialesNode) {
+        AutoconfMedidor autoconfMedidor = conectorAutoConfService2.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie,
+                vcSIC, vcserialesNode);
         return autoconfMedidor;
     }
 
-
-
-    public String usarConectorProgramacion(String mensaje, ProgramacionesAMI programacionAMI ) {
+    public String usarConectorProgramacionCaso1(String mensaje, ProgramacionesAMI programacionAMI) {
         String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso1(mensaje, programacionAMI);
 
-        
-        return  Impreso; // Retorna el mensaje para confirmar la ejecución
+        return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
 
-    public String usarConectorProgramacionFaltantes(String mensaje, ProgramacionesAMI programacionAMI, String medidoresFaltantesPorLeer_ ) {
-        String resultadoEjecucionConect = conectorProgramacionService.UsarConectorProgramacionFaltantesCaso1(mensaje, programacionAMI, medidoresFaltantesPorLeer_);
+    public String usarConectorProgramacionFaltantesCaso1(String mensaje, ProgramacionesAMI programacionAMI,
+            String medidoresFaltantesPorLeer_) {
+        String resultadoEjecucionConect = conectorProgramacionService.UsarConectorProgramacionFaltantesCaso1(mensaje,
+                programacionAMI, medidoresFaltantesPorLeer_);
 
-        
-        return  resultadoEjecucionConect; // Retorna el mensaje para confirmar la ejecución
+        return resultadoEjecucionConect; // Retorna el mensaje para confirmar la ejecución
     }
+
+    public String usarConectorProgramacionCaso2(String mensaje, ProgramacionesAMI programacionAMI, String vcSeriesAReintentarFiltrado) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso2(mensaje, programacionAMI, vcSeriesAReintentarFiltrado);
+
+        return Impreso; // Retorna el mensaje para confirmar la ejecución
+    }
+
+    
+
+    public String usarConectorProgramacionCaso3(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso3(mensaje, programacionAMI, vcserie);
+
+        return Impreso; // Retorna el mensaje para confirmar la ejecución
+    }
+
 }

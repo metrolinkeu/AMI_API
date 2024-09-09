@@ -45,30 +45,30 @@ public class ConectorGeneralService {
         return autoconfMedidor;
     }
 
-    public String usarConectorProgramacionCaso1(String mensaje, ProgramacionesAMI programacionAMI) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso1(mensaje, programacionAMI);
+    public String usarConectorProgramacionCaso1(String mensaje, ProgramacionesAMI programacionAMI,
+            String vcSeriesAReintentarFiltrado) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso1(mensaje, programacionAMI,
+                vcSeriesAReintentarFiltrado);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
 
-    public String usarConectorProgramacionFaltantesCaso1(String mensaje, ProgramacionesAMI programacionAMI,
-            String medidoresFaltantesPorLeer_) {
-        String resultadoEjecucionConect = conectorProgramacionService.UsarConectorProgramacionFaltantesCaso1(mensaje,
-                programacionAMI, medidoresFaltantesPorLeer_);
-
-        return resultadoEjecucionConect; // Retorna el mensaje para confirmar la ejecución
-    }
-
-    public String usarConectorProgramacionCaso2(String mensaje, ProgramacionesAMI programacionAMI, String vcSeriesAReintentarFiltrado) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso2(mensaje, programacionAMI, vcSeriesAReintentarFiltrado);
+    public String usarConectorProgramacionCaso2(String mensaje, ProgramacionesAMI programacionAMI,
+            String vcSeriesAReintentarFiltrado) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso2(mensaje, programacionAMI,
+                vcSeriesAReintentarFiltrado);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
-
-    
 
     public String usarConectorProgramacionCaso3(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
         String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso3(mensaje, programacionAMI, vcserie);
+
+        return Impreso; // Retorna el mensaje para confirmar la ejecución
+    }
+
+    public String usarConectorProgramacionCaso4(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso4(mensaje, programacionAMI, vcserie);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }

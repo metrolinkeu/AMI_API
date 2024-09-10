@@ -171,6 +171,11 @@ public class ProgramacionHandlerService {
                 break;
             case "concentradorymedidores":
                 System.out.println("FILTRO POR CONCENTRADOR Y MEDIDORES");
+
+                programarTareasFrecuentesCaso6(diasSemana, tiempoInicio, programacionAMI, filtro,
+                        vcSeriesAReintentarFiltrado_,
+                        reintentosRestantes);
+
                 break;
             case "medidores":
                 System.out.println("FILTRO POR MEDIDORES");
@@ -222,7 +227,8 @@ public class ProgramacionHandlerService {
             try {
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                        .usarConectorProgramacionFiltroConcentrador("Lectura caso 1", programacionAMI, vcSeriesAReintentarFiltrado_);
+                        .usarConectorProgramacionFiltroConcentrador("Lectura caso 1", programacionAMI,
+                                vcSeriesAReintentarFiltrado_);
 
                 // Usar GeneradorDeColas para encolar la tarea
                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -264,7 +270,7 @@ public class ProgramacionHandlerService {
 
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                        .usarConectorProgramacionCaso2("Lectura caso 2", programacionAMI, vcSeriesAReintentarFiltrado_);
+                        .usarConectorProgramacionFiltroConyMed("Lectura caso 2", programacionAMI, vcSeriesAReintentarFiltrado_);
 
                 // Usar GeneradorDeColas para encolar la tarea
                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -511,7 +517,7 @@ public class ProgramacionHandlerService {
                     .withHour(tiempoInicio.getHour())
                     .withMinute(tiempoInicio.getMinute()).withSecond(0);
 
-                    System.out.println("Se programa para el siguiente dia: "+diaSemana);
+            System.out.println("Se programa para el siguiente dia: " + diaSemana);
 
             // Calcular el delay en milisegundos hasta el siguiente día de la semana
             long delay = Duration.between(ahora, proximoDia).toMillis();
@@ -523,7 +529,8 @@ public class ProgramacionHandlerService {
 
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                        .usarConectorProgramacionFiltroConcentrador("Lectura caso 5", programacionAMI, vcSeriesAReintentarFiltrado_);
+                        .usarConectorProgramacionFiltroConcentrador("Lectura caso 5", programacionAMI,
+                                vcSeriesAReintentarFiltrado_);
 
                 // Usar GeneradorDeColas para encolar la tarea
                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -567,7 +574,8 @@ public class ProgramacionHandlerService {
 
             // Crear la tarea para reintentar
             Callable<String> tareaParaReintentar = () -> conectorGeneralService
-                    .usarConectorProgramacionFiltroConcentrador("Lectura reintento", programacionAMI, vcSeriesAReintentarFiltrado);
+                    .usarConectorProgramacionFiltroConcentrador("Lectura reintento", programacionAMI,
+                            vcSeriesAReintentarFiltrado);
 
             // Usar GeneradorDeColas para encolar la tarea
             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -584,6 +592,108 @@ public class ProgramacionHandlerService {
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
                     programarReintentoTareaCaso5(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                            reintentosRestantes - 1);
+                } else if (reintentosRestantes == 0) {
+                    System.out.println("Se alcanzó el número máximo de reintentos.");
+                } else {
+                    System.out.println("Se completó la lectura de todos los medidores.");
+                }
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+        }, delay, TimeUnit.MILLISECONDS); // Programar para ejecutarse después de 1 minuto
+    }
+
+    private void programarTareasFrecuentesCaso6(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+            int reintentosRestantes) {
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        LocalDateTime ahora = LocalDateTime.now();
+
+        // Iterar sobre cada día de la semana y programar la tarea
+        for (DayOfWeek diaSemana : diasSemana) {
+            LocalDateTime proximoDia = ahora.with(TemporalAdjusters.nextOrSame(diaSemana))
+                    .withHour(tiempoInicio.getHour())
+                    .withMinute(tiempoInicio.getMinute()).withSecond(0);
+
+            System.out.println("Se programa para el siguiente dia: " + diaSemana);
+
+            // Calcular el delay en milisegundos hasta el siguiente día de la semana
+            long delay = Duration.between(ahora, proximoDia).toMillis();
+
+            // Programar la tarea recurrente indefinidamente para ese día de la semana
+            scheduler.scheduleAtFixedRate(() -> {
+                System.out.println("Ejecutando tarea para " + diaSemana + " con filtro: " + filtro);
+                // Aquí iría la lógica de ejecución de la tarea para este día
+
+                // Crear la tarea que se encolará
+                Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                        .usarConectorProgramacionFiltroConyMed("Lectura caso 6", programacionAMI,
+                                vcSeriesAReintentarFiltrado_);
+
+                // Usar GeneradorDeColas para encolar la tarea
+                CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
+                        programacionAMI.getGrupoMedidores().getVcidentificador(),
+                        tareaParaProgramar);
+
+                try {
+                    // Esperar a que se complete la tarea
+                    String resultadoTarea = future.get(); // Este método bloquea hasta que la tarea esté completa
+                    String vcSeriesAReintentarFiltrado = resultadoTarea;
+
+                    // Reintentar la tarea si hay medidores no leídos
+                    if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
+                        System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
+
+                        // Programar la tarea para 1 minuto después solo con los medidores no leídos
+                        programarReintentoTareaCaso6(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                                reintentosRestantes - 1);
+
+                    } else if (reintentosRestantes == 0) {
+                        System.out.println("Se alcanzó el número máximo de reintentos.");
+                    } else {
+                        System.out.println(
+                                "Se leyeron todos los medidores de " + programacionAMI.getGrupoMedidores().getVcfiltro()
+                                        + " " + programacionAMI.getGrupoMedidores().getVcidentificador());
+                    }
+
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+
+            }, delay, TimeUnit.DAYS.toMillis(7), TimeUnit.MILLISECONDS); // Repetir cada 7 días
+        }
+    }
+
+    private void programarReintentoTareaCaso6(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+            long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
+
+        scheduler.schedule(() -> {
+            System.out.println("Reintentando tarea para medidores no leídos...");
+
+            // Crear la tarea para reintentar
+            Callable<String> tareaParaReintentar = () -> conectorGeneralService
+                    .usarConectorProgramacionFiltroConyMed("Lectura reintento", programacionAMI,
+                            vcSeriesAReintentarFiltrado);
+
+            // Usar GeneradorDeColas para encolar la tarea
+            CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
+                    programacionAMI.getGrupoMedidores().getVcidentificador(),
+                    tareaParaReintentar);
+
+            try {
+                // Esperar a que se complete la tarea
+                String resultadoReintento = future.get(); // Bloquea hasta que la tarea esté completa
+                String vcSeriesAReintentarFiltradoNuevo = resultadoReintento;
+
+                // Si quedan medidores por leer y hay reintentos disponibles, reprograma
+                // nuevamente
+                if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
+                    System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
+                    programarReintentoTareaCaso6(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
                             reintentosRestantes - 1);
                 } else if (reintentosRestantes == 0) {
                     System.out.println("Se alcanzó el número máximo de reintentos.");

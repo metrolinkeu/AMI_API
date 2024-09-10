@@ -1,6 +1,6 @@
 package com.metrolink.ami_api.services.procesos.programacionesAmi;
 
-import java.security.Timestamp;
+
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -110,7 +110,7 @@ public class ConectorProgramacionService {
 
     }
 
-    public String UsarConectorProgramacionCaso2(String mensaje, ProgramacionesAMI programacionAMI,
+    public String UsarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado) {
 
         System.out.println(mensaje);

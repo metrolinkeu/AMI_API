@@ -24,7 +24,7 @@ public class ConectorProgramacionService {
     @Autowired
     private MedidoresService medidoresService;
 
-    public String UsarConectorProgramacionCaso1(String mensaje, ProgramacionesAMI programacionAMI,
+    public String UsarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado) {
 
         System.out.println(mensaje);

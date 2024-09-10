@@ -45,9 +45,9 @@ public class ConectorGeneralService {
         return autoconfMedidor;
     }
 
-    public String usarConectorProgramacionCaso1(String mensaje, ProgramacionesAMI programacionAMI,
+    public String usarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso1(mensaje, programacionAMI,
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroConcentrador(mensaje, programacionAMI,
                 vcSeriesAReintentarFiltrado);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
@@ -72,5 +72,7 @@ public class ConectorGeneralService {
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
+
+
 
 }

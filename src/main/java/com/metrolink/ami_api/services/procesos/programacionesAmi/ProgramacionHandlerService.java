@@ -17,7 +17,9 @@ import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +32,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+
+import java.util.Map;
 
 @Component
 public class ProgramacionHandlerService {
@@ -149,6 +153,10 @@ public class ProgramacionHandlerService {
         // Obtener los días de la semana desde jsdiasSemana
         String jsdiasSemana = programacionAMI.getParametrizacionProg().getJsdiasSemana();
         System.out.println(jsdiasSemana);
+
+        String jsfrecuenciaLecturaLote = programacionAMI.getParametrizacionProg().getJsfrecuenciaLecturaLote();
+        System.out.println(jsfrecuenciaLecturaLote);
+
         List<DayOfWeek> diasSemana = convertirDiasSemana(jsdiasSemana);
         System.out.println(diasSemana);
 
@@ -204,13 +212,40 @@ public class ProgramacionHandlerService {
                 programacionAMI.getNcodigo(),
                 filtro); // estoo es un error
 
+        // Obtener los días de la semana desde jsdiasSemana
+        String jsdiasSemana = programacionAMI.getParametrizacionProg().getJsdiasSemana();
+        System.out.println(jsdiasSemana);
+
+        String jsfrecuenciaLecturaLote = programacionAMI.getParametrizacionProg().getJsfrecuenciaLecturaLote();
+        System.out.println(jsfrecuenciaLecturaLote);
+
+        List<DayOfWeek> diasSemana = convertirDiasSemana(jsdiasSemana);
+        System.out.println(diasSemana);
+
+        // Obtenemos el tiempo de inicio base
+        LocalDateTime tiempoInicio = programacionAMI.getParametrizacionProg().getDfechaHoraInicio().toInstant()
+                .atZone(ZoneId.systemDefault()).toLocalDateTime();
+
+        System.out.println(tiempoInicio);
+
+        String vcSeriesAReintentarFiltrado_ = "EstadoInicio";
+        int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos();
+
         switch (filtro.toLowerCase()) {
             case "concentrador":
                 System.out.println("FILTRO POR CONCENTRADOR");
 
+                programarTareasRecurrenteCaso9(diasSemana, tiempoInicio, programacionAMI, filtro,
+                        vcSeriesAReintentarFiltrado_,
+                        reintentosRestantes);
+
                 break;
             case "concentradorymedidores":
                 System.out.println("FILTRO POR CONCENTRADOR Y MEDIDORES");
+                programarTareasRecurrenteCaso10(diasSemana, tiempoInicio, programacionAMI, filtro,
+                        vcSeriesAReintentarFiltrado_,
+                        reintentosRestantes);
+
                 break;
             case "medidores":
                 System.out.println("FILTRO POR MEDIDORES");
@@ -1140,6 +1175,250 @@ public class ProgramacionHandlerService {
         }, delay, TimeUnit.MILLISECONDS); // Programar para ejecutarse después de 1 minuto
     }
 
+    private void programarTareasRecurrenteCaso9(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+            int reintentosRestantes) {
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        LocalDateTime ahora = LocalDateTime.now();
+
+        // Deserializamos la frecuencia de lectura
+        String jsfrecuenciaLecturaLote = programacionAMI.getParametrizacionProg().getJsfrecuenciaLecturaLote();
+        Map<String, Map<String, String>> frecuenciaLecturaLote = deserializarFrecuenciaLectura(jsfrecuenciaLecturaLote);
+
+        // Iterar sobre cada día de la semana y programar la tarea según la hora de
+        // inicio del JSON
+        for (DayOfWeek diaSemana : diasSemana) {
+            String diaSemanaStr = obtenerDiaSemanaString(diaSemana); // Método para convertir DayOfWeek a String en
+                                                                     // español
+            if (frecuenciaLecturaLote.containsKey(diaSemanaStr)) {
+                // Obtenemos la hora de inicio y fin del JSON
+                String horaInicioStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaInicio");
+                // String horaFinStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaFin");
+
+                // Convertir las horas de inicio y fin en LocalTime
+                LocalTime horaInicio = convertirHoraString(horaInicioStr);
+                // LocalTime horaFin = convertirHoraString(horaFinStr);
+
+                // Programar las tareas dentro del rango de horas especificado
+                LocalDateTime proximoDia = ahora.with(TemporalAdjusters.nextOrSame(diaSemana))
+                        .withHour(horaInicio.getHour())
+                        .withMinute(horaInicio.getMinute()).withSecond(0);
+
+                System.out.println("Se programa para el siguiente dia: " + diaSemana + " a la hora: " + horaInicio);
+
+                // Calcular el delay en milisegundos hasta el siguiente día de la semana y hora
+                // de inicio
+                long delay = Duration.between(ahora, proximoDia).toMillis();
+
+                // Programar la tarea recurrente para ese día y dentro del rango de horas
+                scheduler.scheduleAtFixedRate(() -> {
+                    System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
+                            + " a la hora: " + horaInicio);
+
+                    // Crear la tarea que se encolará
+                    Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                            .usarConectorProgramacionFiltroConcentrador("Lectura caso 9", programacionAMI,
+                                    vcSeriesAReintentarFiltrado_);
+
+                    // Usar GeneradorDeColas para encolar la tarea
+                    CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
+                            programacionAMI.getGrupoMedidores().getVcidentificador(),
+                            tareaParaProgramar);
+
+                    try {
+                        // Esperar a que se complete la tarea
+                        String resultadoTarea = future.get(); // Este método bloquea hasta que la tarea esté completa
+                        String vcSeriesAReintentarFiltrado = resultadoTarea;
+
+                        // Reintentar la tarea si hay medidores no leídos
+                        if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
+                            System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
+
+                            // Programar la tarea para 1 minuto después solo con los medidores no leídos
+                            programarReintentoTareaCaso9(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                                    reintentosRestantes - 1);
+
+                        } else if (reintentosRestantes == 0) {
+                            System.out.println("Se alcanzó el número máximo de reintentos.");
+                        } else {
+                            System.out.println(
+                                    "Se leyeron todos los medidores de "
+                                            + programacionAMI.getGrupoMedidores().getVcfiltro()
+                                            + " " + programacionAMI.getGrupoMedidores().getVcidentificador());
+                        }
+
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                }, delay, TimeUnit.DAYS.toMillis(7), TimeUnit.MILLISECONDS); // Repetir cada 7 días
+            }
+        }
+    }
+
+    private void programarReintentoTareaCaso9(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+            long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
+
+        scheduler.schedule(() -> {
+            System.out.println("Reintentando tarea para medidores no leídos...");
+
+            // Crear la tarea que se encolará
+            Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                    .usarConectorProgramacionFiltroConcentrador("Lectura caso 9", programacionAMI,
+                            vcSeriesAReintentarFiltrado);
+
+            // Usar GeneradorDeColas para encolar la tarea
+            CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
+                    programacionAMI.getGrupoMedidores().getVcidentificador(),
+                    tareaParaProgramar);
+
+            try {
+                // Esperar a que se complete la tarea
+                String resultadoReintento = future.get(); // Bloquea hasta que la tarea esté completa
+                String vcSeriesAReintentarFiltradoNuevo = resultadoReintento;
+
+                // Si quedan medidores por leer y hay reintentos disponibles, reprograma
+                // nuevamente
+                if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
+                    System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
+                    programarReintentoTareaCaso9(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                            reintentosRestantes - 1);
+                } else if (reintentosRestantes == 0) {
+                    System.out.println("Se alcanzó el número máximo de reintentos.");
+                } else {
+                    System.out.println("Se completó la lectura de todos los medidores.");
+                }
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+        }, delay, TimeUnit.MILLISECONDS); // Programar para ejecutarse después de 1 minuto
+    }
+
+    private void programarTareasRecurrenteCaso10(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+            int reintentosRestantes) {
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        LocalDateTime ahora = LocalDateTime.now();
+
+        // Deserializamos la frecuencia de lectura
+        String jsfrecuenciaLecturaLote = programacionAMI.getParametrizacionProg().getJsfrecuenciaLecturaLote();
+        Map<String, Map<String, String>> frecuenciaLecturaLote = deserializarFrecuenciaLectura(jsfrecuenciaLecturaLote);
+
+        // Iterar sobre cada día de la semana y programar la tarea según la hora de
+        // inicio del JSON
+        for (DayOfWeek diaSemana : diasSemana) {
+            String diaSemanaStr = obtenerDiaSemanaString(diaSemana); // Método para convertir DayOfWeek a String en
+                                                                     // español
+            if (frecuenciaLecturaLote.containsKey(diaSemanaStr)) {
+                // Obtenemos la hora de inicio y fin del JSON
+                String horaInicioStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaInicio");
+                // String horaFinStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaFin");
+
+                // Convertir las horas de inicio y fin en LocalTime
+                LocalTime horaInicio = convertirHoraString(horaInicioStr);
+                // LocalTime horaFin = convertirHoraString(horaFinStr);
+
+                // Programar las tareas dentro del rango de horas especificado
+                LocalDateTime proximoDia = ahora.with(TemporalAdjusters.nextOrSame(diaSemana))
+                        .withHour(horaInicio.getHour())
+                        .withMinute(horaInicio.getMinute()).withSecond(0);
+
+                System.out.println("Se programa para el siguiente dia: " + diaSemana + " a la hora: " + horaInicio);
+
+                // Calcular el delay en milisegundos hasta el siguiente día de la semana y hora
+                // de inicio
+                long delay = Duration.between(ahora, proximoDia).toMillis();
+
+                // Programar la tarea recurrente para ese día y dentro del rango de horas
+                scheduler.scheduleAtFixedRate(() -> {
+                    System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
+                            + " a la hora: " + horaInicio);
+
+                    // Crear la tarea que se encolará
+                    Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                            .usarConectorProgramacionFiltroConyMed("Lectura caso 10", programacionAMI,
+                                    vcSeriesAReintentarFiltrado_);
+
+                    // Usar GeneradorDeColas para encolar la tarea
+                    CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
+                            programacionAMI.getGrupoMedidores().getVcidentificador(),
+                            tareaParaProgramar);
+
+                    try {
+                        // Esperar a que se complete la tarea
+                        String resultadoTarea = future.get(); // Este método bloquea hasta que la tarea esté completa
+                        String vcSeriesAReintentarFiltrado = resultadoTarea;
+
+                        // Reintentar la tarea si hay medidores no leídos
+                        if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
+                            System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
+
+                            // Programar la tarea para 1 minuto después solo con los medidores no leídos
+                            programarReintentoTareaCaso10(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                                    reintentosRestantes - 1);
+
+                        } else if (reintentosRestantes == 0) {
+                            System.out.println("Se alcanzó el número máximo de reintentos.");
+                        } else {
+                            System.out.println(
+                                    "Se leyeron todos los medidores de "
+                                            + programacionAMI.getGrupoMedidores().getVcfiltro()
+                                            + " " + programacionAMI.getGrupoMedidores().getVcidentificador());
+                        }
+
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+
+                }, delay, TimeUnit.DAYS.toMillis(7), TimeUnit.MILLISECONDS); // Repetir cada 7 días
+            }
+        }
+    }
+
+    private void programarReintentoTareaCaso10(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+            long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
+
+        scheduler.schedule(() -> {
+            System.out.println("Reintentando tarea para medidores no leídos...");
+
+            // Crear la tarea que se encolará
+            Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                    .usarConectorProgramacionFiltroConyMed("Lectura caso 10", programacionAMI,
+                            vcSeriesAReintentarFiltrado);
+
+            // Usar GeneradorDeColas para encolar la tarea
+            CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
+                    programacionAMI.getGrupoMedidores().getVcidentificador(),
+                    tareaParaProgramar);
+
+            try {
+                // Esperar a que se complete la tarea
+                String resultadoReintento = future.get(); // Bloquea hasta que la tarea esté completa
+                String vcSeriesAReintentarFiltradoNuevo = resultadoReintento;
+
+                // Si quedan medidores por leer y hay reintentos disponibles, reprograma
+                // nuevamente
+                if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
+                    System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
+                    programarReintentoTareaCaso10(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                            reintentosRestantes - 1);
+                } else if (reintentosRestantes == 0) {
+                    System.out.println("Se alcanzó el número máximo de reintentos.");
+                } else {
+                    System.out.println("Se completó la lectura de todos los medidores.");
+                }
+
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
+        }, delay, TimeUnit.MILLISECONDS); // Programar para ejecutarse después de 1 minuto
+    }
+
     // Método para convertir los días de la semana en español a DayOfWeek
     private List<DayOfWeek> convertirDiasSemana(String jsdiasSemana) {
         List<String> diasEnTexto = Arrays
@@ -1165,5 +1444,47 @@ public class ProgramacionHandlerService {
                     throw new IllegalArgumentException("Día no reconocido: " + dia);
             }
         }).collect(Collectors.toList());
+    }
+
+    private Map<String, Map<String, String>> deserializarFrecuenciaLectura(String jsfrecuenciaLecturaLote) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Map<String, String>> frecuenciaLecturaLote = null;
+        try {
+            // Deserializamos el JSON a un Map
+            frecuenciaLecturaLote = objectMapper.readValue(jsfrecuenciaLecturaLote,
+                    new TypeReference<Map<String, Map<String, String>>>() {
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return frecuenciaLecturaLote;
+    }
+
+    // Método para convertir DayOfWeek a String en español
+    private String obtenerDiaSemanaString(DayOfWeek dayOfWeek) {
+        switch (dayOfWeek) {
+            case MONDAY:
+                return "Lunes";
+            case TUESDAY:
+                return "Martes";
+            case WEDNESDAY:
+                return "Miércoles";
+            case THURSDAY:
+                return "Jueves";
+            case FRIDAY:
+                return "Viernes";
+            case SATURDAY:
+                return "Sabado";
+            case SUNDAY:
+                return "Domingo";
+            default:
+                throw new IllegalArgumentException("Día no reconocido");
+        }
+    }
+
+    // Método para convertir la hora en formato de texto ("05:00am") a LocalTime
+    private LocalTime convertirHoraString(String horaStr) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mma", Locale.US);
+        return LocalTime.parse(horaStr.toUpperCase(), formatter);
     }
 }

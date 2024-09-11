@@ -186,7 +186,7 @@ public class ConectorProgramacionService {
 
     }
 
-    public String UsarConectorProgramacionCaso3(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+    public String UsarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
 
         String vcSerieAReintentar = "";
 

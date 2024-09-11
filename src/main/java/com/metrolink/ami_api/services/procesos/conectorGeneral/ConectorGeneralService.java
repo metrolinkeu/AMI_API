@@ -61,8 +61,8 @@ public class ConectorGeneralService {
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
 
-    public String usarConectorProgramacionCaso3(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso3(mensaje, programacionAMI, vcserie);
+    public String usarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroMedidores(mensaje, programacionAMI, vcserie);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }

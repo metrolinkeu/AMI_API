@@ -25,7 +25,7 @@ public class ConectorDetecMedService2 {
         System.out.println("vcnoSerie: " + vcnoSerie);
 
         Random random = new Random();
-        int cantidadMedidores = 1;
+        int cantidadMedidores = 3;
         StringJoiner medidoresJoiner = new StringJoiner(", ");
         for (int i = 1; i <= cantidadMedidores; i++) {
             String numeroSerie = String.format("%05d", random.nextInt(99999)); // Número de serie de 5 dígitos

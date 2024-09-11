@@ -269,7 +269,7 @@ public class ConectorProgramacionService {
 
     }
 
-    public String UsarConectorProgramacionCaso4(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+    public String UsarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
 
         String vcSerieAReintentar = "";
 

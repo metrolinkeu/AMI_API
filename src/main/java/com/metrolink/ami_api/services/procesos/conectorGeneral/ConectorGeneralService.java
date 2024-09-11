@@ -28,7 +28,6 @@ public class ConectorGeneralService {
     private ConectorProgramacionService conectorProgramacionService;
 
     public String usarConectorDeteccion(String json) {
-        System.out.println("entre a usarconector detectcion");
         String newJson = conectorDetecMedService2.usarConectorDeteccion(json);
         return newJson;
     }
@@ -47,7 +46,8 @@ public class ConectorGeneralService {
 
     public String usarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroConcentrador(mensaje, programacionAMI,
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroConcentrador(mensaje,
+                programacionAMI,
                 vcSeriesAReintentarFiltrado);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
@@ -61,18 +61,19 @@ public class ConectorGeneralService {
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
 
-    public String usarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroMedidores(mensaje, programacionAMI, vcserie);
+    public String usarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI,
+            String vcserie) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroMedidores(mensaje, programacionAMI,
+                vcserie);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
 
-    public String usarConectorProgramacionCaso4(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionCaso4(mensaje, programacionAMI, vcserie);
+    public String usarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroSIC(mensaje, programacionAMI,
+                vcserie);
 
         return Impreso; // Retorna el mensaje para confirmar la ejecución
     }
-
-
 
 }

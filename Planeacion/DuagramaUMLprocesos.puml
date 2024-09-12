@@ -337,8 +337,14 @@ package "com.metrolink.ami_api" {
                     + ConectorProgramacionService conectorProgramacionService
                     * public String usarConectorDeteccion(String json)
                     * public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie)
-                    * public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode) 
-                    * public String usarConectorProgramacion(String mensaje, ProgramacionesAMI programacionAMI )
+                    * public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode)
+                    *  public String usarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
+                    String vcSeriesAReintentarFiltrado)
+                    * public String usarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
+                    String vcSeriesAReintentarFiltrado)
+                    * public String usarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI,
+                    String vcserie)
+                    * public String usarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie)
 
                 }
             }
@@ -354,8 +360,8 @@ package "com.metrolink.ami_api" {
                     * private void procesarCola(String clave)
                     * private <T> void completarFuture(CompletableFuture<?> future, T result)
                     * private static class Pair<K, V> <Clase Auxiliar>
-                    
-               
+
+
 
                 }
             }
@@ -391,7 +397,7 @@ package "com.metrolink.ami_api" {
                     + MedidoresService medidoresService
                     * List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie)
                     *  public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC,
-            JsonNode vcserialesNode)
+                    JsonNode vcserialesNode)
                     * private AutoconfMedidor crearAutoconfMedidor(String vcSerie, Random random)
                     * private AutoConfCodigosObisCanal crearCodigosObisCanal(Random random)
 
@@ -433,15 +439,90 @@ package "com.metrolink.ami_api" {
                 }
 
                 class ConectorProgramacionService {
+                    + ConcentradoresService concentradoresService
                     + MedidoresService medidoresService
-                    * public String UsarConectorProgramacionTEST(String mensaje, ProgramacionesAMI programacionAMI)
+                    * public String UsarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
+                    String vcSeriesAReintentarFiltrado)
+                    * public String UsarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
+                    String vcSeriesAReintentarFiltrado)
+                    * public String UsarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI, String vcserie)
+                    * public String UsarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie)
                 }
                 class ProgramacionHandlerService{
                     + ConectorGeneralService conectorGeneralService
                     + GeneradorDeColas generadorDeColas
+                    + MedidoresService medidoresService
+                    --
                     * public String manejarProgramacion(ProgramacionesAMI programacionAMI)
-                    * private String manejarFiltro(String filtro, ProgramacionesAMI programacionAMI)
-                    * private void programarTarea(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI, long delay)
+                    --
+                    * private String manejarFiltro_unica(String filtro, ProgramacionesAMI programacionAMI)
+                    * private String manejarFiltro_frecuenteNoR(String filtro, ProgramacionesAMI programacionAMI)
+                    * private String manejarFiltro_recurrente(String filtro, ProgramacionesAMI programacionAMI)
+                    --
+                    * private void programarTareaCaso1(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado_, int reintentosRestantes)
+                    --
+                    * private void programarTareaCaso2(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado_, int reintentosRestantes)
+                    --
+                    * private void programarTareaCaso3(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado_, int reintentosRestantes)
+                    --
+                    * private void programarTareaCaso4(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado_, int reintentosRestantes)
+                    --
+                    * private void programarTareasFrecuentesCaso5(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso5(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private void programarTareasFrecuentesCaso6(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso6(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private void programarTareasFrecuentesCaso7(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso7(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private void programarTareasFrecuentesCaso8(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso8(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private void programarTareasRecurrenteCaso9(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso9(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private void programarTareasRecurrenteCaso10(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso10(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private void programarTareasRecurrenteCaso11(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso11(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private void programarTareasRecurrenteCaso12(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+                    ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+                    int reintentosRestantes)
+                    * private void programarReintentoTareaCaso12(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+                    long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes)
+                    --
+                    * private List<DayOfWeek> convertirDiasSemana(String jsdiasSemana)
+                    * private Map<String, Map<String, String>> deserializarFrecuenciaLectura(String jsfrecuenciaLecturaLote)
+                    * private String obtenerDiaSemanaString(DayOfWeek dayOfWeek)
+                    * private LocalTime convertirHoraString(String horaStr)
                 }
             }
             !endif
@@ -584,6 +665,10 @@ GeneradorDeColas -> ConcentradoresService
 
 ProgramacionHandlerService -> ConectorGeneralService
 ProgramacionHandlerService --> GeneradorDeColas
+ProgramacionHandlerService -> MedidoresService
+
+
+AgendaProgramacionesAMIService::save --> ProgramacionHandlerService::manejarProgramacion: usa
 
 
 

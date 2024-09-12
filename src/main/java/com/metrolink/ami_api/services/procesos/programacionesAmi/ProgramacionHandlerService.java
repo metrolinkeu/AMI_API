@@ -234,24 +234,27 @@ public class ProgramacionHandlerService {
         switch (filtro.toLowerCase()) {
             case "concentrador":
                 System.out.println("FILTRO POR CONCENTRADOR");
-
                 programarTareasRecurrenteCaso9(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
                         reintentosRestantes);
-
                 break;
             case "concentradorymedidores":
                 System.out.println("FILTRO POR CONCENTRADOR Y MEDIDORES");
                 programarTareasRecurrenteCaso10(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
                         reintentosRestantes);
-
                 break;
             case "medidores":
                 System.out.println("FILTRO POR MEDIDORES");
+                programarTareasRecurrenteCaso11(diasSemana, tiempoInicio, programacionAMI, filtro,
+                        vcSeriesAReintentarFiltrado_,
+                        reintentosRestantes);
                 break;
             case "frontera sic":
                 System.out.println("FILTRO FRONTERA SIC");
+                programarTareasRecurrenteCaso12(diasSemana, tiempoInicio, programacionAMI, filtro,
+                        vcSeriesAReintentarFiltrado_,
+                        reintentosRestantes);
                 break;
             default:
                 System.out.println("FILTRO NO DEFINIDO");
@@ -1358,7 +1361,8 @@ public class ProgramacionHandlerService {
                             System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
 
                             // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                            programarReintentoTareaCaso10(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                            programarReintentoTareaCaso10(scheduler, programacionAMI, 60000,
+                                    vcSeriesAReintentarFiltrado,
                                     reintentosRestantes - 1);
 
                         } else if (reintentosRestantes == 0) {
@@ -1414,6 +1418,468 @@ public class ProgramacionHandlerService {
 
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
+            }
+
+        }, delay, TimeUnit.MILLISECONDS); // Programar para ejecutarse después de 1 minuto
+    }
+
+    private void programarTareasRecurrenteCaso11(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+            int reintentosRestantes) {
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        LocalDateTime ahora = LocalDateTime.now();
+
+        // Deserializamos la frecuencia de lectura
+        String jsfrecuenciaLecturaLote = programacionAMI.getParametrizacionProg().getJsfrecuenciaLecturaLote();
+        Map<String, Map<String, String>> frecuenciaLecturaLote = deserializarFrecuenciaLectura(jsfrecuenciaLecturaLote);
+
+        // Iterar sobre cada día de la semana y programar la tarea según la hora de
+        // inicio del JSON
+        for (DayOfWeek diaSemana : diasSemana) {
+            String diaSemanaStr = obtenerDiaSemanaString(diaSemana); // Método para convertir DayOfWeek a String en
+                                                                     // español
+            if (frecuenciaLecturaLote.containsKey(diaSemanaStr)) {
+                // Obtenemos la hora de inicio y fin del JSON
+                String horaInicioStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaInicio");
+                // String horaFinStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaFin");
+
+                // Convertir las horas de inicio y fin en LocalTime
+                LocalTime horaInicio = convertirHoraString(horaInicioStr);
+                // LocalTime horaFin = convertirHoraString(horaFinStr);
+
+                // Programar las tareas dentro del rango de horas especificado
+                LocalDateTime proximoDia = ahora.with(TemporalAdjusters.nextOrSame(diaSemana))
+                        .withHour(horaInicio.getHour())
+                        .withMinute(horaInicio.getMinute()).withSecond(0);
+
+                System.out.println("Se programa para el siguiente dia: " + diaSemana + " a la hora: " + horaInicio);
+
+                // Calcular el delay en milisegundos hasta el siguiente día de la semana y hora
+                // de inicio
+                long delay = Duration.between(ahora, proximoDia).toMillis();
+
+                // Programar la tarea recurrente para ese día y dentro del rango de horas
+                scheduler.scheduleAtFixedRate(() -> {
+                    System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
+                            + " a la hora: " + horaInicio);
+
+                    String jsseriesMed = "";
+                    List<String> vcSeriesAReintentar = new ArrayList<>();
+                    // Crear una lista para almacenar los CompletableFutures
+                    List<CompletableFuture<String>> futuresList = new ArrayList<>();
+
+                    if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado_)) {
+                        jsseriesMed = vcSeriesAReintentarFiltrado_;
+                    } else {
+                        jsseriesMed = programacionAMI.getGrupoMedidores().getJsseriesMed();
+                    }
+
+                    // Convertir la cadena JSON a una lista de strings
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    List<String> jsseriesMedList;
+
+                    try {
+                        jsseriesMedList = objectMapper.readValue(jsseriesMed, new TypeReference<List<String>>() {
+                        });
+
+                        // Verificar si la lista contiene elementos
+                        if (jsseriesMedList.isEmpty()) {
+                            System.out.println("No se encontraron series en la lista.");
+                        } else {
+                            // Iterar sobre la lista y procesar cada serie
+                            for (int i = 0; i < jsseriesMedList.size(); i++) {
+                                String vcserie = jsseriesMedList.get(i);
+                                // Crar la tarea que se encolará
+                                Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                                        .usarConectorProgramacionFiltroMedidores("Lectura caso 11", programacionAMI,
+                                                vcserie);
+
+                                // Usar GeneradorDeColas para encolar la tarea
+                                CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
+                                        tareaParaProgramar);
+
+                                // Agregar el CompletableFuture a la lista de futuros
+                                futuresList.add(future);
+                            }
+
+                            // Esperar a que todos los futuros se completen y recoger los resultados
+                            for (CompletableFuture<String> future : futuresList) {
+                                try {
+                                    // Obtener el resultado de cada future y agregarlo a la lista
+                                    // autoConfiguraciones
+                                    String LeidoNoLeido = future.get(); // Este método bloquea hasta que el
+                                                                        // resultado
+                                                                        // esté disponible
+                                    vcSeriesAReintentar.add(LeidoNoLeido);
+                                } catch (InterruptedException | ExecutionException e) {
+                                    e.printStackTrace();
+                                    // Manejar excepciones según sea necesario
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    // Filtrar los valores vacíos y construir el string con el formato requerido
+                    String vcSeriesAReintentarFiltrado = vcSeriesAReintentar.stream()
+                            .filter(serie -> !serie.isEmpty()) // Filtra las cadenas vacías
+                            .map(serie -> "\"" + serie + "\"") // Añade las comillas a cada serie
+                            .collect(Collectors.joining(", ", "[", "]")); // Une con comas y encierra en corchetes
+
+                    // Imprimir el resultado
+                    System.out.println(vcSeriesAReintentarFiltrado);
+
+                    // Reintentar la tarea si hay medidores no leídos
+                    if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
+                        System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
+
+                        // Programar la tarea para 1 minuto después solo con los medidores no leídos
+                        programarReintentoTareaCaso11(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                                reintentosRestantes - 1);
+
+                    } else if (reintentosRestantes == 0) {
+                        System.out.println("Se alcanzó el número máximo de reintentos.");
+                    } else {
+                        System.out.println(
+                                "Se leyeron todos los medidores de " + programacionAMI.getGrupoMedidores().getVcfiltro()
+                                        + " " + programacionAMI.getGrupoMedidores().getVcidentificador());
+                    }
+
+                }, delay, TimeUnit.DAYS.toMillis(7), TimeUnit.MILLISECONDS); // Repetir cada 7 días
+            }
+        }
+    }
+
+    private void programarReintentoTareaCaso11(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+            long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
+
+        scheduler.schedule(() -> {
+            System.out.println("Reintentando tarea para medidores no leídos...");
+
+            String jsseriesMed = "";
+            List<String> vcSeriesAReintentar = new ArrayList<>();
+            // Crear una lista para almacenar los CompletableFutures
+            List<CompletableFuture<String>> futuresList = new ArrayList<>();
+
+            if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado)) {
+                jsseriesMed = vcSeriesAReintentarFiltrado;
+            } else {
+                jsseriesMed = programacionAMI.getGrupoMedidores().getJsseriesMed();
+            }
+
+            // Convertir la cadena JSON a una lista de strings
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<String> jsseriesMedList;
+
+            try {
+                jsseriesMedList = objectMapper.readValue(jsseriesMed, new TypeReference<List<String>>() {
+                });
+
+                // Verificar si la lista contiene elementos
+                if (jsseriesMedList.isEmpty()) {
+                    System.out.println("No se encontraron series en la lista.");
+                } else {
+                    // Iterar sobre la lista y procesar cada serie
+                    for (int i = 0; i < jsseriesMedList.size(); i++) {
+                        String vcserie = jsseriesMedList.get(i);
+                        // Crar la tarea que se encolará
+                        Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                                .usarConectorProgramacionFiltroMedidores("Lectura Reintento caso 11", programacionAMI,
+                                        vcserie);
+
+                        // Usar GeneradorDeColas para encolar la tarea
+                        CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
+                                tareaParaProgramar);
+
+                        // Agregar el CompletableFuture a la lista de futuros
+                        futuresList.add(future);
+                    }
+
+                    // Esperar a que todos los futuros se completen y recoger los resultados
+                    for (CompletableFuture<String> future : futuresList) {
+                        try {
+                            // Obtener el resultado de cada future y agregarlo a la lista
+                            // autoConfiguraciones
+                            String LeidoNoLeido = future.get(); // Este método bloquea hasta que el
+                                                                // resultado
+                                                                // esté disponible
+                            vcSeriesAReintentar.add(LeidoNoLeido);
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                            // Manejar excepciones según sea necesario
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Filtrar los valores vacíos y construir el string con el formato requerido
+            String vcSeriesAReintentarFiltradoNuevo = vcSeriesAReintentar.stream()
+                    .filter(serie -> !serie.isEmpty()) // Filtra las cadenas vacías
+                    .map(serie -> "\"" + serie + "\"") // Añade las comillas a cada serie
+                    .collect(Collectors.joining(", ", "[", "]")); // Une con comas y encierra en corchetes
+
+            // Imprimir el resultado
+            System.out.println(vcSeriesAReintentarFiltradoNuevo);
+
+            // Si quedan medidores por leer y hay reintentos disponibles, reprograma
+            // nuevamente
+            if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
+                System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
+                programarReintentoTareaCaso11(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                        reintentosRestantes - 1);
+            } else if (reintentosRestantes == 0) {
+                System.out.println("Se alcanzó el número máximo de reintentos.");
+            } else {
+                System.out.println("Se completó la lectura de todos los medidores.");
+            }
+
+        }, delay, TimeUnit.MILLISECONDS); // Programar para ejecutarse después de 1 minuto
+    }
+
+    private void programarTareasRecurrenteCaso12(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
+            int reintentosRestantes) {
+
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        LocalDateTime ahora = LocalDateTime.now();
+
+        // Deserializamos la frecuencia de lectura
+        String jsfrecuenciaLecturaLote = programacionAMI.getParametrizacionProg().getJsfrecuenciaLecturaLote();
+        Map<String, Map<String, String>> frecuenciaLecturaLote = deserializarFrecuenciaLectura(jsfrecuenciaLecturaLote);
+
+        // Iterar sobre cada día de la semana y programar la tarea según la hora de
+        // inicio del JSON
+        for (DayOfWeek diaSemana : diasSemana) {
+            String diaSemanaStr = obtenerDiaSemanaString(diaSemana); // Método para convertir DayOfWeek a String en
+                                                                     // español
+            if (frecuenciaLecturaLote.containsKey(diaSemanaStr)) {
+                // Obtenemos la hora de inicio y fin del JSON
+                String horaInicioStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaInicio");
+                // String horaFinStr = frecuenciaLecturaLote.get(diaSemanaStr).get("horaFin");
+
+                // Convertir las horas de inicio y fin en LocalTime
+                LocalTime horaInicio = convertirHoraString(horaInicioStr);
+                // LocalTime horaFin = convertirHoraString(horaFinStr);
+
+                // Programar las tareas dentro del rango de horas especificado
+                LocalDateTime proximoDia = ahora.with(TemporalAdjusters.nextOrSame(diaSemana))
+                        .withHour(horaInicio.getHour())
+                        .withMinute(horaInicio.getMinute()).withSecond(0);
+
+                System.out.println("Se programa para el siguiente dia: " + diaSemana + " a la hora: " + horaInicio);
+
+                // Calcular el delay en milisegundos hasta el siguiente día de la semana y hora
+                // de inicio
+                long delay = Duration.between(ahora, proximoDia).toMillis();
+
+                // Programar la tarea recurrente para ese día y dentro del rango de horas
+                scheduler.scheduleAtFixedRate(() -> {
+                    System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
+                            + " a la hora: " + horaInicio);
+
+                    String jsseriesMed = "";
+                    List<String> vcSeriesAReintentar = new ArrayList<>();
+                    // Crear una lista para almacenar los CompletableFutures
+                    List<CompletableFuture<String>> futuresList = new ArrayList<>();
+
+                    if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado_)) {
+                        jsseriesMed = vcSeriesAReintentarFiltrado_;
+                    } else {
+                        String identidicadorSic = programacionAMI.getGrupoMedidores().getVcidentificador();
+                        List<Medidores> medidores = medidoresService.findByVcsic(identidicadorSic);
+                        jsseriesMed = "["; // Iniciamos con el formato de array
+                        StringBuilder tempBuilder = new StringBuilder();
+                        medidores.forEach(medidor -> {
+                            String vcSerie = medidor.getVcSerie();
+
+                            // Agregamos cada vcSerie al StringBuilder temporal
+                            if (tempBuilder.length() > 0) {
+                                tempBuilder.append(", ");
+                            }
+                            tempBuilder.append("\"").append(vcSerie).append("\"");
+                        });
+
+                        // Asignamos el valor final a la variable jsseriesMed con el formato adecuado
+                        jsseriesMed += tempBuilder.toString() + "]";
+                    }
+
+                    // Convertir la cadena JSON a una lista de strings
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    List<String> jsseriesMedList;
+
+                    try {
+                        jsseriesMedList = objectMapper.readValue(jsseriesMed, new TypeReference<List<String>>() {
+                        });
+
+                        // Verificar si la lista contiene elementos
+                        if (jsseriesMedList.isEmpty()) {
+                            System.out.println("No se encontraron series en la lista.");
+                        } else {
+                            // Iterar sobre la lista y procesar cada serie
+                            for (int i = 0; i < jsseriesMedList.size(); i++) {
+                                String vcserie = jsseriesMedList.get(i);
+                                // Crar la tarea que se encolará
+                                Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                                        .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie);
+
+                                // Usar GeneradorDeColas para encolar la tarea
+                                CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
+                                        tareaParaProgramar);
+
+                                // Agregar el CompletableFuture a la lista de futuros
+                                futuresList.add(future);
+                            }
+
+                            // Esperar a que todos los futuros se completen y recoger los resultados
+                            for (CompletableFuture<String> future : futuresList) {
+                                try {
+                                    // Obtener el resultado de cada future y agregarlo a la lista
+                                    // autoConfiguraciones
+                                    String LeidoNoLeido = future.get(); // Este método bloquea hasta que el
+                                                                        // resultado
+                                                                        // esté disponible
+                                    vcSeriesAReintentar.add(LeidoNoLeido);
+                                } catch (InterruptedException | ExecutionException e) {
+                                    e.printStackTrace();
+                                    // Manejar excepciones según sea necesario
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    // Filtrar los valores vacíos y construir el string con el formato requerido
+                    String vcSeriesAReintentarFiltrado = vcSeriesAReintentar.stream()
+                            .filter(serie -> !serie.isEmpty()) // Filtra las cadenas vacías
+                            .map(serie -> "\"" + serie + "\"") // Añade las comillas a cada serie
+                            .collect(Collectors.joining(", ", "[", "]")); // Une con comas y encierra en corchetes
+
+                    // Imprimir el resultado
+                    System.out.println(vcSeriesAReintentarFiltrado);
+
+                    // Reintentar la tarea si hay medidores no leídos
+                    if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
+                        System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
+
+                        // Programar la tarea para 1 minuto después solo con los medidores no leídos
+                        programarReintentoTareaCaso12(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                                reintentosRestantes - 1);
+
+                    } else if (reintentosRestantes == 0) {
+                        System.out.println("Se alcanzó el número máximo de reintentos.");
+                    } else {
+                        System.out.println(
+                                "Se leyeron todos los medidores de " + programacionAMI.getGrupoMedidores().getVcfiltro()
+                                        + " " + programacionAMI.getGrupoMedidores().getVcidentificador());
+                    }
+
+                }, delay, TimeUnit.DAYS.toMillis(7), TimeUnit.MILLISECONDS); // Repetir cada 7 días
+            }
+        }
+    }
+
+    private void programarReintentoTareaCaso12(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
+            long delay, String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
+
+        scheduler.schedule(() -> {
+            System.out.println("Reintentando tarea para medidores no leídos...");
+
+            String jsseriesMed = "";
+                    List<String> vcSeriesAReintentar = new ArrayList<>();
+                    // Crear una lista para almacenar los CompletableFutures
+                    List<CompletableFuture<String>> futuresList = new ArrayList<>();
+
+                    if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado)) {
+                        jsseriesMed = vcSeriesAReintentarFiltrado;
+                    } else {
+                        String identidicadorSic = programacionAMI.getGrupoMedidores().getVcidentificador();
+                        List<Medidores> medidores = medidoresService.findByVcsic(identidicadorSic);
+                        jsseriesMed = "["; // Iniciamos con el formato de array
+                        StringBuilder tempBuilder = new StringBuilder();
+                        medidores.forEach(medidor -> {
+                            String vcSerie = medidor.getVcSerie();
+
+                            // Agregamos cada vcSerie al StringBuilder temporal
+                            if (tempBuilder.length() > 0) {
+                                tempBuilder.append(", ");
+                            }
+                            tempBuilder.append("\"").append(vcSerie).append("\"");
+                        });
+
+                        // Asignamos el valor final a la variable jsseriesMed con el formato adecuado
+                        jsseriesMed += tempBuilder.toString() + "]";
+                    }
+
+                    // Convertir la cadena JSON a una lista de strings
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    List<String> jsseriesMedList;
+
+                    try {
+                        jsseriesMedList = objectMapper.readValue(jsseriesMed, new TypeReference<List<String>>() {
+                        });
+
+                        // Verificar si la lista contiene elementos
+                        if (jsseriesMedList.isEmpty()) {
+                            System.out.println("No se encontraron series en la lista.");
+                        } else {
+                            // Iterar sobre la lista y procesar cada serie
+                            for (int i = 0; i < jsseriesMedList.size(); i++) {
+                                String vcserie = jsseriesMedList.get(i);
+                                // Crar la tarea que se encolará
+                                Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                                        .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie);
+
+                                // Usar GeneradorDeColas para encolar la tarea
+                                CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
+                                        tareaParaProgramar);
+
+                                // Agregar el CompletableFuture a la lista de futuros
+                                futuresList.add(future);
+                            }
+
+                            // Esperar a que todos los futuros se completen y recoger los resultados
+                            for (CompletableFuture<String> future : futuresList) {
+                                try {
+                                    // Obtener el resultado de cada future y agregarlo a la lista
+                                    // autoConfiguraciones
+                                    String LeidoNoLeido = future.get(); // Este método bloquea hasta que el
+                                                                        // resultado
+                                                                        // esté disponible
+                                    vcSeriesAReintentar.add(LeidoNoLeido);
+                                } catch (InterruptedException | ExecutionException e) {
+                                    e.printStackTrace();
+                                    // Manejar excepciones según sea necesario
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    // Filtrar los valores vacíos y construir el string con el formato requerido
+                    String vcSeriesAReintentarFiltradoNuevo = vcSeriesAReintentar.stream()
+                            .filter(serie -> !serie.isEmpty()) // Filtra las cadenas vacías
+                            .map(serie -> "\"" + serie + "\"") // Añade las comillas a cada serie
+                            .collect(Collectors.joining(", ", "[", "]")); // Une con comas y encierra en corchetes
+
+                    // Imprimir el resultado
+                    System.out.println(vcSeriesAReintentarFiltradoNuevo);
+
+            // Si quedan medidores por leer y hay reintentos disponibles, reprograma
+            // nuevamente
+            if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
+                System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
+                programarReintentoTareaCaso12(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                        reintentosRestantes - 1);
+            } else if (reintentosRestantes == 0) {
+                System.out.println("Se alcanzó el número máximo de reintentos.");
+            } else {
+                System.out.println("Se completó la lectura de todos los medidores.");
             }
 
         }, delay, TimeUnit.MILLISECONDS); // Programar para ejecutarse después de 1 minuto

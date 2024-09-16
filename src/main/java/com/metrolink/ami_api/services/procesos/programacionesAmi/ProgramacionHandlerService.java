@@ -52,6 +52,9 @@ public class ProgramacionHandlerService {
         String tipoLectura = programacionAMI.getParametrizacionProg().getVctipoDeLectura();
         String filtro = programacionAMI.getGrupoMedidores().getVcfiltro();
 
+        System.out.println("Estos son los minutos de delay que programare para cada reintento "
+                + programacionAMI.getParametrizacionProg().getNdelayMin());
+
         // Determinar el tipo de lectura y aplicar la lógica correspondiente
         if ("única".equalsIgnoreCase(tipoLectura)) {
             System.out.println("LECTURA ÚNICA");
@@ -88,7 +91,6 @@ public class ProgramacionHandlerService {
 
         String vcSeriesAReintentarFiltrado_ = "EstadoInicio";
         int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos();
-        ;
 
         switch (filtro.toLowerCase()) {
             case "concentrador":
@@ -287,8 +289,10 @@ public class ProgramacionHandlerService {
                 // Reintentar la tarea si hay medidores no leídos
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
-                    programarTareaCaso1(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                   
+                    programarTareaCaso1(scheduler, programacionAMI, delayReintento, vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
                     // +1
 
@@ -330,8 +334,10 @@ public class ProgramacionHandlerService {
                 // Reintentar la tarea si hay medidores no leídos
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
-                    programarTareaCaso2(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                  
+                    programarTareaCaso2(scheduler, programacionAMI, delayReintento, vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
                     // +1
                 } else if (reintentosRestantes == 0) {
@@ -425,8 +431,10 @@ public class ProgramacionHandlerService {
                 // // Reintentar la tarea si hay medidores no leídos
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
-                    programarTareaCaso3(scheduler, programacionAMI, 60000,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                    
+                    programarTareaCaso3(scheduler, programacionAMI, delayReintento,
                             vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
                     // +1
@@ -534,8 +542,10 @@ public class ProgramacionHandlerService {
                 // // Reintentar la tarea si hay medidores no leídos
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
-                    programarTareaCaso4(scheduler, programacionAMI, 60000,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                   
+                    programarTareaCaso4(scheduler, programacionAMI, delayReintento,
                             vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
                     // +1
@@ -594,9 +604,12 @@ public class ProgramacionHandlerService {
                     // Reintentar la tarea si hay medidores no leídos
                     if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                        int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                        Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                       
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                        programarReintentoTareaCaso5(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                        programarReintentoTareaCaso5(scheduler, programacionAMI, delayReintento,
+                                vcSeriesAReintentarFiltrado,
                                 reintentosRestantes - 1);
 
                     } else if (reintentosRestantes == 0) {
@@ -640,7 +653,11 @@ public class ProgramacionHandlerService {
                 // nuevamente
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                    programarReintentoTareaCaso5(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                    
+                    programarReintentoTareaCaso5(scheduler, programacionAMI, delayReintento,
+                            vcSeriesAReintentarFiltradoNuevo,
                             reintentosRestantes - 1);
                 } else if (reintentosRestantes == 0) {
                     System.out.println("Se alcanzó el número máximo de reintentos.");
@@ -696,9 +713,12 @@ public class ProgramacionHandlerService {
                     // Reintentar la tarea si hay medidores no leídos
                     if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                        int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                        Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                       
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                        programarReintentoTareaCaso6(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                        programarReintentoTareaCaso6(scheduler, programacionAMI, delayReintento,
+                                vcSeriesAReintentarFiltrado,
                                 reintentosRestantes - 1);
 
                     } else if (reintentosRestantes == 0) {
@@ -742,7 +762,10 @@ public class ProgramacionHandlerService {
                 // nuevamente
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                    programarReintentoTareaCaso6(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                    programarReintentoTareaCaso6(scheduler, programacionAMI, delayReintento,
+                            vcSeriesAReintentarFiltradoNuevo,
                             reintentosRestantes - 1);
                 } else if (reintentosRestantes == 0) {
                     System.out.println("Se alcanzó el número máximo de reintentos.");
@@ -850,9 +873,12 @@ public class ProgramacionHandlerService {
                 // Reintentar la tarea si hay medidores no leídos
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                    
                     // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                    programarReintentoTareaCaso7(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                    programarReintentoTareaCaso7(scheduler, programacionAMI, delayReintento,
+                            vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1);
 
                 } else if (reintentosRestantes == 0) {
@@ -943,7 +969,10 @@ public class ProgramacionHandlerService {
             // nuevamente
             if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                 System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                programarReintentoTareaCaso7(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                programarReintentoTareaCaso7(scheduler, programacionAMI, delayReintento,
+                        vcSeriesAReintentarFiltradoNuevo,
                         reintentosRestantes - 1);
             } else if (reintentosRestantes == 0) {
                 System.out.println("Se alcanzó el número máximo de reintentos.");
@@ -1061,9 +1090,12 @@ public class ProgramacionHandlerService {
                 // Reintentar la tarea si hay medidores no leídos
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                    
                     // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                    programarReintentoTareaCaso8(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                    programarReintentoTareaCaso8(scheduler, programacionAMI, delayReintento,
+                            vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1);
 
                 } else if (reintentosRestantes == 0) {
@@ -1167,7 +1199,10 @@ public class ProgramacionHandlerService {
             // nuevamente
             if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                 System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                programarReintentoTareaCaso8(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                programarReintentoTareaCaso8(scheduler, programacionAMI, delayReintento,
+                        vcSeriesAReintentarFiltradoNuevo,
                         reintentosRestantes - 1);
             } else if (reintentosRestantes == 0) {
                 System.out.println("Se alcanzó el número máximo de reintentos.");
@@ -1237,9 +1272,12 @@ public class ProgramacionHandlerService {
                         // Reintentar la tarea si hay medidores no leídos
                         if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                             System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                            int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                            Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                            
                             // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                            programarReintentoTareaCaso9(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                            programarReintentoTareaCaso9(scheduler, programacionAMI, delayReintento,
+                                    vcSeriesAReintentarFiltrado,
                                     reintentosRestantes - 1);
 
                         } else if (reintentosRestantes == 0) {
@@ -1285,7 +1323,10 @@ public class ProgramacionHandlerService {
                 // nuevamente
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                    programarReintentoTareaCaso9(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                    programarReintentoTareaCaso9(scheduler, programacionAMI, delayReintento,
+                            vcSeriesAReintentarFiltradoNuevo,
                             reintentosRestantes - 1);
                 } else if (reintentosRestantes == 0) {
                     System.out.println("Se alcanzó el número máximo de reintentos.");
@@ -1359,9 +1400,11 @@ public class ProgramacionHandlerService {
                         // Reintentar la tarea si hay medidores no leídos
                         if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                             System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                            int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                            Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                            
                             // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                            programarReintentoTareaCaso10(scheduler, programacionAMI, 60000,
+                            programarReintentoTareaCaso10(scheduler, programacionAMI, delayReintento,
                                     vcSeriesAReintentarFiltrado,
                                     reintentosRestantes - 1);
 
@@ -1408,7 +1451,10 @@ public class ProgramacionHandlerService {
                 // nuevamente
                 if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                     System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                    programarReintentoTareaCaso10(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                    int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                    Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                    programarReintentoTareaCaso10(scheduler, programacionAMI, delayReintento,
+                            vcSeriesAReintentarFiltradoNuevo,
                             reintentosRestantes - 1);
                 } else if (reintentosRestantes == 0) {
                     System.out.println("Se alcanzó el número máximo de reintentos.");
@@ -1534,9 +1580,12 @@ public class ProgramacionHandlerService {
                     // Reintentar la tarea si hay medidores no leídos
                     if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                        int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                        Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                        
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                        programarReintentoTareaCaso11(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                        programarReintentoTareaCaso11(scheduler, programacionAMI, delayReintento,
+                                vcSeriesAReintentarFiltrado,
                                 reintentosRestantes - 1);
 
                     } else if (reintentosRestantes == 0) {
@@ -1629,7 +1678,10 @@ public class ProgramacionHandlerService {
             // nuevamente
             if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                 System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                programarReintentoTareaCaso11(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                programarReintentoTareaCaso11(scheduler, programacionAMI, delayReintento,
+                        vcSeriesAReintentarFiltradoNuevo,
                         reintentosRestantes - 1);
             } else if (reintentosRestantes == 0) {
                 System.out.println("Se alcanzó el número máximo de reintentos.");
@@ -1765,9 +1817,12 @@ public class ProgramacionHandlerService {
                     // Reintentar la tarea si hay medidores no leídos
                     if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltrado) && reintentosRestantes > 0) {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
-
+                        int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                        Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                       
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
-                        programarReintentoTareaCaso12(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltrado,
+                        programarReintentoTareaCaso12(scheduler, programacionAMI, delayReintento,
+                                vcSeriesAReintentarFiltrado,
                                 reintentosRestantes - 1);
 
                     } else if (reintentosRestantes == 0) {
@@ -1790,91 +1845,94 @@ public class ProgramacionHandlerService {
             System.out.println("Reintentando tarea para medidores no leídos...");
 
             String jsseriesMed = "";
-                    List<String> vcSeriesAReintentar = new ArrayList<>();
-                    // Crear una lista para almacenar los CompletableFutures
-                    List<CompletableFuture<String>> futuresList = new ArrayList<>();
+            List<String> vcSeriesAReintentar = new ArrayList<>();
+            // Crear una lista para almacenar los CompletableFutures
+            List<CompletableFuture<String>> futuresList = new ArrayList<>();
 
-                    if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado)) {
-                        jsseriesMed = vcSeriesAReintentarFiltrado;
-                    } else {
-                        String identidicadorSic = programacionAMI.getGrupoMedidores().getVcidentificador();
-                        List<Medidores> medidores = medidoresService.findByVcsic(identidicadorSic);
-                        jsseriesMed = "["; // Iniciamos con el formato de array
-                        StringBuilder tempBuilder = new StringBuilder();
-                        medidores.forEach(medidor -> {
-                            String vcSerie = medidor.getVcSerie();
+            if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado)) {
+                jsseriesMed = vcSeriesAReintentarFiltrado;
+            } else {
+                String identidicadorSic = programacionAMI.getGrupoMedidores().getVcidentificador();
+                List<Medidores> medidores = medidoresService.findByVcsic(identidicadorSic);
+                jsseriesMed = "["; // Iniciamos con el formato de array
+                StringBuilder tempBuilder = new StringBuilder();
+                medidores.forEach(medidor -> {
+                    String vcSerie = medidor.getVcSerie();
 
-                            // Agregamos cada vcSerie al StringBuilder temporal
-                            if (tempBuilder.length() > 0) {
-                                tempBuilder.append(", ");
-                            }
-                            tempBuilder.append("\"").append(vcSerie).append("\"");
-                        });
+                    // Agregamos cada vcSerie al StringBuilder temporal
+                    if (tempBuilder.length() > 0) {
+                        tempBuilder.append(", ");
+                    }
+                    tempBuilder.append("\"").append(vcSerie).append("\"");
+                });
 
-                        // Asignamos el valor final a la variable jsseriesMed con el formato adecuado
-                        jsseriesMed += tempBuilder.toString() + "]";
+                // Asignamos el valor final a la variable jsseriesMed con el formato adecuado
+                jsseriesMed += tempBuilder.toString() + "]";
+            }
+
+            // Convertir la cadena JSON a una lista de strings
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<String> jsseriesMedList;
+
+            try {
+                jsseriesMedList = objectMapper.readValue(jsseriesMed, new TypeReference<List<String>>() {
+                });
+
+                // Verificar si la lista contiene elementos
+                if (jsseriesMedList.isEmpty()) {
+                    System.out.println("No se encontraron series en la lista.");
+                } else {
+                    // Iterar sobre la lista y procesar cada serie
+                    for (int i = 0; i < jsseriesMedList.size(); i++) {
+                        String vcserie = jsseriesMedList.get(i);
+                        // Crar la tarea que se encolará
+                        Callable<String> tareaParaProgramar = () -> conectorGeneralService
+                                .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie);
+
+                        // Usar GeneradorDeColas para encolar la tarea
+                        CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
+                                tareaParaProgramar);
+
+                        // Agregar el CompletableFuture a la lista de futuros
+                        futuresList.add(future);
                     }
 
-                    // Convertir la cadena JSON a una lista de strings
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    List<String> jsseriesMedList;
-
-                    try {
-                        jsseriesMedList = objectMapper.readValue(jsseriesMed, new TypeReference<List<String>>() {
-                        });
-
-                        // Verificar si la lista contiene elementos
-                        if (jsseriesMedList.isEmpty()) {
-                            System.out.println("No se encontraron series en la lista.");
-                        } else {
-                            // Iterar sobre la lista y procesar cada serie
-                            for (int i = 0; i < jsseriesMedList.size(); i++) {
-                                String vcserie = jsseriesMedList.get(i);
-                                // Crar la tarea que se encolará
-                                Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                        .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie);
-
-                                // Usar GeneradorDeColas para encolar la tarea
-                                CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
-                                        tareaParaProgramar);
-
-                                // Agregar el CompletableFuture a la lista de futuros
-                                futuresList.add(future);
-                            }
-
-                            // Esperar a que todos los futuros se completen y recoger los resultados
-                            for (CompletableFuture<String> future : futuresList) {
-                                try {
-                                    // Obtener el resultado de cada future y agregarlo a la lista
-                                    // autoConfiguraciones
-                                    String LeidoNoLeido = future.get(); // Este método bloquea hasta que el
-                                                                        // resultado
-                                                                        // esté disponible
-                                    vcSeriesAReintentar.add(LeidoNoLeido);
-                                } catch (InterruptedException | ExecutionException e) {
-                                    e.printStackTrace();
-                                    // Manejar excepciones según sea necesario
-                                }
-                            }
+                    // Esperar a que todos los futuros se completen y recoger los resultados
+                    for (CompletableFuture<String> future : futuresList) {
+                        try {
+                            // Obtener el resultado de cada future y agregarlo a la lista
+                            // autoConfiguraciones
+                            String LeidoNoLeido = future.get(); // Este método bloquea hasta que el
+                                                                // resultado
+                                                                // esté disponible
+                            vcSeriesAReintentar.add(LeidoNoLeido);
+                        } catch (InterruptedException | ExecutionException e) {
+                            e.printStackTrace();
+                            // Manejar excepciones según sea necesario
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-                    // Filtrar los valores vacíos y construir el string con el formato requerido
-                    String vcSeriesAReintentarFiltradoNuevo = vcSeriesAReintentar.stream()
-                            .filter(serie -> !serie.isEmpty()) // Filtra las cadenas vacías
-                            .map(serie -> "\"" + serie + "\"") // Añade las comillas a cada serie
-                            .collect(Collectors.joining(", ", "[", "]")); // Une con comas y encierra en corchetes
+            // Filtrar los valores vacíos y construir el string con el formato requerido
+            String vcSeriesAReintentarFiltradoNuevo = vcSeriesAReintentar.stream()
+                    .filter(serie -> !serie.isEmpty()) // Filtra las cadenas vacías
+                    .map(serie -> "\"" + serie + "\"") // Añade las comillas a cada serie
+                    .collect(Collectors.joining(", ", "[", "]")); // Une con comas y encierra en corchetes
 
-                    // Imprimir el resultado
-                    System.out.println(vcSeriesAReintentarFiltradoNuevo);
+            // Imprimir el resultado
+            System.out.println(vcSeriesAReintentarFiltradoNuevo);
 
             // Si quedan medidores por leer y hay reintentos disponibles, reprograma
             // nuevamente
             if (!"[]".equalsIgnoreCase(vcSeriesAReintentarFiltradoNuevo) && reintentosRestantes > 0) {
                 System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
-                programarReintentoTareaCaso12(scheduler, programacionAMI, 60000, vcSeriesAReintentarFiltradoNuevo,
+                int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
+                Long delayReintento = LapsoMinReintentos * 60 * 1000L;
+                programarReintentoTareaCaso12(scheduler, programacionAMI, delayReintento,
+                        vcSeriesAReintentarFiltradoNuevo,
                         reintentosRestantes - 1);
             } else if (reintentosRestantes == 0) {
                 System.out.println("Se alcanzó el número máximo de reintentos.");

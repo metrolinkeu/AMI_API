@@ -21,12 +21,13 @@ public class ParametrizacionesProg {
     private Long ncodigo;
 
     private String vctipoDeLectura;
- 
+
     @Column(name = "dfechaHoraInicio")
     private Timestamp dfechaHoraInicio;
 
-
     private int nreintentos;
+
+    private int ndelayMin;
 
     @Column(columnDefinition = "CLOB")
     private String jsdiasSemana; // Almacenar el JSON como String en un CLOB

@@ -105,8 +105,8 @@ public class ConectorProgramacionService {
 
         String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
 
-        // return medidoresFaltantesPorLeer;
-        return "[]";
+        return medidoresFaltantesPorLeer;
+        //return "[]";
 
     }
 

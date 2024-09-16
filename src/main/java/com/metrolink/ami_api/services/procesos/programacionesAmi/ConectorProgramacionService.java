@@ -1,6 +1,5 @@
 package com.metrolink.ami_api.services.procesos.programacionesAmi;
 
-
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -38,9 +37,10 @@ public class ConectorProgramacionService {
 
         // por otra parte, a traves de un condicional se revisa si lee todos los
         // medidores
-        // o si solo lee los medidores que vienen en vcSeriesAReintentarFiltrado los
+        // o si solo lee los medidores que vienen en vcSeriesAReintentarFiltrado que son
+        // los
         // cuales
-        // son producto de haber intentado leer, pero no logrando leerlos todos
+        // son producto de haber intentado leer, pero no haber logrado leerlos todos.
         // Estos no leidos vienen en: vcSeriesAReintentarFiltrado
 
         if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado)) {
@@ -93,20 +93,82 @@ public class ConectorProgramacionService {
             return "Error al procesar medidores faltantes";
         }
 
+        // La direccion Ip y el Puerto en este caso tienen que ser las del concentrador
+        // asociado
+        // que se encuentra en:
         //
         // Lugar para pedir esto en Realidad
         //
 
-        // Esto ultimo no tiene es inventado, no tiene relacion con la logica de arriba,
+        // en caso de que todos los medidores hayan sido leidos el resultado serial un
+        // json
+        // que representa una lista vacia : "[]"
+
+        // en caso de que se vayan encontrado casos en los cuales no se leyo se debe de
+        // agregar el medidor no leido a la lista de la siguiente forma:
+        // "[\"Seria de mediddor no leido\", \"15913\", \"61452\"]"
+        // las comillas dentro del json debe de colocarse asi con el caracter de escape
+        // asi: \"
+
+        // las peticiones que se deben hacer a cada medidor estan en
+        String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
+        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+
+        String ip = concentrador.getParamTiposDeComunicacion().getVcip();
+        String puerto = concentrador.getParamTiposDeComunicacion().getVcpuerto();
+        System.out.println("IP del concentrador: " + ip);
+        System.out.println("Puerto del concentrador: " + puerto);
+
+        // Est ip y puerto se tienen que usar por que son las mismas que se usaron para
+        // generar un hilo y una cola unica para la conexion tcp de este
+        // concentrador
+
+        // las peticiones que se deben hacer a cada medidor vienen en unas variables boleanas y solo
+        // se deben leer las que vengan en true
+
+        //la accion del rele viene en un string que indica si activar o desactivar
+
+        //la hora de sincronizacion de relog viene en formato time stamp pero se transforma en string si es neceario
+
+        boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
+        boolean leventos = programacionAMI.getListaPeticiones().isLeventos();
+        boolean lregistros = programacionAMI.getListaPeticiones().isLregistros();
+        boolean lfactorPotencia = programacionAMI.getListaPeticiones().isLfactorPotencia();
+        boolean linstantaneos = programacionAMI.getListaPeticiones().isLinstantaneos();
+        String vcaccionRele = programacionAMI.getListaPeticiones().getVcaccionRele();
+        java.sql.Timestamp dfechaHoraSincronizacion = programacionAMI.getListaPeticiones()
+                .getDfechaHoraSincronizacion();
+
+        // Imprimir las variables
+        System.out.println("llectura_perfil_1: " + llectura_perfil_1);
+        System.out.println("leventos: " + leventos);
+        System.out.println("lregistros: " + lregistros);
+        System.out.println("lfactorPotencia: " + lfactorPotencia);
+        System.out.println("linstantaneos: " + linstantaneos);
+        System.out.println("vcaccionRele: " + vcaccionRele);
+        System.out.println("dfechaHoraSincronizacion: " + dfechaHoraSincronizacion);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
+        System.out.println("dfechaHoraSincronizacion: " + formattedDate);
+
+
+
+
+
+
+
+
+
+        // Esto ultimo es inventado, no tiene relacion con la logica de arriba,
         // solo
         // devuelve un resultado similar al que deberia de entregar
-
         String medidor1 = "19014";
 
         String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
 
         return medidoresFaltantesPorLeer;
-        //return "[]";
+        // return "[]";
 
     }
 
@@ -117,17 +179,10 @@ public class ConectorProgramacionService {
 
         String jsseriesMed = "";
 
-        // Este caso se usa para leer los medidores a traves de un concentrador el cual
-        // viene con ip y puerto:
+        //Este conector es similar al conector anterior pero en este caso, los medidores asociados al concentrador 
+        //vienen ya especificados en  programacionAMI.getGrupoMedidores().getJsseriesMed();
 
-        String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
-        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
-
-        String ip = concentrador.getParamTiposDeComunicacion().getVcip();
-        String puerto = concentrador.getParamTiposDeComunicacion().getVcpuerto();
-        System.out.println("IP del concentrador: " + ip);
-        System.out.println("Puerto del concentrador: " + puerto);
-
+        
         // en este momento se revisa si se deben de leer todos los medidores de la
         // programacion
         // o si es un reintento y solo se leeran los medidores que estan faltantdo
@@ -173,6 +228,66 @@ public class ConectorProgramacionService {
             return "Error al procesar medidores faltantes";
         }
 
+        // La direccion Ip y el Puerto en este caso tienen que ser las del concentrador
+        // asociado
+        // que se encuentra en:
+        //
+        // Lugar para pedir esto en Realidad
+        //
+
+        // en caso de que todos los medidores hayan sido leidos el resultado serial un
+        // json
+        // que representa una lista vacia : "[]"
+
+        // en caso de que se vayan encontrado casos en los cuales no se leyo se debe de
+        // agregar el medidor no leido a la lista de la siguiente forma:
+        // "[\"Seria de mediddor no leido\", \"15913\", \"61452\"]"
+        // las comillas dentro del json debe de colocarse asi con el caracter de escape
+        // asi: \"
+
+        // las peticiones que se deben hacer a cada medidor estan en
+        String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
+        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
+
+        String ip = concentrador.getParamTiposDeComunicacion().getVcip();
+        String puerto = concentrador.getParamTiposDeComunicacion().getVcpuerto();
+        System.out.println("IP del concentrador: " + ip);
+        System.out.println("Puerto del concentrador: " + puerto);
+
+        // Est ip y puerto se tienen que usar por que son las mismas que se usaron para
+        // generar un hilo y una cola unica para la conexion tcp de este
+        // concentrador
+
+        // las peticiones que se deben hacer a cada medidor vienen en unas variables boleanas y solo
+        // se deben leer las que vengan en true
+
+        //la accion del rele viene en un string que indica si activar o desactivar
+
+        //la hora de sincronizacion de relog viene en formato time stamp pero se transforma en string si es neceario
+
+        boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
+        boolean leventos = programacionAMI.getListaPeticiones().isLeventos();
+        boolean lregistros = programacionAMI.getListaPeticiones().isLregistros();
+        boolean lfactorPotencia = programacionAMI.getListaPeticiones().isLfactorPotencia();
+        boolean linstantaneos = programacionAMI.getListaPeticiones().isLinstantaneos();
+        String vcaccionRele = programacionAMI.getListaPeticiones().getVcaccionRele();
+        java.sql.Timestamp dfechaHoraSincronizacion = programacionAMI.getListaPeticiones()
+                .getDfechaHoraSincronizacion();
+
+        // Imprimir las variables
+        System.out.println("llectura_perfil_1: " + llectura_perfil_1);
+        System.out.println("leventos: " + leventos);
+        System.out.println("lregistros: " + lregistros);
+        System.out.println("lfactorPotencia: " + lfactorPotencia);
+        System.out.println("linstantaneos: " + linstantaneos);
+        System.out.println("vcaccionRele: " + vcaccionRele);
+        System.out.println("dfechaHoraSincronizacion: " + dfechaHoraSincronizacion);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
+        System.out.println("dfechaHoraSincronizacion: " + formattedDate);
+
+
         //
         // Lugar para pedir esto en Realidad
         //
@@ -186,7 +301,8 @@ public class ConectorProgramacionService {
 
     }
 
-    public String UsarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+    public String UsarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI,
+            String vcserie) {
 
         String vcSerieAReintentar = "";
 
@@ -195,7 +311,7 @@ public class ConectorProgramacionService {
         Medidores medidor = medidoresService.findById(vcserie);
 
         // lectura de un medidor en especifico,
-        // EL medidor a leer viene en vcserie
+        // EL medidor a leer viene en vcserie.
         // lo que se le va a pedir al medidor viene en
 
         boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
@@ -227,7 +343,7 @@ public class ConectorProgramacionService {
         // aqui se debe de hacer las eticiones a traves del concentrador con su ip y
         // puerto:
 
-        if (medidor.getConcentrador() != null) {
+        if (medidor.getConcentrador() != null) { //NO tener esta linea
 
             String vcnoSerie = medidor.getConcentrador().getVcnoSerie();
             Concentradores concentrador = concentradoresService.findById(vcnoSerie);
@@ -237,7 +353,7 @@ public class ConectorProgramacionService {
             System.out.println("IP del concentrador: " + ip);
             System.out.println("Puerto del concentrador: " + puerto);
 
-        } else {
+        } else { // La ip siempre sera esta. 
 
             String ip = medidor.getVcip();
             String puerto = medidor.getVcpuerto();
@@ -250,15 +366,16 @@ public class ConectorProgramacionService {
 
         //
         // construida con la ip y el puerto.
-        // por lo tanto se debe de usar la misma ip y puerto que estan en:
+        // por lo tanto se debe de usar la misma ip y puerto que estan en en hilo y la cola
 
-        // pido al medidor con todo necesario
+        // se pide al medidor con todos sus parametros.
 
-        // devuelve un Leido o no leido
+        //si el medidor es leido devuelve un noLeido en True  coloca el numero de su vcSerie para hacer un reintento
+        //si es leido correctamente entega un  vacio ""
 
-        boolean Leido = true;
+        boolean noLeido = true;
 
-        if (Leido) {
+        if (noLeido) {
             vcSerieAReintentar = vcserie;
         } else {
             vcSerieAReintentar = "";
@@ -303,12 +420,10 @@ public class ConectorProgramacionService {
         String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
         System.out.println("dfechaHoraSincronizacion: " + formattedDate);
 
-       // en esta caso es cuando el medidor es Servidor.
+        // en esta caso es cuando el medidor es Servidor.
         // En este punto ya se esta en una cola e hilo unicos para este medidor la cual
         // fue construida de acuerdo a dos casos:
-        // Este medidor esta asociado a un concentrador:
-        // aqui se debe de hacer las eticiones a traves del concentrador con su ip y
-        // puerto:
+   
 
         if (medidor.getConcentrador() != null) {
 

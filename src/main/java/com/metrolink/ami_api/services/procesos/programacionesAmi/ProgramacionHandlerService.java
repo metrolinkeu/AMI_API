@@ -291,7 +291,7 @@ public class ProgramacionHandlerService {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                     int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                     Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                   
+
                     programarTareaCaso1(scheduler, programacionAMI, delayReintento, vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
                     // +1
@@ -336,7 +336,7 @@ public class ProgramacionHandlerService {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                     int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                     Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                  
+
                     programarTareaCaso2(scheduler, programacionAMI, delayReintento, vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
                     // +1
@@ -433,7 +433,7 @@ public class ProgramacionHandlerService {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                     int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                     Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                    
+
                     programarTareaCaso3(scheduler, programacionAMI, delayReintento,
                             vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
@@ -544,7 +544,7 @@ public class ProgramacionHandlerService {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                     int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                     Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                   
+
                     programarTareaCaso4(scheduler, programacionAMI, delayReintento,
                             vcSeriesAReintentarFiltrado,
                             reintentosRestantes - 1); // Reprograma
@@ -606,7 +606,7 @@ public class ProgramacionHandlerService {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                         int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                         Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                       
+
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
                         programarReintentoTareaCaso5(scheduler, programacionAMI, delayReintento,
                                 vcSeriesAReintentarFiltrado,
@@ -655,7 +655,7 @@ public class ProgramacionHandlerService {
                     System.out.println("Reintentando la tarea nuevamente en 1 minuto...");
                     int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                     Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                    
+
                     programarReintentoTareaCaso5(scheduler, programacionAMI, delayReintento,
                             vcSeriesAReintentarFiltradoNuevo,
                             reintentosRestantes - 1);
@@ -715,7 +715,7 @@ public class ProgramacionHandlerService {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                         int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                         Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                       
+
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
                         programarReintentoTareaCaso6(scheduler, programacionAMI, delayReintento,
                                 vcSeriesAReintentarFiltrado,
@@ -875,7 +875,7 @@ public class ProgramacionHandlerService {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                     int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                     Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                    
+
                     // Programar la tarea para 1 minuto después solo con los medidores no leídos
                     programarReintentoTareaCaso7(scheduler, programacionAMI, delayReintento,
                             vcSeriesAReintentarFiltrado,
@@ -1092,7 +1092,7 @@ public class ProgramacionHandlerService {
                     System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                     int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                     Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                    
+
                     // Programar la tarea para 1 minuto después solo con los medidores no leídos
                     programarReintentoTareaCaso8(scheduler, programacionAMI, delayReintento,
                             vcSeriesAReintentarFiltrado,
@@ -1274,7 +1274,7 @@ public class ProgramacionHandlerService {
                             System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                             int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                             Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                            
+
                             // Programar la tarea para 1 minuto después solo con los medidores no leídos
                             programarReintentoTareaCaso9(scheduler, programacionAMI, delayReintento,
                                     vcSeriesAReintentarFiltrado,
@@ -1402,7 +1402,7 @@ public class ProgramacionHandlerService {
                             System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                             int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                             Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                            
+
                             // Programar la tarea para 1 minuto después solo con los medidores no leídos
                             programarReintentoTareaCaso10(scheduler, programacionAMI, delayReintento,
                                     vcSeriesAReintentarFiltrado,
@@ -1582,7 +1582,7 @@ public class ProgramacionHandlerService {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                         int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                         Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                        
+
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
                         programarReintentoTareaCaso11(scheduler, programacionAMI, delayReintento,
                                 vcSeriesAReintentarFiltrado,
@@ -1819,7 +1819,7 @@ public class ProgramacionHandlerService {
                         System.out.println("Reintentando la tarea en 1 minuto debido a medidores no leídos.");
                         int LapsoMinReintentos = programacionAMI.getParametrizacionProg().getNdelayMin();
                         Long delayReintento = LapsoMinReintentos * 60 * 1000L;
-                       
+
                         // Programar la tarea para 1 minuto después solo con los medidores no leídos
                         programarReintentoTareaCaso12(scheduler, programacionAMI, delayReintento,
                                 vcSeriesAReintentarFiltrado,

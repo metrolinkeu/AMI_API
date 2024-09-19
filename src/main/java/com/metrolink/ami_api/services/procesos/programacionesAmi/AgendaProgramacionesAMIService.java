@@ -26,6 +26,9 @@ public class AgendaProgramacionesAMIService {
     @Autowired
     private ProgramacionHandlerService programacionHandler;
 
+    @Autowired
+    private AgendaProgramacionesAMIService agendaProgramacionesAMIService;
+
     @Transactional
     public AgendaProgramacionesAMI save(AgendaProgramacionesAMI agendaProgramacionesAMI, boolean isUpdate) {
         if (!isUpdate && agendaProgramacionesAMI.getNcodigo() != null) {

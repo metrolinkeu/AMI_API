@@ -84,8 +84,10 @@ public class AutoConfiguracionService {
                     CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
                             "M_" + vcserie,
                             () -> {
-                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService2) Caso 2 " );
-                                return conectorGeneralService.UsarConectorAutoConfMed2(vcserie, vcnoSerie, vcSIC, vcserialesNode );
+                                System.out
+                                        .println("Estoy en la tarea para encolar (AutoConfiguracionService2) Caso 2 ");
+                                return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
+                                        vcserialesNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros
@@ -119,8 +121,9 @@ public class AutoConfiguracionService {
                     CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
                             "M_" + vcserie,
                             () -> {
-                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService2)");
-                                return conectorGeneralService.UsarConectorAutoConfMed2(vcserie, vcnoSerie, vcSIC, vcserialesNode);
+                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService_solo) caso 3");
+                                return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
+                                        vcserialesNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros
@@ -156,8 +159,9 @@ public class AutoConfiguracionService {
                     CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
                             "M_" + vcserie,
                             () -> {
-                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService2)");
-                                return conectorGeneralService.UsarConectorAutoConfMed2(vcserie, vcnoSerie, vcSIC, vcserialesNode);
+                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService) caso 4");
+                                return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
+                                        vcserialesNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros
@@ -193,8 +197,10 @@ public class AutoConfiguracionService {
                     CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
                             "M_" + vcserie,
                             () -> {
-                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService2)  Caso 5");
-                                return conectorGeneralService.UsarConectorAutoConfMed2(vcserie, vcnoSerie, vcSIC, vcserialesNode);
+                                System.out
+                                        .println("Estoy en la tarea para encolar (AutoConfiguracionService)  Caso 5");
+                                return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
+                                        vcserialesNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros

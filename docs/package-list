@@ -9,7 +9,6 @@ com.metrolink.ami_api.controllers.procesos.deteccionMed
 com.metrolink.ami_api.controllers.procesos.programacionesAmi
 com.metrolink.ami_api.controllers.tablasFront
 com.metrolink.ami_api.controllers.tablasFrontMed
-com.metrolink.ami_api.exception
 com.metrolink.ami_api.models.bl
 com.metrolink.ami_api.models.concentrador
 com.metrolink.ami_api.models.medidor
@@ -26,7 +25,6 @@ com.metrolink.ami_api.repositories.tablasFront
 com.metrolink.ami_api.repositories.tablasFrontMed
 com.metrolink.ami_api.services.bl
 com.metrolink.ami_api.services.concentrador
-com.metrolink.ami_api.services.concentrador.hilo_colaCompartidaConcentrador
 com.metrolink.ami_api.services.medidor
 com.metrolink.ami_api.services.procesos.autoconfiguracion
 com.metrolink.ami_api.services.procesos.conectorGeneral

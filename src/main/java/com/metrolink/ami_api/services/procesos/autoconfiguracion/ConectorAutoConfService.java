@@ -18,7 +18,7 @@ import com.metrolink.ami_api.services.medidor.MedidoresService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ConectorAutoConfService2 {
+public class ConectorAutoConfService {
 
     @Autowired
     private MedidoresService medidoresService;

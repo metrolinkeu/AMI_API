@@ -20,7 +20,7 @@ public class AutoConfiguracionController {
     @Autowired
     private AutoConfiguracionService autoConfiguracionService;
 
-    @GetMapping("/ObtenerConfig")
+    @PostMapping("/ObtenerConfig")
     public ResponseEntity<List<AutoconfMedidor>> recibirConfiguracion(HttpServletRequest request) throws ExecutionException, InterruptedException {
         try {
             // Leer el cuerpo de la solicitud como texto

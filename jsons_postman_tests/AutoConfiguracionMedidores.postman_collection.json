@@ -2,21 +2,20 @@
 	"info": {
 		"_postman_id": "8091b44a-418d-4b96-ab2e-9d778cc57895",
 		"name": "AutoConfiguracionMedidores",
+		"description": "### **1\\. Información General de la Colección (****`info`****):**\n\n- **name**: `\"AutoConfiguracionMedidores\"`\n    \n    - Nombre de la colección, indica que está relacionada con la autoconfiguración de medidores.\n        \n\n---\n\n### **2\\. Lista de Solicitudes (****`item`****):**\n\nLa colección contiene varias solicitudes, cada una diseñada para obtener la autoconfiguración basada en diferentes parámetros.\n\n#### **2.1. Solicitud: \"ObtenerAutoConfigBy_Conce\"**\n\n- **Método**: `GET`\n    \n- **URL**: `http://localhost:8083/api/autoconfiguracion/ObtenerConfig`\n    \n- { \"vcnoSerie\": \"12345\"}\n    \n    - **Descripción**: Esta solicitud obtiene la autoconfiguración para los medidores de un **concentrador específico** identificado por su número de serie (`vcnoSerie`).\n        \n\n---\n\n#### **2.2. Solicitud: \"ObtenerAutoConfigBy_list\"**\n\n- **Método**: `GET`\n    \n- **URL**: Igual a la anterior.\n    \n- { \"vcnoSerie\": \"12345\", \"vcseriales\": { \"vcserie1\": \"74111\", \"vcserie2\": \"57318\" }}\n    \n    - **Descripción**: Obtiene la autoconfiguración para los medidores asociados a un concentrador indicados en una **lista de medidores** asociados.\n        \n    - **Parámetros**:\n        \n        - **`vcnoSerie`**: Número de serie del concentrador.\n            \n        - **`vcseriales`**: Objeto que contiene los números de serie de los medidores.\n            \n- **Uso Previsto**:\n    \n    - Cuando se necesita obtener la configuración de varios medidores asociados a un concentrador, pero solo los indicados en una lista.\n        \n\n---\n\n#### **2.3. Solicitud: \"ObtenerAutoConfigBy_list_Med\"**\n\n- **Método**: `GET`\n    \n- **URL**: Igual a las anteriores.\n    \n- { \"vcseriales\": { \"vcserie1\": \"74111\", \"vcserie2\": \"57318\" }}\n    \n    - **Descripción**: Obtiene la autoconfiguración para una **lista de medidores** independientes (No conectados a traves de concentrador).\n        \n    - **Parámetros**:\n        \n        - **`vcseriales`**: Lista de números de serie de los medidores.\n            \n- **Uso Previsto**:\n    \n    - Cuando se requiere configurar medidores individuales no conectados a un concentrador.\n        \n\n---\n\n#### **2.4. Solicitud: \"ObtenerAutoConfigBy_Con_SIC\"**\n\n- **Método**: `GET`\n    \n- **URL**: Igual.\n    \n- { \"vcnoSerie\": \"12345\", \"SIC\": \"222\"}\n    \n    - **Descripción**: Obtiene la autoconfiguración para los medidores asociados a un concentrador específico y que ademas esten en una misma zona con **código SIC**.\n        \n    - **Parámetros**:\n        \n        - **`vcnoSerie`**: Número de serie del concentrador.\n            \n        - **`SIC`**: Código SIC, posiblemente representando un sector o grupo específico.\n            \n- **Uso Previsto**:\n    \n    - Cuando se desea configurar todos los medidores de un concentrador que pertenecen a un SIC determinado.\n        \n\n---\n\n#### **2.5. Solicitud: \"ObtenerAutoConfigBy_SIC\"**\n\n- **Método**: `GET`\n    \n- **URL**: Igual.\n    \n- { \"SIC\": \"222\"}\n    \n    - **Descripción**: Obtiene la autoconfiguración de los medidores basada únicamente en un **código SIC**.\n        \n    - **Parámetros**:\n        \n        - **`SIC`**: Código SIC.\n            \n- **Uso Previsto**:\n    \n    - Cuando se necesita configurar todos los medidores que pertenecen a un SIC específico, sin importar el concentrador.\n        \n\n---\n\n### **Resumen General:**\n\nLa colección contiene solicitudes diseñadas para cubrir diferentes escenarios en la obtención de la autoconfiguración de medidores y concentradores:\n\n1. **Por Concentrador**: Obtener la configuracion de medidores de un concentrador específico.\n    \n2. **Por Concentrador y Lista de Medidores**: Obtener la configuraracion los medidores un concentrador y ciertos medidores asociados.\n    \n3. **Por Lista de Medidores**: Obtener la configuracion de medidores específicos sin referencia a un concentrador.\n    \n4. **Por Concentrador y SIC**: Obtener la configuracion de todos los medidores de un concentrador que pertenecen a un SIC.\n    \n5. **Por SIC**: Obtener la configuracion de todos los medidores que pertenecen a un SIC específico en general.\n    \n\n### **Consideraciones Técnicas:**\n\n- **Método HTTP**: Todas las solicitudes utilizan el método `GET` con un cuerpo. Sin embargo, según el estándar HTTP, las solicitudes GET no deberían tener un cuerpo. Es recomendable utilizar `POST` para estas operaciones.\n    \n- **Configuración de Postman**:\n    \n    - El atributo `\"disableBodyPruning\": true` en `protocolProfileBehavior` permite que Postman envíe un cuerpo en una solicitud GET, aunque no sea convencional.\n        \n- **Endpoint Común**: Todas las solicitudes apuntan a `http://localhost:8083/api/autoconfiguracion/ObtenerConfig`, lo que sugiere que el servidor interpreta los parámetros del cuerpo para determinar la acción a realizar.\n    \n\n### **Posibles Mejoras:**\n\n- **Uso Apropiado de Métodos HTTP**:\n    \n    - Cambiar el método a `POST` o `PUT` para solicitudes que incluyen un cuerpo con datos.\n        \n\n### **Conclusión:**\n\nEl JSON proporcionado es una colección de solicitudes API destinadas a obtener la autoconfiguración de medidores en diferentes escenarios",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36280962"
+		"_exporter_id": "36280962",
+		"_collection_link": "https://metrolink-6641.postman.co/workspace/cd4f0c0e-c05d-4938-86ed-6b60c47cb078/collection/36280962-8091b44a-418d-4b96-ab2e-9d778cc57895?action=share&source=collection_link&creator=36280962"
 	},
 	"item": [
 		{
 			"name": "ObtenerAutoConfigBy_Conce",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcnoSerie\": \"8251\"\r\n}\r\n\r\n",
+					"raw": "{\r\n    \"vcnoSerie\": \"12345\"\r\n}\r\n\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -41,15 +40,102 @@
 		},
 		{
 			"name": "ObtenerAutoConfigBy_list",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcnoSerie\": \"7256\",\r\n    \"vcseriales\": {\r\n        \"vcserie1\": \"47722\"\r\n        // \"vcserie2\": \"32470\",\r\n        // \"vcserie3\": \"71542\"\r\n       \r\n        \r\n    }\r\n}",
+					"raw": "{\r\n    \"vcnoSerie\": \"12345\",\r\n    \"vcseriales\": {\r\n        \"vcserie1\": \"74111\",\r\n        \"vcserie2\": \"57318\" \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/autoconfiguracion/ObtenerConfig",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"autoconfiguracion",
+						"ObtenerConfig"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerAutoConfigBy_list_Med",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcseriales\": {\r\n        \"vcserie1\": \"74111\",\r\n        \"vcserie2\": \"57318\"\r\n         \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/autoconfiguracion/ObtenerConfig",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"autoconfiguracion",
+						"ObtenerConfig"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerAutoConfigBy_Con_SIC",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"vcnoSerie\": \"12345\",\r\n    \"SIC\": \"222\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/api/autoconfiguracion/ObtenerConfig",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"api",
+						"autoconfiguracion",
+						"ObtenerConfig"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ObtenerAutoConfigBy_SIC",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"SIC\": \"222\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

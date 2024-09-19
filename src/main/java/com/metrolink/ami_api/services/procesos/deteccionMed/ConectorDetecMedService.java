@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-public class ConectorDetecMedService2 {
+public class ConectorDetecMedService {
 
     public String usarConectorDeteccion(String json) {
 

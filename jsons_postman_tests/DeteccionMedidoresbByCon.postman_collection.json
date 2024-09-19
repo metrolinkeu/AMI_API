@@ -3,7 +3,8 @@
 		"_postman_id": "399b9c7e-8bc2-4463-b408-8487085646a1",
 		"name": "DeteccionMedidoresbByCon",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36280962"
+		"_exporter_id": "36280962",
+		"_collection_link": "https://metrolink-6641.postman.co/workspace/cd4f0c0e-c05d-4938-86ed-6b60c47cb078/collection/36280962-399b9c7e-8bc2-4463-b408-8487085646a1?action=share&source=collection_link&creator=36280962"
 	},
 	"item": [
 		{
@@ -13,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcnoSerie\": \"6060\"\r\n}",
+					"raw": "{\r\n    \"vcnoSerie\": \"12345\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

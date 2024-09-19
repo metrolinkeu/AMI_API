@@ -3,7 +3,8 @@
 		"_postman_id": "8f18a8dd-61f6-4054-ac5c-520404b63e71",
 		"name": "CrudAgendaProgramacionesAmi",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36280962"
+		"_exporter_id": "36280962",
+		"_collection_link": "https://metrolink-6641.postman.co/workspace/cd4f0c0e-c05d-4938-86ed-6b60c47cb078/collection/36280962-8f18a8dd-61f6-4054-ac5c-520404b63e71?action=share&source=collection_link&creator=36280962"
 	},
 	"item": [
 		{
@@ -13,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": \"402\"\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"dfechaHoraProximo\":\"2025-07-04T15:30:00\"  // Formato de Timestamp\r\n    }\r\n}",
+					"raw": "{\r\n    \"programacionAMI\": {\r\n        \"ncodigo\": 54\r\n    },\r\n    \"estadoHoy\": {\r\n        \"vcdescripcion\": \"En proceso\",\r\n        \"lproximo\": null,\r\n        \"dfechaHoraProximo\":\"\" // Este valor es tomado de la programacion asociada que se esta ejecutando \r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -45,7 +46,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -77,7 +78,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"codigo\": 1,\r\n    \"marca\": \"MarcaX\",\r\n    \"concat\": \"ConcatenadoX\"\r\n}\r\n",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -137,7 +138,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"marca\": \"MarcaActualizada\",\r\n    \"concat\": \"ConcatenadoActualizado\"\r\n}\r\n",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -145,7 +146,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/249",
+					"raw": "http://localhost:8083/api/agendaProgramacionesAMI/254",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -154,7 +155,7 @@
 					"path": [
 						"api",
 						"agendaProgramacionesAMI",
-						"249"
+						"254"
 					]
 				}
 			},

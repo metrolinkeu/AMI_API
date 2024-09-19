@@ -9,9 +9,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
 import com.metrolink.ami_api.models.procesos.programacionesAmi.ProgramacionesAMI;
-import com.metrolink.ami_api.services.procesos.autoconfiguracion.ConectorAutoConfService2;
+import com.metrolink.ami_api.services.procesos.autoconfiguracion.ConectorAutoConfService;
 
-import com.metrolink.ami_api.services.procesos.deteccionMed.ConectorDetecMedService2;
+import com.metrolink.ami_api.services.procesos.deteccionMed.ConectorDetecMedService;
 
 import com.metrolink.ami_api.services.procesos.programacionesAmi.ConectorProgramacionService;
 
@@ -19,27 +19,27 @@ import com.metrolink.ami_api.services.procesos.programacionesAmi.ConectorProgram
 public class ConectorGeneralService {
 
     @Autowired
-    private ConectorDetecMedService2 conectorDetecMedService2;
+    private ConectorDetecMedService conectorDetecMedService;
 
     @Autowired
-    private ConectorAutoConfService2 conectorAutoConfService2;
+    private ConectorAutoConfService conectorAutoConfService;
 
     @Autowired
     private ConectorProgramacionService conectorProgramacionService;
 
     public String usarConectorDeteccion(String json) {
-        String newJson = conectorDetecMedService2.usarConectorDeteccion(json);
+        String newJson = conectorDetecMedService.usarConectorDeteccion(json);
         return newJson;
     }
 
     public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie) {
-        List<AutoconfMedidor> autoconfMedidores = conectorAutoConfService2.UsarConectorAutoConfMed(vcnoSerie);
+        List<AutoconfMedidor> autoconfMedidores = conectorAutoConfService.UsarConectorAutoConfMed(vcnoSerie);
         return autoconfMedidores;
     }
 
-    public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC,
+    public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC,
             JsonNode vcserialesNode) {
-        AutoconfMedidor autoconfMedidor = conectorAutoConfService2.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie,
+        AutoconfMedidor autoconfMedidor = conectorAutoConfService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie,
                 vcSIC, vcserialesNode);
         return autoconfMedidor;
     }

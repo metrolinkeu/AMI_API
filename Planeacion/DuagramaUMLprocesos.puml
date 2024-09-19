@@ -332,13 +332,13 @@ package "com.metrolink.ami_api" {
             package "com.metrolink.ami_api.services.procesos.conectorGeneral"{
                 class ConectorGeneralService #84f086 {
 
-                    + ConectorDetecMedService2 conectorDetecMedService2
-                    + ConectorAutoConfService2 conectorAutoConfService2
+                    + ConectorDetecMedService conectorDetecMedService
+                    + ConectorAutoConfService conectorAutoConfService
                     + ConectorProgramacionService conectorProgramacionService
                     * public String usarConectorDeteccion(String json)
                     * public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie)
-                    * public AutoconfMedidor UsarConectorAutoConfMed2(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode)
-                    *  public String usarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
+                    * public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC, JsonNode vcserialesNode)
+                    * public String usarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
                     String vcSeriesAReintentarFiltrado)
                     * public String usarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
                     String vcSeriesAReintentarFiltrado)
@@ -376,7 +376,7 @@ package "com.metrolink.ami_api" {
                     - static final Logger logger = LoggerConfigProcesos
                     * procesarDeteccionByCon(json: String): List<Medidores>
                 }
-                class ConectorDetecMedService2 #84f086{
+                class ConectorDetecMedService #84f086{
                     * String usarConectorDeteccion(String json)
 
                 }
@@ -392,7 +392,7 @@ package "com.metrolink.ami_api" {
                     * procesarConfiguracion(String json) : List<AutoconfMedidor>
                 }
 
-                class ConectorAutoConfService2  #84f086{
+                class ConectorAutoConfService  #84f086{
 
                     + MedidoresService medidoresService
                     * List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie)
@@ -597,11 +597,6 @@ AutoConfiguracionService -> AutoConfCodigosObisCanal : usa
 AutoConfiguracionService -> AutoconfMedidor : usa
 
 
-' ConectorAutoConfService -> Medidores: usa
-' ConectorAutoConfService -> AutoConfCanalesPerfilCarga: usa
-' ConectorAutoConfService -> AutoConfCodigosObisCanal: usa
-' ConectorAutoConfService -> AutoconfMedidor: usa
-' ConectorAutoConfService -> MedidoresService: @Autowired
 
 ProgramacionesAMI --> GrupoMedidores: contiene
 ProgramacionesAMI --> ListasPeticiones: contiene
@@ -634,7 +629,7 @@ AsignacionAgendaAMedidoresService --> ProgramacionesAMIService: @Autowired
 AsignacionAgendaAMedidoresService -> MedidoresService: @Autowired
 
 
-' ConectorDetecMedService --> TcpClientDetecMedService: @Autowired
+
 
 MedidoresAgendaController --> MedidoresAgendaService: @Autowired
 MedidoresAgendaService --> MedidoresAgenda: usa
@@ -642,9 +637,7 @@ MedidoresAgendaService --> MedidoresAgenda: usa
 LoggerConfigProcesos --> procesos_log
 
 
-' ConectorDetecMedService -> SharedTaskQueueConc: implementa
 
-' ConectorAutoConfService -> SharedTaskQueueConc: implementa
 
 AsignacionAgendaAMedidoresService -> MedidorUtils::obtenerStringDeVcSerie
 
@@ -657,8 +650,8 @@ DeteccionMedService --> ConectorGeneralService #f50707
 DeteccionMedService --> GeneradorDeColas #f50707
 
 
-ConectorGeneralService ---> ConectorDetecMedService2
-ConectorGeneralService ---> ConectorAutoConfService2
+ConectorGeneralService ---> ConectorDetecMedService
+ConectorGeneralService ---> ConectorAutoConfService
 ConectorGeneralService -> ConectorProgramacionService
 
 GeneradorDeColas -> ConcentradoresService

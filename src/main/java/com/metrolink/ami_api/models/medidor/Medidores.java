@@ -100,12 +100,8 @@ public class Medidores {
     @JoinColumn(name = "Canales_p_carga", referencedColumnName = "nid")
     private CanalesPerfilCarga canalesPerfilCarga;
 
-
     @Transient
     private boolean esExistente;
-
-    
-
 }
 
 

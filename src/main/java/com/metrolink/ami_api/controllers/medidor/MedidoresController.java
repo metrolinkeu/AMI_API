@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/medidores")
@@ -55,8 +56,26 @@ public class MedidoresController {
             @RequestBody Medidores medidorDetails) {
         Medidores updatedMedidor = medidoresService.update(vcSerie, medidorDetails);
         return ResponseEntity.ok(updatedMedidor);
+
     }
 
+    @PatchMapping("/{vcSerie}")
+    public ResponseEntity<Medidores> updatePartialMedidor(@PathVariable String vcSerie,
+            @RequestBody Map<String, Object> updates) {
+        try {
+            Medidores updatedMedidor = medidoresService.updatePartial(vcSerie, updates);
+            return ResponseEntity.ok(updatedMedidor);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+
+
+
+
+
+    
     @DeleteMapping("/{vcSerie}")
     public ResponseEntity<Void> deleteMedidor(@PathVariable String vcSerie) {
         medidoresService.deleteById(vcSerie);

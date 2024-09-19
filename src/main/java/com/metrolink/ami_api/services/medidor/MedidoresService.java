@@ -1,6 +1,8 @@
 package com.metrolink.ami_api.services.medidor;
 
 import com.metrolink.ami_api.models.concentrador.ConfiguracionProtocolo;
+import com.metrolink.ami_api.models.medidor.CanalesPerfilCarga;
+import com.metrolink.ami_api.models.medidor.CodigosObisCanal;
 import com.metrolink.ami_api.models.medidor.Medidores;
 import com.metrolink.ami_api.models.medidor.ParamAdvMed;
 import com.metrolink.ami_api.models.medidor.TipoParamAdvMed;
@@ -268,6 +270,57 @@ public class MedidoresService {
                     medidor.setParamAdvMed(paramAdvMed);
                     break;
 
+                case "vcsic":
+                    medidor.setVcsic((String) value);
+                    break;
+
+                case "canalesPerfilCarga":
+                    Map<String, Object> canalesPerfilCargaMap = (Map<String, Object>) value;
+                    CanalesPerfilCarga canalesPerfilCarga = medidor.getCanalesPerfilCarga();
+
+                    if (canalesPerfilCarga == null) {
+                        canalesPerfilCarga = new CanalesPerfilCarga();
+                    }
+
+                    // Actualizar CodigosObisCanal_1
+                    if (canalesPerfilCargaMap.containsKey("codigosObisCanal_1")) {
+                        Map<String, Object> codigosObisCanal_1Map = (Map<String, Object>) canalesPerfilCargaMap
+                                .get("codigosObisCanal_1");
+                        CodigosObisCanal codigosObisCanal_1 = canalesPerfilCarga.getCodigosObisCanal_1();
+                        if (codigosObisCanal_1 == null) {
+                            codigosObisCanal_1 = new CodigosObisCanal();
+                        }
+                        actualizarCodigosObis(codigosObisCanal_1, codigosObisCanal_1Map);
+                        canalesPerfilCarga.setCodigosObisCanal_1(codigosObisCanal_1);
+                    }
+
+                    // Actualizar CodigosObisCanal_2
+                    if (canalesPerfilCargaMap.containsKey("codigosObisCanal_2")) {
+                        Map<String, Object> codigosObisCanal_2Map = (Map<String, Object>) canalesPerfilCargaMap
+                                .get("codigosObisCanal_2");
+                        CodigosObisCanal codigosObisCanal_2 = canalesPerfilCarga.getCodigosObisCanal_2();
+                        if (codigosObisCanal_2 == null) {
+                            codigosObisCanal_2 = new CodigosObisCanal();
+                        }
+                        actualizarCodigosObis(codigosObisCanal_2, codigosObisCanal_2Map);
+                        canalesPerfilCarga.setCodigosObisCanal_2(codigosObisCanal_2);
+                    }
+
+                    // Actualizar CodigosObisCanal_3
+                    if (canalesPerfilCargaMap.containsKey("codigosObisCanal_3")) {
+                        Map<String, Object> codigosObisCanal_3Map = (Map<String, Object>) canalesPerfilCargaMap
+                                .get("codigosObisCanal_3");
+                        CodigosObisCanal codigosObisCanal_3 = canalesPerfilCarga.getCodigosObisCanal_3();
+                        if (codigosObisCanal_3 == null) {
+                            codigosObisCanal_3 = new CodigosObisCanal();
+                        }
+                        actualizarCodigosObis(codigosObisCanal_3, codigosObisCanal_3Map);
+                        canalesPerfilCarga.setCodigosObisCanal_3(codigosObisCanal_3);
+                    }
+
+                    medidor.setCanalesPerfilCarga(canalesPerfilCarga);
+                    break;
+
                 // Añadir más campos según sea necesario...
                 default:
                     throw new IllegalArgumentException("Campo no reconocido: " + key);
@@ -276,4 +329,38 @@ public class MedidoresService {
 
         return medidoresRepository.save(medidor);
     }
+
+    private void actualizarCodigosObis(CodigosObisCanal codigosObisCanal, Map<String, Object> obisMap) {
+        if (obisMap.containsKey("vcobis_1")) {
+            codigosObisCanal.setVcobis_1((String) obisMap.get("vcobis_1"));
+        }
+        if (obisMap.containsKey("vcobis_2")) {
+            codigosObisCanal.setVcobis_2((String) obisMap.get("vcobis_2"));
+        }
+        if (obisMap.containsKey("vcobis_3")) {
+            codigosObisCanal.setVcobis_3((String) obisMap.get("vcobis_3"));
+        }
+        if (obisMap.containsKey("vcobis_4")) {
+            codigosObisCanal.setVcobis_4((String) obisMap.get("vcobis_4"));
+        }
+        if (obisMap.containsKey("vcobis_5")) {
+            codigosObisCanal.setVcobis_5((String) obisMap.get("vcobis_5"));
+        }
+        if (obisMap.containsKey("vcobis_6")) {
+            codigosObisCanal.setVcobis_6((String) obisMap.get("vcobis_6"));
+        }
+        if (obisMap.containsKey("vcobis_7")) {
+            codigosObisCanal.setVcobis_7((String) obisMap.get("vcobis_7"));
+        }
+        if (obisMap.containsKey("vcobis_8")) {
+            codigosObisCanal.setVcobis_8((String) obisMap.get("vcobis_8"));
+        }
+        if (obisMap.containsKey("vcobis_9")) {
+            codigosObisCanal.setVcobis_9((String) obisMap.get("vcobis_9"));
+        }
+        if (obisMap.containsKey("vcobis_10")) {
+            codigosObisCanal.setVcobis_10((String) obisMap.get("vcobis_10"));
+        }
+    }
+
 }

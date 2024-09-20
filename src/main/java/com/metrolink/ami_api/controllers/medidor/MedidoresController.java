@@ -51,14 +51,6 @@ public class MedidoresController {
         return ResponseEntity.ok(medidores);
     }
 
-    @PutMapping("/{vcSerie}")
-    public ResponseEntity<Medidores> updateMedidor(@PathVariable String vcSerie,
-            @RequestBody Medidores medidorDetails) {
-        Medidores updatedMedidor = medidoresService.update(vcSerie, medidorDetails);
-        return ResponseEntity.ok(updatedMedidor);
-
-    }
-
     @PatchMapping("/{vcSerie}")
     public ResponseEntity<Medidores> updatePartialMedidor(@PathVariable String vcSerie,
             @RequestBody Map<String, Object> updates) {

@@ -13,7 +13,6 @@ import com.metrolink.ami_api.repositories.medidor.MedidoresRepository;
 import com.metrolink.ami_api.repositories.medidor.TipoParamAdvMedRepository;
 import com.metrolink.ami_api.repositories.tablasFront.EstadosRepository;
 import com.metrolink.ami_api.repositories.tablasFront.NodeBytesdeDireccionRepository;
-import com.metrolink.ami_api.repositories.tablasFront.TiposDeComunicacionRepository;
 import com.metrolink.ami_api.repositories.tablasFrontMed.MarcasMedRepository;
 import com.metrolink.ami_api.repositories.tablasFrontMed.TiposDeModuloDeComRepository;
 import com.metrolink.ami_api.repositories.tablasFrontMed.ViasObtencionDatosRepository;
@@ -89,34 +88,7 @@ public class MedidoresService {
         return medidoresRepository.findByVcsic(vcsic);
     }
 
-    public Medidores update(String vcSerie, Medidores medidorDetails) {
-        Medidores medidor = findById(vcSerie);
-        medidor.setVcidCliente(medidorDetails.getVcidCliente());
-        medidor.setVcdescripcion(medidorDetails.getVcdescripcion());
-        medidor.setMarcaMed(medidorDetails.getMarcaMed());
-        medidor.setLisMacro(medidorDetails.isLisMacro());
-        medidor.setVclongitudLatitud(medidorDetails.getVclongitudLatitud());
-        medidor.setDfechaInstalacion(medidorDetails.getDfechaInstalacion());
-        medidor.setEstado(medidorDetails.getEstado());
-        medidor.setDfechaHoraUltimaLectura(medidorDetails.getDfechaHoraUltimaLectura());
-        medidor.setVcperiodoIntegracion(medidorDetails.getVcperiodoIntegracion());
-        medidor.setVcultimoEstadoRele(medidorDetails.getVcultimoEstadoRele());
-        medidor.setVcfirmware(medidorDetails.getVcfirmware());
-        medidor.setViaObtencionDatos(medidorDetails.getViaObtencionDatos());
-        medidor.setConcentrador(medidorDetails.getConcentrador());
-        medidor.setCanalDeComunicacion(medidorDetails.getCanalDeComunicacion());
-        medidor.setVcip(medidorDetails.getVcip());
-        medidor.setVcpuerto(medidorDetails.getVcpuerto());
-        medidor.setTipoDeModuloDeCom(medidorDetails.getTipoDeModuloDeCom());
-        medidor.setConfiguracionProtocolo(medidorDetails.getConfiguracionProtocolo());
-        medidor.setParamAdvMed(medidorDetails.getParamAdvMed());
-        medidor.setConfiguracionActivo(medidorDetails.getConfiguracionActivo());
-        medidor.setVcsic(medidorDetails.getVcsic());
-        medidor.setCanalesPerfilCarga(medidorDetails.getCanalesPerfilCarga());
-
-        return medidoresRepository.save(medidor);
-    }
-
+    
     public void deleteById(String vcSerie) {
         medidoresRepository.deleteById(vcSerie);
     }

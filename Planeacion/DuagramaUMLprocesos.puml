@@ -231,7 +231,9 @@ package "com.metrolink.ami_api" {
                 * createMedidor(medidores: Medidores): Medidores
                 * getAllMedidores() : List<Medidores>
                 * getMedidorById(vcSerie: String) : Medidores
-                * updateMedidor(vcSerie: String, medidorDetails:  Medidores) : Medidores
+                * public ResponseEntity<List<Medidores>> getMedidoresByConcentradorVcnoSerie(@PathVariable String vcnoSerie)
+                * public ResponseEntity<List<Medidores>> getMedidoresByVcsic(@PathVariable String vcsic)
+                * public ResponseEntity<Medidores> updatePartialMedidor(@PathVariable String vcSerie, @RequestBody Map<String, Object> updates)
                 * deleteMedidor(vcSerie: String) : void
             }
         }
@@ -313,10 +315,21 @@ package "com.metrolink.ami_api" {
         package "com.metrolink.ami_api.services.medidor" #fadb9d  {
             class MedidoresService #FFFFBA {
                 + MedidoresRepository medidoresRepository
+                + MarcasMedRepository marcaMedRepository
+                + EstadosRepository estadoRepository
+                + BlMovConfigActivosRepository configuracionActivoRepository
+                + ViasObtencionDatosRepository viasObtencionDatosRepository
+                + ConcentradoresRepository concentradorRepository
+                + CanalesDeComunicacionRepository canalDeComunicacionRepository
+                + TiposDeModuloDeComRepository tipoDeModuloDeComRepository
+                + NodeBytesdeDireccionRepository nodeBytesdeDireccionRepository
+                + TipoParamAdvMedRepository tipoParamAdvMedRepository
                 * save(medidores: Medidores, isUpdate : boolean ): Medidores
                 * findAll() : List<Medidores>
                 * findById(vcSerie: String) : Optional<Medidores>
-                * update(vcSerie: String, medidorDetails: Medidores)
+                * public List<Medidores> findByConcentradorVcnoSerie(String vcnoSerie)
+                * public List<Medidores> findByVcsic(String vcsic)
+                * public Medidores updatePartial(String vcSerie, Map<String, Object> updates)
                 * deleteById(vcSerie : String): void
             }
 

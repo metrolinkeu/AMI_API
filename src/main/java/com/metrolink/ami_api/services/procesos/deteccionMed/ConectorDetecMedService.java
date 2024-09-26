@@ -24,6 +24,14 @@ public class ConectorDetecMedService {
         String vcnoSerie = jsonNode.get("vcnoSerie").asText();
         System.out.println("vcnoSerie: " + vcnoSerie);
 
+        /*
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         */
+
         Random random = new Random();
         int cantidadMedidores = 3;
         StringJoiner medidoresJoiner = new StringJoiner(", ");

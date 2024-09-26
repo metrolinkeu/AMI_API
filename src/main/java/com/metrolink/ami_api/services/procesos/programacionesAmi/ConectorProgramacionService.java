@@ -85,6 +85,13 @@ public class ConectorProgramacionService {
                 // Iterar sobre la lista y procesar cada serie
                 for (int i = 0; i < jsseriesMedList.size(); i++) {
                     System.out.println("vcserie" + (i + 1) + ": " + jsseriesMedList.get(i));
+                    /*
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     */
                 }
             }
 
@@ -123,12 +130,14 @@ public class ConectorProgramacionService {
         // generar un hilo y una cola unica para la conexion tcp de este
         // concentrador
 
-        // las peticiones que se deben hacer a cada medidor vienen en unas variables boleanas y solo
+        // las peticiones que se deben hacer a cada medidor vienen en unas variables
+        // boleanas y solo
         // se deben leer las que vengan en true
 
-        //la accion del rele viene en un string que indica si activar o desactivar
+        // la accion del rele viene en un string que indica si activar o desactivar
 
-        //la hora de sincronizacion de relog viene en formato time stamp pero se transforma en string si es neceario
+        // la hora de sincronizacion de relog viene en formato time stamp pero se
+        // transforma en string si es neceario
 
         boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
         boolean leventos = programacionAMI.getListaPeticiones().isLeventos();
@@ -152,14 +161,6 @@ public class ConectorProgramacionService {
         String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
         System.out.println("dfechaHoraSincronizacion: " + formattedDate);
 
-
-
-
-
-
-
-
-
         // Esto ultimo es inventado, no tiene relacion con la logica de arriba,
         // solo
         // devuelve un resultado similar al que deberia de entregar
@@ -179,10 +180,11 @@ public class ConectorProgramacionService {
 
         String jsseriesMed = "";
 
-        //Este conector es similar al conector anterior pero en este caso, los medidores asociados al concentrador 
-        //vienen ya especificados en  programacionAMI.getGrupoMedidores().getJsseriesMed();
+        // Este conector es similar al conector anterior pero en este caso, los
+        // medidores asociados al concentrador
+        // vienen ya especificados en
+        // programacionAMI.getGrupoMedidores().getJsseriesMed();
 
-        
         // en este momento se revisa si se deben de leer todos los medidores de la
         // programacion
         // o si es un reintento y solo se leeran los medidores que estan faltantdo
@@ -220,6 +222,13 @@ public class ConectorProgramacionService {
                 // Iterar sobre la lista y procesar cada serie
                 for (int i = 0; i < jsseriesMedList.size(); i++) {
                     System.out.println("vcserie" + (i + 1) + ": " + jsseriesMedList.get(i));
+                    /*
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                     */
                 }
             }
 
@@ -258,12 +267,14 @@ public class ConectorProgramacionService {
         // generar un hilo y una cola unica para la conexion tcp de este
         // concentrador
 
-        // las peticiones que se deben hacer a cada medidor vienen en unas variables boleanas y solo
+        // las peticiones que se deben hacer a cada medidor vienen en unas variables
+        // boleanas y solo
         // se deben leer las que vengan en true
 
-        //la accion del rele viene en un string que indica si activar o desactivar
+        // la accion del rele viene en un string que indica si activar o desactivar
 
-        //la hora de sincronizacion de relog viene en formato time stamp pero se transforma en string si es neceario
+        // la hora de sincronizacion de relog viene en formato time stamp pero se
+        // transforma en string si es neceario
 
         boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
         boolean leventos = programacionAMI.getListaPeticiones().isLeventos();
@@ -286,7 +297,6 @@ public class ConectorProgramacionService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
         System.out.println("dfechaHoraSincronizacion: " + formattedDate);
-
 
         //
         // Lugar para pedir esto en Realidad
@@ -343,7 +353,7 @@ public class ConectorProgramacionService {
         // aqui se debe de hacer las eticiones a traves del concentrador con su ip y
         // puerto:
 
-        if (medidor.getConcentrador() != null) { //NO tener esta linea
+        if (medidor.getConcentrador() != null) { // NO tener esta linea
 
             String vcnoSerie = medidor.getConcentrador().getVcnoSerie();
             Concentradores concentrador = concentradoresService.findById(vcnoSerie);
@@ -353,7 +363,7 @@ public class ConectorProgramacionService {
             System.out.println("IP del concentrador: " + ip);
             System.out.println("Puerto del concentrador: " + puerto);
 
-        } else { // La ip siempre sera esta. 
+        } else { // La ip siempre sera esta.
 
             String ip = medidor.getVcip();
             String puerto = medidor.getVcpuerto();
@@ -366,12 +376,22 @@ public class ConectorProgramacionService {
 
         //
         // construida con la ip y el puerto.
-        // por lo tanto se debe de usar la misma ip y puerto que estan en en hilo y la cola
+        // por lo tanto se debe de usar la misma ip y puerto que estan en en hilo y la
+        // cola
 
         // se pide al medidor con todos sus parametros.
 
-        //si el medidor es leido devuelve un noLeido en True  coloca el numero de su vcSerie para hacer un reintento
-        //si es leido correctamente entega un  vacio ""
+        // si el medidor es leido devuelve un noLeido en True coloca el numero de su
+        // vcSerie para hacer un reintento
+        // si es leido correctamente entega un vacio ""
+
+        /*
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         */
 
         boolean noLeido = true;
 
@@ -423,7 +443,6 @@ public class ConectorProgramacionService {
         // en esta caso es cuando el medidor es Servidor.
         // En este punto ya se esta en una cola e hilo unicos para este medidor la cual
         // fue construida de acuerdo a dos casos:
-   
 
         if (medidor.getConcentrador() != null) {
 

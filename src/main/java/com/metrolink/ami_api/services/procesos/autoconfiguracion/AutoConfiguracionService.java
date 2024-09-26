@@ -64,7 +64,7 @@ public class AutoConfiguracionService {
                         "C_" + vcnoSerie,
                         () -> {
                             System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService) Caso 1");
-                            return conectorGeneralService.UsarConectorAutoConfMed(vcnoSerie);
+                            return conectorGeneralService.UsarConectorAutoConfMed(vcnoSerie, rootNode);
                         });
 
                 // Esperar a que se complete la tarea y obtener el resultado
@@ -87,7 +87,7 @@ public class AutoConfiguracionService {
                                 System.out
                                         .println("Estoy en la tarea para encolar (AutoConfiguracionService2) Caso 2 ");
                                 return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
-                                        vcserialesNode);
+                                        vcserialesNode, rootNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros
@@ -123,7 +123,7 @@ public class AutoConfiguracionService {
                             () -> {
                                 System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService_solo) caso 3");
                                 return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
-                                        vcserialesNode);
+                                        vcserialesNode, rootNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros
@@ -161,7 +161,7 @@ public class AutoConfiguracionService {
                             () -> {
                                 System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService) caso 4");
                                 return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
-                                        vcserialesNode);
+                                        vcserialesNode, rootNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros
@@ -200,7 +200,7 @@ public class AutoConfiguracionService {
                                 System.out
                                         .println("Estoy en la tarea para encolar (AutoConfiguracionService)  Caso 5");
                                 return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
-                                        vcserialesNode);
+                                        vcserialesNode, rootNode);
                             });
 
                     // Agregar el CompletableFuture a la lista de futuros

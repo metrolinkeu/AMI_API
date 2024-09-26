@@ -32,48 +32,48 @@ public class ConectorGeneralService {
         return newJson;
     }
 
-    public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie) {
-        List<AutoconfMedidor> autoconfMedidores = conectorAutoConfService.UsarConectorAutoConfMed(vcnoSerie);
+    public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie, JsonNode rootNode) {
+        List<AutoconfMedidor> autoconfMedidores = conectorAutoConfService.UsarConectorAutoConfMed(vcnoSerie, rootNode);
         return autoconfMedidores;
     }
 
     public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC,
-            JsonNode vcserialesNode) {
+            JsonNode vcserialesNode, JsonNode rootNode) {
         AutoconfMedidor autoconfMedidor = conectorAutoConfService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie,
-                vcSIC, vcserialesNode);
+                vcSIC, vcserialesNode, rootNode);
         return autoconfMedidor;
     }
 
     public String usarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroConcentrador(mensaje,
+        String medidoresFaltantesPorLeer = conectorProgramacionService.UsarConectorProgramacionFiltroConcentrador(mensaje,
                 programacionAMI,
                 vcSeriesAReintentarFiltrado);
 
-        return Impreso; // Retorna el mensaje para confirmar la ejecución
+        return medidoresFaltantesPorLeer; // Retorna el mensaje para confirmar la ejecución
     }
 
     public String usarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroConyMed(mensaje, programacionAMI,
+        String medidoresFaltantesPorLeer = conectorProgramacionService.UsarConectorProgramacionFiltroConyMed(mensaje, programacionAMI,
                 vcSeriesAReintentarFiltrado);
 
-        return Impreso; // Retorna el mensaje para confirmar la ejecución
+        return medidoresFaltantesPorLeer; // Retorna el mensaje para confirmar la ejecución
     }
 
     public String usarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI,
             String vcserie) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroMedidores(mensaje, programacionAMI,
+        String vcSerieMedAReintentar = conectorProgramacionService.UsarConectorProgramacionFiltroMedidores(mensaje, programacionAMI,
                 vcserie);
 
-        return Impreso; // Retorna el mensaje para confirmar la ejecución
+        return vcSerieMedAReintentar; // Retorna el mensaje para confirmar la ejecución
     }
 
     public String usarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
-        String Impreso = conectorProgramacionService.UsarConectorProgramacionFiltroSIC(mensaje, programacionAMI,
+        String vcSerieMedAReintentar = conectorProgramacionService.UsarConectorProgramacionFiltroSIC(mensaje, programacionAMI,
                 vcserie);
 
-        return Impreso; // Retorna el mensaje para confirmar la ejecución
+        return vcSerieMedAReintentar; // Retorna el mensaje para confirmar la ejecución
     }
 
 }

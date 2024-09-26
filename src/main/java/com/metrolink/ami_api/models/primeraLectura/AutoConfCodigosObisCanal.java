@@ -15,5 +15,4 @@ public class AutoConfCodigosObisCanal {
     private String vcobis_8;
     private String vcobis_9;
     private String vcobis_10;
-
 }

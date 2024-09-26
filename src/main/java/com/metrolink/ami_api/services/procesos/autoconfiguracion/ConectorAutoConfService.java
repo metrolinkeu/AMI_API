@@ -23,7 +23,7 @@ public class ConectorAutoConfService {
     @Autowired
     private MedidoresService medidoresService;
 
-    public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie) {
+    public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie, JsonNode rootNode) {
 
         System.out.println("Caso 1: vcnoSerie.");
 
@@ -31,37 +31,16 @@ public class ConectorAutoConfService {
         Random random = new Random();
 
         try {
-
-            // ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            // // parte para pruebas de conexion con socket
-            // ///////////////////////////////////////////////////////////////
-            // Concentradores concentrador = concentradoresService.findById(vcnoSerie);
-            // System.out.println(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion());
-
-            // if
-            // ("Servidor".equalsIgnoreCase(concentrador.getParamTiposDeComunicacion().getVctiposDeComunicacion()))
-            // {
-            // String direccion = concentrador.getParamTiposDeComunicacion().getVcip();
-            // int puerto =
-            // Integer.parseInt(concentrador.getParamTiposDeComunicacion().getVcpuerto());
-
-            // byte[] bytesToSend = new byte[] { 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
-            // 0x02, 0x62, 0x00 };
-
-            // String response =
-            // tcpClientDetecMedService.sendBytesToAddressAndPort(bytesToSend, direccion,
-            // puerto);
-            // System.out.println("Response from TCP server at " + direccion + ":" + puerto
-            // + ": " + response);
-            // } else {
-            // System.out.println("en construccion");
-
-            // }
-            // // parte para pruebas de conexion con socket
-            // ///////////////////////////////////////////////////////////////
-            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
             List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
+
+            /*
+             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+             */
+
             for (Medidores medidor : medidores) {
                 AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
                 autoconfMedidores.add(autoconfMedidor);
@@ -75,7 +54,7 @@ public class ConectorAutoConfService {
     }
 
     public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC,
-            JsonNode vcserialesNode) {
+            JsonNode vcserialesNode, JsonNode rootNode) {
 
         // Verificar y manejar el caso 2: vcnoSerie y vcseriales están presentes
         if (vcserialesNode != null && !vcserialesNode.isEmpty() && vcnoSerie != null && !vcnoSerie.equals("")
@@ -99,6 +78,15 @@ public class ConectorAutoConfService {
                 && !vcSIC.equals("")) {
             System.out.println("Caso 5: Solo SIC está presente.");
         }
+
+        /*
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+         */
+
         Random random = new Random();
         AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
 

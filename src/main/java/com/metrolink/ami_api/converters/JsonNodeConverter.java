@@ -29,4 +29,21 @@ public class JsonNodeConverter implements AttributeConverter<JsonNode, String> {
             throw new IllegalArgumentException("Error converting String to JsonNode", e);
         }
     }
+
+    // Implementación de equals que compara los JsonNode como cadenas JSON
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        JsonNodeConverter that = (JsonNodeConverter) o;
+        return this.convertToDatabaseColumn(that.convertToEntityAttribute((String) o))
+                .equals(this.convertToDatabaseColumn((JsonNode) o));
+    }
+
+    @Override
+    public int hashCode() {
+        return this.hashCode();
+    }
 }

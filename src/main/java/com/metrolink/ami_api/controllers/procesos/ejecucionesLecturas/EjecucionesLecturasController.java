@@ -34,11 +34,6 @@ public class EjecucionesLecturasController {
         return ResponseEntity.ok(ejecucion);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<EjecucionesLecturas> updateEjecucion(@PathVariable Long id, @RequestBody EjecucionesLecturas ejecucionDetails) {
-        EjecucionesLecturas updatedEjecucion = ejecucionesLecturasService.update(id, ejecucionDetails);
-        return ResponseEntity.ok(updatedEjecucion);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEjecucion(@PathVariable Long id) {

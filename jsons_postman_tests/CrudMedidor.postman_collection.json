@@ -3,7 +3,8 @@
 		"_postman_id": "0d53d5df-f612-4c73-aaf8-cab61792ece2",
 		"name": "CrudMedidor",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36280962"
+		"_exporter_id": "36280962",
+		"_collection_link": "https://metrolink-6641.postman.co/workspace/Ami_Api~cd4f0c0e-c05d-4938-86ed-6b60c47cb078/collection/36280962-0d53d5df-f612-4c73-aaf8-cab61792ece2?action=share&source=collection_link&creator=36280962"
 	},
 	"item": [
 		{
@@ -13,7 +14,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcSerie\": \"00014Directo\",\r\n    \"vcidCliente\": \"12345\",\r\n    \"vcdescripcion\": \"Medidor de prueba\",\r\n    \"marcaMed\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"lisMacro\": true,\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"dfechaInstalacion\": \"2024-07-04T15:30:00\",\r\n    \"estado\": {\r\n        \"ncodigo\": 5\r\n    },\r\n    \"configuracionActivo\": {\r\n        \"idConfiguracionActivo\": 11\r\n    },\r\n    \"dfechaHoraUltimaLectura\": \"2024-07-04T15:30:00\",  // Formato de Timestamp\r\n    \"vcdíasdeRegDíariosMensuales\": \"No leido\",\r\n    \"vcdiasdeEventos\": \"No leido\",\r\n    \"vcperiodoIntegracion\": \"Diario\",\r\n    \"vcultimoEstadoRele\": \"Activo\",\r\n    \"vcfirmware\": \"1.0.0\",\r\n    \"viaObtencionDatos\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"canalDeComunicacion\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"vcip\": \"192.168.1.1\",\r\n    \"vcpuerto\": \"8080\",\r\n    \"tipoDeModuloDeCom\": {\r\n        \"ncodigo\": 3\r\n    },\r\n    \"configuracionProtocolo\": {\r\n        \"vcdireccionFisica\": \"123\",\r\n        \"vcdireccionLogica\": \"456\",\r\n        \"vcdireccionCliente\": \"789\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 1\r\n        }\r\n    },\r\n    \"paramAdvMed\": {\r\n        \"vcSerieP\": \"00014Directo\", //Aqui debe ser el mismo que el vcSerie por ahora, se debe corregir esto !!!\r\n        \"vcValue\": \"0000000000000000001\",\r\n        \"tipoParamAdvMed\": {\r\n            \"ncod\": 1\r\n        }\r\n    },\r\n    \"enAgendaProgramacionesAMI\": null,      \r\n    \"estadoEnAgenda\": null,\r\n    \"vcsic\": \"siCsas\",\r\n    \"canalesPerfilCarga\": {\r\n        \"codigosObisCanal_1\": {\r\n            \"vcobis_1\": \"1-0:1.8.1\", // Energía activa importada tarifa 1\r\n            \"vcobis_2\": \"1-0:1.8.2\", // Energía activa importada tarifa 2\r\n            \"vcobis_3\": \"1-0:2.8.1\", // Energía activa exportada tarifa 1\r\n            \"vcobis_4\": \"1-0:2.8.2\", // Energía activa exportada tarifa 2\r\n            \"vcobis_5\": \"1-0:3.7.0\", // Potencia activa total\r\n            \"vcobis_6\": \"1-0:4.7.0\", // Potencia reactiva total\r\n            \"vcobis_7\": \"1-0:5.7.0\", // Potencia aparente total\r\n            \"vcobis_8\": \"1-0:6.7.0\", // Potencia máxima demandada\r\n            \"vcobis_9\": \"1-0:7.0.0\", // Energía activa neta\r\n            \"vcobis_10\": \"1-0:8.0.0\" // Energía reactiva neta\r\n        },\r\n        \"codigosObisCanal_2\": {\r\n            \"vcobis_1\": \"1-0:2.8.0\", // Energía activa exportada total\r\n            \"vcobis_2\": \"1-0:1.8.0\", // Energía activa importada total\r\n            \"vcobis_3\": \"1-0:1.7.0\", // Potencia activa total (instantánea)\r\n            \"vcobis_4\": \"1-0:2.7.0\", // Potencia activa exportada (instantánea)\r\n            \"vcobis_5\": \"1-0:32.7.0\", // Voltaje\r\n            \"vcobis_6\": \"1-0:52.7.0\", // Voltaje fase 1\r\n            \"vcobis_7\": \"1-0:72.7.0\", // Voltaje fase 2\r\n            \"vcobis_8\": \"1-0:31.7.0\", // Corriente fase 1\r\n            \"vcobis_9\": \"1-0:51.7.0\", // Corriente fase 2\r\n            \"vcobis_10\": \"1-0:71.7.0\" // Corriente fase 3\r\n        },\r\n        \"codigosObisCanal_3\": {\r\n            \"vcobis_1\": \"1-0:3.8.0\", // Energía reactiva importada total\r\n            \"vcobis_2\": \"1-0:4.8.0\", // Energía reactiva exportada total\r\n            \"vcobis_3\": \"1-0:3.7.0\", // Potencia reactiva total (instantánea)\r\n            \"vcobis_4\": \"1-0:4.7.0\", // Potencia reactiva exportada (instantánea)\r\n            \"vcobis_5\": \"1-0:13.7.0\", // Potencia aparente total (instantánea)\r\n            \"vcobis_6\": \"1-0:14.7.0\", // Potencia aparente exportada (instantánea)\r\n            \"vcobis_7\": \"1-0:15.7.0\", // Potencia aparente importada (instantánea)\r\n            \"vcobis_8\": \"1-0:3.7.0\", // Potencia activa neta\r\n            \"vcobis_9\": \"1-0:4.7.0\", // Potencia reactiva neta\r\n            \"vcobis_10\": \"1-0:9.7.0\" // Factor de potencia\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n    \"vcSerie\": \"0104Directo\",\r\n    \"vcidCliente\": \"12345\",\r\n    \"vcdescripcion\": \"Medidor de prueba\",\r\n    \"marcaMed\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"lisMacro\": true,\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"dfechaInstalacion\": \"2024-07-04T15:30:00\",\r\n    \"estado\": {\r\n        \"ncodigo\": 5\r\n    },\r\n    \"configuracionActivo\": {\r\n        \"idConfiguracionActivo\": 11\r\n    },\r\n    \"dfechaHoraUltimaLectura\": \"2024-07-04T15:30:00\",  // Formato de Timestamp\r\n    \"vcdíasdeRegDíariosMensuales\": \"No leido\",\r\n    \"vcdiasdeEventos\": \"No leido\",\r\n    \"vcperiodoIntegracion\": \"Diario\",\r\n    \"vcultimoEstadoRele\": \"Activo\",\r\n    \"vcfirmware\": \"1.0.0\",\r\n    \"viaObtencionDatos\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"canalDeComunicacion\": {\r\n        \"ncodigo\": 1\r\n    },\r\n    \"vcip\": \"192.168.1.3\",\r\n    \"vcpuerto\": \"8080\",\r\n    \"tipoDeModuloDeCom\": {\r\n        \"ncodigo\": 3\r\n    },\r\n    \"configuracionProtocolo\": {\r\n        \"vcdireccionFisica\": \"123\",\r\n        \"vcdireccionLogica\": \"456\",\r\n        \"vcdireccionCliente\": \"789\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 1\r\n        }\r\n    },\r\n    \"paramAdvMed\": {\r\n        \"vcSerieP\": \"0104Directo\", //Aqui debe ser el mismo que el vcSerie por ahora, se debe corregir esto !!!\r\n        \"vcValue\": \"0000000000000000001\",\r\n        \"tipoParamAdvMed\": {\r\n            \"ncod\": 1\r\n        }\r\n    },\r\n    \"enAgendaProgramacionesAMI\": null,      \r\n    \"estadoEnAgenda\": null,\r\n    \"vcsic\": \"222\",\r\n    \"canalesPerfilCarga\": {\r\n        \"codigosObisCanal_1\": {\r\n            \"vcobis_1\": \"1-0:1.8.1\", // Energía activa importada tarifa 1\r\n            \"vcobis_2\": \"1-0:1.8.2\", // Energía activa importada tarifa 2\r\n            \"vcobis_3\": \"1-0:2.8.1\", // Energía activa exportada tarifa 1\r\n            \"vcobis_4\": \"1-0:2.8.2\", // Energía activa exportada tarifa 2\r\n            \"vcobis_5\": \"1-0:3.7.0\", // Potencia activa total\r\n            \"vcobis_6\": \"1-0:4.7.0\", // Potencia reactiva total\r\n            \"vcobis_7\": \"1-0:5.7.0\", // Potencia aparente total\r\n            \"vcobis_8\": \"1-0:6.7.0\", // Potencia máxima demandada\r\n            \"vcobis_9\": \"1-0:7.0.0\", // Energía activa neta\r\n            \"vcobis_10\": \"1-0:8.0.0\" // Energía reactiva neta\r\n        },\r\n        \"codigosObisCanal_2\": {\r\n            \"vcobis_1\": \"1-0:2.8.0\", // Energía activa exportada total\r\n            \"vcobis_2\": \"1-0:1.8.0\", // Energía activa importada total\r\n            \"vcobis_3\": \"1-0:1.7.0\", // Potencia activa total (instantánea)\r\n            \"vcobis_4\": \"1-0:2.7.0\", // Potencia activa exportada (instantánea)\r\n            \"vcobis_5\": \"1-0:32.7.0\", // Voltaje\r\n            \"vcobis_6\": \"1-0:52.7.0\", // Voltaje fase 1\r\n            \"vcobis_7\": \"1-0:72.7.0\", // Voltaje fase 2\r\n            \"vcobis_8\": \"1-0:31.7.0\", // Corriente fase 1\r\n            \"vcobis_9\": \"1-0:51.7.0\", // Corriente fase 2\r\n            \"vcobis_10\": \"1-0:71.7.0\" // Corriente fase 3\r\n        },\r\n        \"codigosObisCanal_3\": {\r\n            \"vcobis_1\": \"1-0:3.8.0\", // Energía reactiva importada total\r\n            \"vcobis_2\": \"1-0:4.8.0\", // Energía reactiva exportada total\r\n            \"vcobis_3\": \"1-0:3.7.0\", // Potencia reactiva total (instantánea)\r\n            \"vcobis_4\": \"1-0:4.7.0\", // Potencia reactiva exportada (instantánea)\r\n            \"vcobis_5\": \"1-0:13.7.0\", // Potencia aparente total (instantánea)\r\n            \"vcobis_6\": \"1-0:14.7.0\", // Potencia aparente exportada (instantánea)\r\n            \"vcobis_7\": \"1-0:15.7.0\", // Potencia aparente importada (instantánea)\r\n            \"vcobis_8\": \"1-0:3.7.0\", // Potencia activa neta\r\n            \"vcobis_9\": \"1-0:4.7.0\", // Potencia reactiva neta\r\n            \"vcobis_10\": \"1-0:9.7.0\" // Factor de potencia\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -143,7 +144,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/medidores/concentrador/7257",
+					"raw": "http://localhost:8083/api/medidores/concentrador/2525",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -153,7 +154,7 @@
 						"api",
 						"medidores",
 						"concentrador",
-						"7257"
+						"2525"
 					]
 				}
 			},
@@ -177,7 +178,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/medidores/vcsic/siCsas",
+					"raw": "http://localhost:8083/api/medidores/vcsic/258",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -187,7 +188,7 @@
 						"api",
 						"medidores",
 						"vcsic",
-						"siCsas"
+						"258"
 					]
 				}
 			},
@@ -211,7 +212,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/medidores/0009Directo",
+					"raw": "http://localhost:8083/api/medidores/25565",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -220,20 +221,20 @@
 					"path": [
 						"api",
 						"medidores",
-						"0009Directo"
+						"25565"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "ActualizarMedidor_vcSerie Dir",
+			"name": "ActualizarMedidor_vcSeriePart",
 			"request": {
-				"method": "PUT",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"vcidCliente\": \"12345\",\r\n    \"vcdescripcion\": \"Medidor de prueba\",\r\n    \"marcaMed\": {\r\n        \"ncodigo\": 1,\r\n        \"vcmarcaMed\": \"Elster\",\r\n        \"vcconcat\": \"1 - Elster\"\r\n    },\r\n    \"lisMacro\": true,\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"dfechaInstalacion\": \"2024-07-04T15:30:00\",\r\n    \"estado\": {\r\n        \"ncodigo\": 5,\r\n        \"vcestado\": \"Instalado Inactivo\",\r\n        \"vcconcat\": \"5 - Instalado Inactivo\"\r\n    },\r\n    \"configuracionActivo\": {\r\n        \"idConfiguracionActivo\": 11,\r\n        \"tipoActivo\": \"Transformador Actualizado\",\r\n        \"vcNombre\": \"Tr11 20MVA\",\r\n        \"vcDescripcion\": \"Transformador secundario\",\r\n        \"vcZona\": \"Zona Este\",\r\n        \"vcSubzona\": \"Subzona A\",\r\n        \"vcSubestacion\": \"Subestación 3\",\r\n        \"vcBarra\": \"Barra B\",\r\n        \"nivelTension\": \"110 kV\",\r\n        \"claseTransformador\": \"Clase B\",\r\n        \"vcCapacidadMaxima\": \"20 MVA\",\r\n        \"vcNivelTensionPrimario\": \"110 kV\",\r\n        \"vcNivelTensionSecundario\": \"34.5 kV\",\r\n        \"vcNivelTensionTerciario\": \"13.2 kV\"\r\n    },\r\n    \"dfechaHoraUltimaLectura\": \"2024-07-04T15:30:00\",  // Formato de Timestamp\r\n    \"vcdíasdeRegDíariosMensuales\": \"No leido\",\r\n    \"vcdiasdeEventos\": \"No leido\",\r\n    \"vcperiodoIntegracion\": \"Diario\",\r\n    \"vcultimoEstadoRele\": \"Activo\",\r\n    \"vcfirmware\": \"1.0.0\",\r\n    \"viaObtencionDatos\": {\r\n        \"ncodigo\": 1,\r\n        \"vcviaObtencionDatos\": \"Directo\",\r\n        \"vcconcat\": \"1 - Directo\"\r\n    },\r\n    \"concentrador\": null,\r\n    \"canalDeComunicacion\": {\r\n        \"ncodigo\": 1,\r\n        \"vccanalDeComunicacion\": \"4 G\",\r\n        \"vcconcat\": \"1 - 4 G\"\r\n    },\r\n    \"vcip\": \"192.168.1.1\",\r\n    \"vcpuerto\": \"8080\",\r\n    \"tipoDeModuloDeCom\": {\r\n        \"ncodigo\": 3,\r\n        \"vctiposDeModuloDeCom\": \"Modem interno\",\r\n        \"vcconcat\": \"3 - Modem Interno\"\r\n    },\r\n    \"configuracionProtocolo\": {\r\n        \"nid\": 61,\r\n        \"vcdireccionFisica\": \"123\",\r\n        \"vcdireccionLogica\": \"456\",\r\n        \"vcdireccionCliente\": \"789\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 1,\r\n            \"vcnodeBytesdeDireccion\": \"1\",\r\n            \"vcconcat\": \"1 - 1\"\r\n        }\r\n    },\r\n    \"paramAdvMed\": {\r\n        \"vcSerieP\": \"0009Directo\",\r\n        \"vcValue\": \"0000000000000000001\",\r\n        \"tipoParamAdvMed\": {\r\n            \"ncod\": 1,\r\n            \"vcDescripcion\": \"DLMS_EK_HLS\"\r\n        }\r\n    },\r\n    \"vcsic\": \"siCsas\",\r\n    \"canalesPerfilCarga\": {\r\n        \"nid\": 21,\r\n        \"codigosObisCanal_1\": {\r\n            \"nid\": 41,\r\n            \"vcobis_1\": \"1-0:1.8.111\",\r\n            \"vcobis_2\": \"1-0:1.8.2\",\r\n            \"vcobis_3\": \"1-0:2.8.1\",\r\n            \"vcobis_4\": \"1-0:2.8.2\",\r\n            \"vcobis_5\": \"1-0:3.7.0\",\r\n            \"vcobis_6\": \"1-0:4.7.0\",\r\n            \"vcobis_7\": \"1-0:5.7.0\",\r\n            \"vcobis_8\": \"1-0:6.7.0\",\r\n            \"vcobis_9\": \"1-0:7.0.0\",\r\n            \"vcobis_10\": \"1-0:8.0.0\"\r\n        },\r\n        \"codigosObisCanal_2\": {\r\n            \"nid\": 42,\r\n            \"vcobis_1\": \"1-0:2.8.0\",\r\n            \"vcobis_2\": \"1-0:1.8.0\",\r\n            \"vcobis_3\": \"1-0:1.7.0\",\r\n            \"vcobis_4\": \"1-0:2.7.0\",\r\n            \"vcobis_5\": \"1-0:32.7.0\",\r\n            \"vcobis_6\": \"1-0:52.7.0\",\r\n            \"vcobis_7\": \"1-0:72.7.0\",\r\n            \"vcobis_8\": \"1-0:31.7.0\",\r\n            \"vcobis_9\": \"1-0:51.7.0\",\r\n            \"vcobis_10\": \"1-0:71.7.0\"\r\n        },\r\n        \"codigosObisCanal_3\": {\r\n            \"nid\": 43,\r\n            \"vcobis_1\": \"1-0:3.8.0\",\r\n            \"vcobis_2\": \"1-0:4.8.0\",\r\n            \"vcobis_3\": \"1-0:3.7.0\",\r\n            \"vcobis_4\": \"1-0:4.7.0\",\r\n            \"vcobis_5\": \"1-0:13.7.0\",\r\n            \"vcobis_6\": \"1-0:14.7.0\",\r\n            \"vcobis_7\": \"1-0:15.7.0\",\r\n            \"vcobis_8\": \"1-0:3.7.0\",\r\n            \"vcobis_9\": \"1-0:4.7.0\",\r\n            \"vcobis_10\": \"1-0:9.7.0\"\r\n        }\r\n    },\r\n    \"esExistente\": false\r\n}",
+					"raw": "{\r\n    \"vcidCliente\": \"universal\",\r\n    \"vcdescripcion\": \"fox\",\r\n    \"marcaMed\": 5,\r\n    \"lisMacro\": false,\r\n    \"vclongitudLatitud\": \"armenia-123\",\r\n    \"dfechaInstalacion\": \"2024-07-04T15:30:00\",\r\n    \"estado\": 2,\r\n    \"configuracionActivo\": 2,\r\n    \"dfechaHoraUltimaLectura\": \"2024-07-04T15:30:00\",\r\n    \"vcdíasdeRegDíariosMensuales\": \"20-80\",\r\n    \"vcdiasdeEventos\": \"800\",\r\n    \"vcperiodoIntegracion\": \"15min\",\r\n    \"vcultimoEstadoRele\": \"Activado\",\r\n    \"vcfirmware\": \"1.2.1.2\",\r\n    \"viaObtencionDatos\": 2,\r\n    \"concentrador\": 12345,\r\n    \"canalDeComunicacion\": 2,\r\n    \"vcip\": \"20000000000\",\r\n    \"vcpuerto\": \"3000000000000\",\r\n    \"tipoDeModuloDeCom\" : 1,\r\n\r\n    \"configuracionProtocolo\": {\r\n        \"vcdireccionFisica\": \"12334567889\",\r\n        \"vcdireccionLogica\": \"3366988547\",\r\n        \"vcdireccionCliente\": \"789\",\r\n        \"nodeBytesdeDireccion\": {\r\n            \"ncodigo\": 3\r\n        }\r\n    },\r\n    \"paramAdvMed\": {\r\n        \"vcSerieP\": \"serietest\", //Aqui debe ser el mismo que el vcSerie por ahora, se debe corregir esto !!!\r\n        \"vcValue\": \"111111111111122222222222\",\r\n        \"tipoParamAdvMed\": {\r\n            \"ncod\": 3\r\n        }\r\n    },\r\n    \"vcsic\": \"1245\",\r\n    \"canalesPerfilCarga\": {\r\n        \"codigosObisCanal_1\": {\r\n            \"vcobis_1\": \"romeo2\", // Energía activa importada tarifa 1\r\n            \"vcobis_2\": \"1-0:1.8.2\", // Energía activa importada tarifa 2\r\n            \"vcobis_3\": \"1-0:2.8.1\", // Energía activa exportada tarifa 1\r\n            \"vcobis_4\": \"1-0:2.8.2\", // Energía activa exportada tarifa 2\r\n            \"vcobis_5\": \"1-0:3.7.0\", // Potencia activa total\r\n            \"vcobis_6\": \"1-0:4.7.0\", // Potencia reactiva total\r\n            \"vcobis_7\": \"1-0:5.7.0\", // Potencia aparente total\r\n            \"vcobis_8\": \"1-0:6.7.0\", // Potencia máxima demandada\r\n            \"vcobis_9\": \"1-0:7.0.0\", // Energía activa neta\r\n            \"vcobis_10\": \"1-0:8.0.0\" // Energía reactiva neta\r\n        },\r\n        \"codigosObisCanal_2\": {\r\n            \"vcobis_1\": \"bertha\", // Energía activa exportada total\r\n            \"vcobis_2\": \"1-0:1.8.0\", // Energía activa importada total\r\n            \"vcobis_3\": \"1-0:1.7.0\", // Potencia activa total (instantánea)\r\n            \"vcobis_4\": \"1-0:2.7.0\", // Potencia activa exportada (instantánea)\r\n            \"vcobis_5\": \"1-0:32.7.0\", // Voltaje\r\n            \"vcobis_6\": \"1-0:52.7.0\", // Voltaje fase 1\r\n            \"vcobis_7\": \"1-0:72.7.0\", // Voltaje fase 2\r\n            \"vcobis_8\": \"1-0:31.7.0\", // Corriente fase 1\r\n            \"vcobis_9\": \"1-0:51.7.0\", // Corriente fase 2\r\n            \"vcobis_10\": \"1-0:71.7.0\" // Corriente fase 3\r\n        },\r\n        \"codigosObisCanal_3\": {\r\n            \"vcobis_1\": \"jjosle\", // Energía reactiva importada total\r\n            \"vcobis_2\": \"1-0:4.8.0\", // Energía reactiva exportada total\r\n            \"vcobis_3\": \"1-0:3.7.0\", // Potencia reactiva total (instantánea)\r\n            \"vcobis_4\": \"1-0:4.7.0\", // Potencia reactiva exportada (instantánea)\r\n            \"vcobis_5\": \"1-0:13.7.0\", // Potencia aparente total (instantánea)\r\n            \"vcobis_6\": \"1-0:14.7.0\", // Potencia aparente exportada (instantánea)\r\n            \"vcobis_7\": \"1-0:15.7.0\", // Potencia aparente importada (instantánea)\r\n            \"vcobis_8\": \"1-0:3.7.0\", // Potencia activa neta\r\n            \"vcobis_9\": \"1-0:4.7.0\", // Potencia reactiva neta\r\n            \"vcobis_10\": \"1-0:9.7.0\" // Factor de potencia\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -241,7 +242,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/medidores/0009Directo",
+					"raw": "http://localhost:8083/api/medidores/25565",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -250,37 +251,7 @@
 					"path": [
 						"api",
 						"medidores",
-						"0009Directo"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "ActualizarMedidor_vcSerie Con",
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"vcidCliente\": \"12345\",\r\n    \"vcdescripcion\": \"Medidor de prueba actualizado\",\r\n    \"marcaMed\": {\r\n        \"ncodigo\": 2\r\n    },\r\n    \"lisMacro\": true,\r\n    \"vclongitudLatitud\": \"4.7110,-74.0721\",\r\n    \"dfechaInstalacion\": \"2024-07-04T15:30:00\",\r\n    \"estado\": {\r\n        \"ncodigo\": 6\r\n    },\r\n    \"configuracionActivo\": {\r\n        \"idConfiguracionActivo\": 7\r\n    },\r\n    \"dfechaHoraUltimaLectura\": \"2024-07-04T15:30:00\",  // Formato de Timestamp\r\n    \"vcdíasdeRegDíariosMensuales\": \"No leido\",\r\n    \"vcdiasdeEventos\": \"No leido\",\r\n    \"vcperiodoIntegracion\": \"Diario\",\r\n    \"vcultimoEstadoRele\": \"Activo\",\r\n    \"vcfirmware\": \"1.0.0\",\r\n    \"viaObtencionDatos\": {\r\n        \"ncodigo\": 2\r\n    },\r\n    \"concentrador\": {\r\n        \"vcnoSerie\": \"7256\"\r\n    }\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8083/api/medidores/0002porConcentrador",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8083",
-					"path": [
-						"api",
-						"medidores",
-						"0002porConcentrador"
+						"25565"
 					]
 				}
 			},
@@ -301,7 +272,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/api/medidores/61204",
+					"raw": "http://localhost:8083/api/medidores/00014Directo",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -310,7 +281,7 @@
 					"path": [
 						"api",
 						"medidores",
-						"61204"
+						"00014Directo"
 					]
 				}
 			},

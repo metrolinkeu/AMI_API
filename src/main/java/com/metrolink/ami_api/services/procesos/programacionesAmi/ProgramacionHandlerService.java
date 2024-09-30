@@ -98,7 +98,7 @@ public class ProgramacionHandlerService {
                 if (delay > 0) {
                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                     programarTareaCaso1(scheduler, programacionAMI, delay, vcSeriesAReintentarFiltrado_,
-                            reintentosRestantes);
+                            reintentosRestantes - 1);
                 } else {
                     System.out.println("La fecha y hora ya han pasado, no se puede programar la tarea.");
                 }
@@ -269,12 +269,14 @@ public class ProgramacionHandlerService {
     // Método para programar y reintentar la tarea
     private void programarTareaCaso1(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
             long delay, String vcSeriesAReintentarFiltrado_, int reintentosRestantes) {
+                
         scheduler.schedule(() -> {
             try {
+                
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
                         .usarConectorProgramacionFiltroConcentrador("Lectura caso 1", programacionAMI,
-                                vcSeriesAReintentarFiltrado_);
+                                vcSeriesAReintentarFiltrado_, reintentosRestantes);
 
                 // Usar GeneradorDeColas para encolar la tarea
                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -589,7 +591,7 @@ public class ProgramacionHandlerService {
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
                         .usarConectorProgramacionFiltroConcentrador("Lectura caso 5", programacionAMI,
-                                vcSeriesAReintentarFiltrado_);
+                                vcSeriesAReintentarFiltrado_, reintentosRestantes);
 
                 // Usar GeneradorDeColas para encolar la tarea
                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -637,7 +639,7 @@ public class ProgramacionHandlerService {
             // Crear la tarea para reintentar
             Callable<String> tareaParaReintentar = () -> conectorGeneralService
                     .usarConectorProgramacionFiltroConcentrador("Lectura reintento caso 5", programacionAMI,
-                            vcSeriesAReintentarFiltrado);
+                            vcSeriesAReintentarFiltrado, reintentosRestantes);
 
             // Usar GeneradorDeColas para encolar la tarea
             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -1257,7 +1259,7 @@ public class ProgramacionHandlerService {
                     // Crear la tarea que se encolará
                     Callable<String> tareaParaProgramar = () -> conectorGeneralService
                             .usarConectorProgramacionFiltroConcentrador("Lectura caso 9", programacionAMI,
-                                    vcSeriesAReintentarFiltrado_);
+                                    vcSeriesAReintentarFiltrado_, reintentosRestantes);
 
                     // Usar GeneradorDeColas para encolar la tarea
                     CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -1307,7 +1309,7 @@ public class ProgramacionHandlerService {
             // Crear la tarea que se encolará
             Callable<String> tareaParaProgramar = () -> conectorGeneralService
                     .usarConectorProgramacionFiltroConcentrador("Lectura caso 9", programacionAMI,
-                            vcSeriesAReintentarFiltrado);
+                            vcSeriesAReintentarFiltrado, reintentosRestantes);
 
             // Usar GeneradorDeColas para encolar la tarea
             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +

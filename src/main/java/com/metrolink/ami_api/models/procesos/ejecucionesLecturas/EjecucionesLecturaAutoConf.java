@@ -12,9 +12,15 @@ public class EjecucionesLecturaAutoConf {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEjecucionLecturaAutoConf;
+    private Long nidEjecucionLecturaAutoConf;
 
-    private String Caso;
+    private String vcdescripcionAutoconf;
+
+    private String vcnoserie;
+    
+    private String vcserie;
+
+    private boolean lobtencionAutoConfOK;
 
     
     @Column(columnDefinition = "CLOB")

@@ -17,9 +17,9 @@ public class EjecucionesLecturasService {
 
     @Transactional
     public EjecucionesLecturas save(EjecucionesLecturas ejecucion, boolean isUpdate) {
-        Optional<EjecucionesLecturas> existingEjecucion = ejecucionesLecturasRepository.findById(ejecucion.getIdEjecucionLectura());
+        Optional<EjecucionesLecturas> existingEjecucion = ejecucionesLecturasRepository.findById(ejecucion.getNidEjecucionLectura());
         if (existingEjecucion.isPresent() && !isUpdate) {
-            throw new IllegalArgumentException("Ejecucion with id " + ejecucion.getIdEjecucionLectura() + " already exists.");
+            throw new IllegalArgumentException("Ejecucion with id " + ejecucion.getNidEjecucionLectura() + " already exists.");
         }
         return ejecucionesLecturasRepository.save(ejecucion);
     }
@@ -32,16 +32,7 @@ public class EjecucionesLecturasService {
         return ejecucionesLecturasRepository.findById(id).orElseThrow(() -> new RuntimeException("Ejecucion not found"));
     }
 
-    public EjecucionesLecturas update(Long id, EjecucionesLecturas ejecucionDetails) {
-        EjecucionesLecturas ejecucion = findById(id);
-        ejecucion.setIdAnteriorIntentoEjecucionLectura(ejecucionDetails.getIdAnteriorIntentoEjecucionLectura());
-        ejecucion.setDinicioEjecucionLectura(ejecucionDetails.getDinicioEjecucionLectura());
-        ejecucion.setDFinEjecucionLectura(ejecucionDetails.getDFinEjecucionLectura());
-        ejecucion.setNIntentoLecturaNumero(ejecucionDetails.getNIntentoLecturaNumero());
-        ejecucion.setProgramacionAMI(ejecucionDetails.getProgramacionAMI());
-        ejecucion.setEjecucionLecturaDetect(ejecucionDetails.getEjecucionLecturaDetect());
-        return ejecucionesLecturasRepository.save(ejecucion);
-    }
+
 
     public void deleteById(Long id) {
         ejecucionesLecturasRepository.deleteById(id);

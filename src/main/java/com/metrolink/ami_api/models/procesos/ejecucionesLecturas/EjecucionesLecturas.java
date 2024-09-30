@@ -2,9 +2,6 @@ package com.metrolink.ami_api.models.procesos.ejecucionesLecturas;
 
 import lombok.Data;
 import javax.persistence.*;
-
-import com.metrolink.ami_api.models.procesos.programacionesAmi.ProgramacionesAMI;
-
 import java.sql.Timestamp;
 
 @Data
@@ -14,31 +11,30 @@ public class EjecucionesLecturas {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEjecucionLectura;
+    private Long nidEjecucionLectura;
 
-    private Long idAnteriorIntentoEjecucionLectura;
+    private Long nidAnteriorIntentoEjecucionLectura;
 
 
     @Column(name = "dinicioEjecucionLectura")
     private Timestamp dinicioEjecucionLectura;
 
     @Column(name = "dFinEjecucionLectura")
-    private Timestamp dFinEjecucionLectura;
+    private Timestamp dfinEjecucionLectura;
 
-    private int nIntentoLecturaNumero;
+    private int nintentoLecturaNumero;
 
-
-
-    @ManyToOne
-    @JoinColumn(name = "ncodProgAMI", referencedColumnName = "ncodigo")
-    private ProgramacionesAMI programacionAMI;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idDetect", referencedColumnName = "idEjecucionLecturaDetect")
+    @JoinColumn(name = "idDetect", referencedColumnName = "nidEjecucionLecturaDetect")
     private EjecucionesLecturaDetect ejecucionLecturaDetect;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idAutoConf", referencedColumnName = "idEjecucionLecturaAutoConf")
+    @JoinColumn(name = "idProg", referencedColumnName = "nidEjecucionesLecturaProg")
+    private EjecucionesLecturaProg ejecucionLecturaProg;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idAutoConf", referencedColumnName = "nidEjecucionLecturaAutoConf")
     private EjecucionesLecturaAutoConf ejecucionLecturaAutoConf;
 
 

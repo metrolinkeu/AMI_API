@@ -13,8 +13,13 @@ import com.metrolink.ami_api.models.medidor.Medidores;
 import com.metrolink.ami_api.models.primeraLectura.AutoConfCanalesPerfilCarga;
 import com.metrolink.ami_api.models.primeraLectura.AutoConfCodigosObisCanal;
 import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
+import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturaAutoConf;
+
+import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturas;
 
 import com.metrolink.ami_api.services.medidor.MedidoresService;
+import com.metrolink.ami_api.services.procesos.ejecucionesLecturas.EjecucionesLecturasService;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,32 +28,60 @@ public class ConectorAutoConfService {
     @Autowired
     private MedidoresService medidoresService;
 
+    @Autowired
+    private EjecucionesLecturasService ejecucionesLecturasService;
+
     public List<AutoconfMedidor> UsarConectorAutoConfMed(String vcnoSerie, JsonNode rootNode) {
+
+        List<Medidores> medidores = new ArrayList<>();
 
         System.out.println("Caso 1: vcnoSerie.");
 
         List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
+
+        EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
+
         Random random = new Random();
 
+        ejecucionLectura.setNidEjecucionLectura(0L);
+        ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0);
+        ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+        ejecucionLectura.setNintentoLecturaNumero(1);
+
+        // Crear instancia de EjecucionesLecturaAutoConf con valores aleatorios
+        EjecucionesLecturaAutoConf ejecucionLecturaAutoConf = new EjecucionesLecturaAutoConf();
+        ejecucionLecturaAutoConf
+                .setVcdescripcionAutoconf("Auto Configuracion de medidores por concentrador: " + vcnoSerie);
+        ejecucionLecturaAutoConf.setVcnoserie(vcnoSerie);
+        // ejecucionLecturaAutoConf.setVcserie("vcserie");
+        ejecucionLecturaAutoConf.setJsequiposAutoconfigurar(rootNode);
+
+        ejecucionLectura.setEjecucionLecturaAutoConf(ejecucionLecturaAutoConf);
+
+        //////// <----------------
         try {
-            List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
-
-            /*
-             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-             * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-             */
-
+            medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
             for (Medidores medidor : medidores) {
                 AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
                 autoconfMedidores.add(autoconfMedidor);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //////// <----------------
+
+        if (!medidores.isEmpty()) {
+            ejecucionLecturaAutoConf.setLobtencionAutoConfOK(true);
+
+        } else {
+            ejecucionLecturaAutoConf.setLobtencionAutoConfOK(false);
+
+        }
+
+        ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+
+        // Guardar
+        EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
 
         return autoconfMedidores;
     }
@@ -56,39 +89,181 @@ public class ConectorAutoConfService {
     public AutoconfMedidor UsarConectorAutoConfMed_solo(String vcserie, String vcnoSerie, String vcSIC,
             JsonNode vcserialesNode, JsonNode rootNode) {
 
+        AutoconfMedidor autoconfMedidor = new AutoconfMedidor();
+
+        Random random = new Random();
+
         // Verificar y manejar el caso 2: vcnoSerie y vcseriales están presentes
         if (vcserialesNode != null && !vcserialesNode.isEmpty() && vcnoSerie != null && !vcnoSerie.equals("")
                 && (vcSIC == null || vcSIC.equals(""))) {
             System.out.println("Caso 2: vcnoSerie y vcseriales están presentes.");
+
+            EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
+
+            ejecucionLectura.setNidEjecucionLectura(0L);
+
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0);
+            ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+
+            ejecucionLectura.setNintentoLecturaNumero(1);
+
+            // Crear instancia de EjecucionesLecturaAutoConf con valores aleatorios
+            EjecucionesLecturaAutoConf ejecucionLecturaAutoConf = new EjecucionesLecturaAutoConf();
+            ejecucionLecturaAutoConf.setVcdescripcionAutoconf(
+                    "Auto Configuracion de medidor: " + vcserie + " por concentrador: " + vcnoSerie);
+            ejecucionLecturaAutoConf.setVcnoserie(vcnoSerie);
+            ejecucionLecturaAutoConf.setVcserie(vcserie);
+            ejecucionLecturaAutoConf.setJsequiposAutoconfigurar(rootNode);
+
+            ejecucionLectura.setEjecucionLecturaAutoConf(ejecucionLecturaAutoConf);
+
+            //////// <----------------
+
+            autoconfMedidor = crearAutoconfMedidor(vcserie, random);
+
+            //////// <----------------
+
+            if (autoconfMedidor.getVcSerie() != null) {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(true);
+
+            } else {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(false);
+
+            }
+
+            ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+            // Guardar
+            EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
+
         }
         // Verificar y manejar el caso 3: Solo vcseriales está presente
         else if (vcserialesNode != null && !vcserialesNode.isEmpty() && (vcnoSerie == null || vcnoSerie.equals(""))
                 && (vcSIC == null || vcSIC.equals(""))) {
             System.out.println("Caso 3: Solo vcseriales está presente.");
+
+            EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
+
+            ejecucionLectura.setNidEjecucionLectura(0L);
+
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0);
+            ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+
+            ejecucionLectura.setNintentoLecturaNumero(1);
+
+            // Crear instancia de EjecucionesLecturaAutoConf con valores aleatorios
+            EjecucionesLecturaAutoConf ejecucionLecturaAutoConf = new EjecucionesLecturaAutoConf();
+            ejecucionLecturaAutoConf.setVcdescripcionAutoconf("Auto Configuracion de medidor: " + vcserie);
+            // ejecucionLecturaAutoConf.setVcnoserie("vcnoSerie");
+            ejecucionLecturaAutoConf.setVcserie(vcserie);
+            ejecucionLecturaAutoConf.setJsequiposAutoconfigurar(rootNode);
+
+            ejecucionLectura.setEjecucionLecturaAutoConf(ejecucionLecturaAutoConf);
+
+            //////// <----------------
+
+            autoconfMedidor = crearAutoconfMedidor(vcserie, random);
+
+            //////// <----------------
+
+            if (autoconfMedidor.getVcSerie() != null) {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(true);
+
+            } else {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(false);
+
+            }
+
+            ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+            // Guardar
+            EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
+
         }
         // Verificar y manejar el caso 4: vcnoSerie y SIC están presentes
         else if ((vcserialesNode == null || vcserialesNode.isEmpty()) && vcnoSerie != null && !vcnoSerie.equals("")
                 && vcSIC != null
                 && !vcSIC.equals("")) {
             System.out.println("Caso 4: vcnoSerie y SIC están presentes.");
+
+            EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
+
+            ejecucionLectura.setNidEjecucionLectura(0L);
+
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0);
+            ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+
+            ejecucionLectura.setNintentoLecturaNumero(1);
+
+            // Crear instancia de EjecucionesLecturaAutoConf con valores aleatorios
+            EjecucionesLecturaAutoConf ejecucionLecturaAutoConf = new EjecucionesLecturaAutoConf();
+            ejecucionLecturaAutoConf.setVcdescripcionAutoconf("Auto Configuracion de medidor: " + vcserie
+                    + " por concentrador" + vcnoSerie + " con SIC: " + vcSIC);
+            ejecucionLecturaAutoConf.setVcnoserie(vcnoSerie);
+            ejecucionLecturaAutoConf.setVcserie(vcserie);
+            ejecucionLecturaAutoConf.setJsequiposAutoconfigurar(rootNode);
+
+            ejecucionLectura.setEjecucionLecturaAutoConf(ejecucionLecturaAutoConf);
+
+            //////// <----------------
+
+            autoconfMedidor = crearAutoconfMedidor(vcserie, random);
+
+            //////// <----------------
+
+            if (autoconfMedidor.getVcSerie() != null) {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(true);
+
+            } else {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(false);
+
+            }
+
+            ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+            // Guardar
+            EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
+
         }
         // Verificar y manejar el caso 5: Solo SIC está presente
         else if ((vcserialesNode == null || vcserialesNode.isEmpty()) && (vcnoSerie == null || vcnoSerie.equals(""))
                 && vcSIC != null
                 && !vcSIC.equals("")) {
             System.out.println("Caso 5: Solo SIC está presente.");
+
+            EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
+
+            ejecucionLectura.setNidEjecucionLectura(0L);
+
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0);
+            ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+
+            ejecucionLectura.setNintentoLecturaNumero(1);
+
+            // Crear instancia de EjecucionesLecturaAutoConf con valores aleatorios
+            EjecucionesLecturaAutoConf ejecucionLecturaAutoConf = new EjecucionesLecturaAutoConf();
+            ejecucionLecturaAutoConf.setVcdescripcionAutoconf("Auto Configuracion de medidor: " + vcserie
+                    + " con SIC: " + vcSIC);
+            // ejecucionLecturaAutoConf.setVcnoserie(vcnoSerie);
+            ejecucionLecturaAutoConf.setVcserie(vcserie);
+            ejecucionLecturaAutoConf.setJsequiposAutoconfigurar(rootNode);
+
+            ejecucionLectura.setEjecucionLecturaAutoConf(ejecucionLecturaAutoConf);
+
+            //////// <----------------
+
+            autoconfMedidor = crearAutoconfMedidor(vcserie, random);
+
+            //////// <----------------
+
+            if (autoconfMedidor.getVcSerie() != null) {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(true);
+            } else {
+                ejecucionLecturaAutoConf.setLobtencionAutoConfOK(false);
+            }
+
+            ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+            // Guardar
+            EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
+
         }
-
-        /*
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         */
-
-        Random random = new Random();
-        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
 
         return autoconfMedidor;
     }
@@ -135,5 +310,6 @@ public class ConectorAutoConfService {
         codigosObisCanal.setVcobis_10("1-0:8.0." + random.nextInt(10));
         return codigosObisCanal;
     }
+
 
 }

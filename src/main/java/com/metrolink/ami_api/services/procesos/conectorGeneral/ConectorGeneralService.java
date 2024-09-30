@@ -45,10 +45,10 @@ public class ConectorGeneralService {
     }
 
     public String usarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
-            String vcSeriesAReintentarFiltrado) {
+            String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
         String medidoresFaltantesPorLeer = conectorProgramacionService.UsarConectorProgramacionFiltroConcentrador(mensaje,
                 programacionAMI,
-                vcSeriesAReintentarFiltrado);
+                vcSeriesAReintentarFiltrado, reintentosRestantes);
 
         return medidoresFaltantesPorLeer; // Retorna el mensaje para confirmar la ejecución
     }

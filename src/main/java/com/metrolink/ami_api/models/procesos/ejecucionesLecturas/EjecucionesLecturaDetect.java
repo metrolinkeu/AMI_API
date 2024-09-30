@@ -13,9 +13,13 @@ public class EjecucionesLecturaDetect {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEjecucionLecturaDetect;
+    private Long nidEjecucionLecturaDetect;
+
+    private String vcdescripcionDetect;
 
     private String vcnoserie;
+
+    private boolean ldeteccionOK;
 
     @Column(columnDefinition = "CLOB")
     private String jsTablaMedidoresDetec; // Almacenar el JSON como String en un CLOB

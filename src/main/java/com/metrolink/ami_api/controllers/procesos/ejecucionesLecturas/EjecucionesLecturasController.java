@@ -34,6 +34,15 @@ public class EjecucionesLecturasController {
         return ResponseEntity.ok(ejecucion);
     }
 
+    @GetMapping("/by-descripcion/{descripcion}")
+    public ResponseEntity<EjecucionesLecturas> getLastByDescripcionProg(@PathVariable String descripcion) {
+        EjecucionesLecturas ejecucion = ejecucionesLecturasService.findLastByDescripcionProg(descripcion);
+        if (ejecucion != null) {
+            return ResponseEntity.ok(ejecucion);
+        } else {
+            return ResponseEntity.noContent().build(); // Retorna 204 si no hay resultados
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEjecucion(@PathVariable Long id) {

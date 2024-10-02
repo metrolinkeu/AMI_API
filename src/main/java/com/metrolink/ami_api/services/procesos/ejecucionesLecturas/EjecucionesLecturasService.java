@@ -3,6 +3,7 @@ package com.metrolink.ami_api.services.procesos.ejecucionesLecturas;
 import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturas;
 import com.metrolink.ami_api.repositories.procesos.ejecucionesLecturas.EjecucionesLecturasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +34,11 @@ public class EjecucionesLecturasService {
     }
 
 
+    // Método para obtener la última ejecución por descripción de programación
+    public EjecucionesLecturas findLastByDescripcionProg(String descripcion) {
+        List<EjecucionesLecturas> ejecuciones = ejecucionesLecturasRepository.findLastByDescripcionProg(descripcion, PageRequest.of(0, 1));
+        return ejecuciones.isEmpty() ? null : ejecuciones.get(0); // Devuelve la primera (y única) entrada o null si no hay resultados
+    }
 
     public void deleteById(Long id) {
         ejecucionesLecturasRepository.deleteById(id);

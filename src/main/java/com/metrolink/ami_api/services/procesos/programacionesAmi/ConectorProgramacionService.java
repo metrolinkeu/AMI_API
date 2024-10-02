@@ -5,9 +5,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.metrolink.ami_api.models.concentrador.Concentradores;
@@ -31,32 +32,44 @@ public class ConectorProgramacionService {
     @Autowired
     private EjecucionesLecturasService ejecucionesLecturasService;
 
+
+    @Transactional
     public String UsarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
 
         System.out.println(mensaje);
-
         String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
 
-        EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
+        EjecucionesLecturas ejecucionLecturaToSave = new EjecucionesLecturas();
+        ejecucionLecturaToSave.setNidEjecucionLectura(0L);
+        EjecucionesLecturas ejecucionLecturaSaved = ejecucionesLecturasService.save(ejecucionLecturaToSave, false);
+        EjecucionesLecturas ejecucionLectura = ejecucionesLecturasService
+                .findById(ejecucionLecturaSaved.getNidEjecucionLectura());
 
-        ejecucionLectura.setNidEjecucionLectura(0L);
-        ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0); // Como saber??
         ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+        ejecucionLectura.setNintentoLecturaNumero(
+                programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes);
 
-        ejecucionLectura.setNintentoLecturaNumero(programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes);
+        if (programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes == 1) {
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(0L);
+        } else {
+
+            EjecucionesLecturas ejecucionLast = ejecucionesLecturasService
+                    .findLastByDescripcionProg("Lectura de medidores programados en la programacion: "
+                            + programacionAMI.getNcodigo() + " por concentrador: " + vcnoSerie);
+
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(ejecucionLast.getNidEjecucionLectura());//
+        }
 
         EjecucionesLecturaProg ejecucionLecturaProg = new EjecucionesLecturaProg();
-
         ejecucionLecturaProg.setVcdescripcionProg("Lectura de medidores programados en la programacion: "
                 + programacionAMI.getNcodigo() + " por concentrador: " + vcnoSerie);
+
         // ejecucionLecturaProg.setVcserie("vcserie");
         ejecucionLecturaProg.setVcnoserie(vcnoSerie);
         ejecucionLecturaProg.setProgramacionAMI(programacionAMI);
 
-     
         String jsseriesMed = "";
-
         if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado)) {
             jsseriesMed = vcSeriesAReintentarFiltrado;
             System.out.println("jsseriesMed: " + jsseriesMed);
@@ -78,23 +91,30 @@ public class ConectorProgramacionService {
         }
 
         ejecucionLecturaProg.setJsseriesMed(jsseriesMed);
-        
+        ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         //// <----------------------------
+
+        // Enviar (ejecucionLectura)
 
         String medidor1 = "19014";
         String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
+        // String medidoresFaltantesPorLeer = "[]";
 
         //// <----------------------------
 
+        if (!medidoresFaltantesPorLeer.equals("[]")) {
+            ejecucionLecturaProg.setLlecturaOK(false);
+        } else {
+            ejecucionLecturaProg.setLlecturaOK(true);
+        }
 
         ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(medidoresFaltantesPorLeer);
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-        // Guardar
-        EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
-        System.out.println(createdEjecucion);
+
+        System.out.println(ejecucionLectura);
 
         return medidoresFaltantesPorLeer;
         // return "[]";

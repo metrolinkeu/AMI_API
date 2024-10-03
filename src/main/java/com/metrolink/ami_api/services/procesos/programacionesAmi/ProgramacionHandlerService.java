@@ -109,7 +109,7 @@ public class ProgramacionHandlerService {
                 if (delay > 0) {
                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                     programarTareaCaso2(scheduler, programacionAMI, delay, vcSeriesAReintentarFiltrado_,
-                            reintentosRestantes);
+                            reintentosRestantes - 1);
                 } else {
                     System.out.println("La fecha y hora ya han pasado, no se puede programar la tarea.");
                 }
@@ -120,7 +120,7 @@ public class ProgramacionHandlerService {
                 if (delay > 0) {
                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                     programarTareaCaso3(scheduler, programacionAMI, delay, vcSeriesAReintentarFiltrado_,
-                            reintentosRestantes);
+                            reintentosRestantes - 1);
                 } else {
                     System.out.println("La fecha y hora ya han pasado, no se puede programar la tarea.");
                 }
@@ -131,7 +131,7 @@ public class ProgramacionHandlerService {
                 if (delay > 0) {
                     ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
                     programarTareaCaso4(scheduler, programacionAMI, delay, vcSeriesAReintentarFiltrado_,
-                            reintentosRestantes);
+                            reintentosRestantes - 1);
                 } else {
                     System.out.println("La fecha y hora ya han pasado, no se puede programar la tarea.");
                 }
@@ -176,7 +176,7 @@ public class ProgramacionHandlerService {
                 System.out.println("FILTRO POR CONCENTRADOR");
                 programarTareasFrecuentesCaso5(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
 
                 break;
             case "concentradorymedidores":
@@ -184,20 +184,20 @@ public class ProgramacionHandlerService {
 
                 programarTareasFrecuentesCaso6(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
 
                 break;
             case "medidores":
                 System.out.println("FILTRO POR MEDIDORES");
                 programarTareasFrecuentesCaso7(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
                 break;
             case "frontera sic":
                 System.out.println("FILTRO FRONTERA SIC");
                 programarTareasFrecuentesCaso8(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
                 break;
             default:
                 System.out.println("FILTRO NO DEFINIDO");
@@ -238,25 +238,25 @@ public class ProgramacionHandlerService {
                 System.out.println("FILTRO POR CONCENTRADOR");
                 programarTareasRecurrenteCaso9(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
                 break;
             case "concentradorymedidores":
                 System.out.println("FILTRO POR CONCENTRADOR Y MEDIDORES");
                 programarTareasRecurrenteCaso10(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
                 break;
             case "medidores":
                 System.out.println("FILTRO POR MEDIDORES");
                 programarTareasRecurrenteCaso11(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
                 break;
             case "frontera sic":
                 System.out.println("FILTRO FRONTERA SIC");
                 programarTareasRecurrenteCaso12(diasSemana, tiempoInicio, programacionAMI, filtro,
                         vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes);
+                        reintentosRestantes - 1);
                 break;
             default:
                 System.out.println("FILTRO NO DEFINIDO");
@@ -321,7 +321,7 @@ public class ProgramacionHandlerService {
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
                         .usarConectorProgramacionFiltroConyMed("Lectura caso 2", programacionAMI,
-                                vcSeriesAReintentarFiltrado_);
+                                vcSeriesAReintentarFiltrado_, reintentosRestantes);
 
                 // Usar GeneradorDeColas para encolar la tarea
                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -392,7 +392,7 @@ public class ProgramacionHandlerService {
                             // Crar la tarea que se encolará
                             Callable<String> tareaParaProgramar = () -> conectorGeneralService
                                     .usarConectorProgramacionFiltroMedidores("Lectura caso 3", programacionAMI,
-                                            vcserie);
+                                            vcserie, reintentosRestantes);
 
                             // Usar GeneradorDeColas para encolar la tarea
                             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -504,7 +504,7 @@ public class ProgramacionHandlerService {
                             String vcserie = jsseriesMedList.get(i);
                             // Crar la tarea que se encolará
                             Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                    .usarConectorProgramacionFiltroSIC("Lectura caso 4", programacionAMI, vcserie);
+                                    .usarConectorProgramacionFiltroSIC("Lectura caso 4", programacionAMI, vcserie, reintentosRestantes);
 
                             // Usar GeneradorDeColas para encolar la tarea
                             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -700,7 +700,7 @@ public class ProgramacionHandlerService {
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
                         .usarConectorProgramacionFiltroConyMed("Lectura caso 6", programacionAMI,
-                                vcSeriesAReintentarFiltrado_);
+                                vcSeriesAReintentarFiltrado_, reintentosRestantes);
 
                 // Usar GeneradorDeColas para encolar la tarea
                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -748,7 +748,7 @@ public class ProgramacionHandlerService {
             // Crear la tarea para reintentar
             Callable<String> tareaParaReintentar = () -> conectorGeneralService
                     .usarConectorProgramacionFiltroConyMed("Lectura reintento caso 6", programacionAMI,
-                            vcSeriesAReintentarFiltrado);
+                            vcSeriesAReintentarFiltrado, reintentosRestantes);
 
             // Usar GeneradorDeColas para encolar la tarea
             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -835,7 +835,7 @@ public class ProgramacionHandlerService {
                             // Crar la tarea que se encolará
                             Callable<String> tareaParaProgramar = () -> conectorGeneralService
                                     .usarConectorProgramacionFiltroMedidores("Lectura caso 7", programacionAMI,
-                                            vcserie);
+                                            vcserie, reintentosRestantes);
 
                             // Usar GeneradorDeColas para encolar la tarea
                             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -929,7 +929,7 @@ public class ProgramacionHandlerService {
                         // Crar la tarea que se encolará
                         Callable<String> tareaParaProgramar = () -> conectorGeneralService
                                 .usarConectorProgramacionFiltroMedidores("Lectura Reintento caso 7", programacionAMI,
-                                        vcserie);
+                                        vcserie, reintentosRestantes);
 
                         // Usar GeneradorDeColas para encolar la tarea
                         CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1051,7 +1051,7 @@ public class ProgramacionHandlerService {
                             String vcserie = jsseriesMedList.get(i);
                             // Crar la tarea que se encolará
                             Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                    .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie);
+                                    .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie, reintentosRestantes);
 
                             // Usar GeneradorDeColas para encolar la tarea
                             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1160,7 +1160,7 @@ public class ProgramacionHandlerService {
                         String vcserie = jsseriesMedList.get(i);
                         // Crar la tarea que se encolará
                         Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie);
+                                .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie, reintentosRestantes);
 
                         // Usar GeneradorDeColas para encolar la tarea
                         CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1387,7 +1387,7 @@ public class ProgramacionHandlerService {
                     // Crear la tarea que se encolará
                     Callable<String> tareaParaProgramar = () -> conectorGeneralService
                             .usarConectorProgramacionFiltroConyMed("Lectura caso 10", programacionAMI,
-                                    vcSeriesAReintentarFiltrado_);
+                                    vcSeriesAReintentarFiltrado_, reintentosRestantes);
 
                     // Usar GeneradorDeColas para encolar la tarea
                     CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -1437,7 +1437,7 @@ public class ProgramacionHandlerService {
             // Crear la tarea que se encolará
             Callable<String> tareaParaProgramar = () -> conectorGeneralService
                     .usarConectorProgramacionFiltroConyMed("Lectura caso 10", programacionAMI,
-                            vcSeriesAReintentarFiltrado);
+                            vcSeriesAReintentarFiltrado, reintentosRestantes);
 
             // Usar GeneradorDeColas para encolar la tarea
             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("C_" +
@@ -1541,7 +1541,7 @@ public class ProgramacionHandlerService {
                                 // Crar la tarea que se encolará
                                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
                                         .usarConectorProgramacionFiltroMedidores("Lectura caso 11", programacionAMI,
-                                                vcserie);
+                                                vcserie, reintentosRestantes);
 
                                 // Usar GeneradorDeColas para encolar la tarea
                                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1638,7 +1638,7 @@ public class ProgramacionHandlerService {
                         // Crar la tarea que se encolará
                         Callable<String> tareaParaProgramar = () -> conectorGeneralService
                                 .usarConectorProgramacionFiltroMedidores("Lectura Reintento caso 11", programacionAMI,
-                                        vcserie);
+                                        vcserie, reintentosRestantes);
 
                         // Usar GeneradorDeColas para encolar la tarea
                         CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1778,7 +1778,7 @@ public class ProgramacionHandlerService {
                                 String vcserie = jsseriesMedList.get(i);
                                 // Crar la tarea que se encolará
                                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                        .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie);
+                                        .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie, reintentosRestantes);
 
                                 // Usar GeneradorDeColas para encolar la tarea
                                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1889,7 +1889,7 @@ public class ProgramacionHandlerService {
                         String vcserie = jsseriesMedList.get(i);
                         // Crar la tarea que se encolará
                         Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie);
+                                .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie, reintentosRestantes);
 
                         // Usar GeneradorDeColas para encolar la tarea
                         CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,

@@ -32,7 +32,6 @@ public class ConectorProgramacionService {
     @Autowired
     private EjecucionesLecturasService ejecucionesLecturasService;
 
-
     @Transactional
     public String UsarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
@@ -120,381 +119,207 @@ public class ConectorProgramacionService {
         // return "[]";
     }
 
+    @Transactional
     public String UsarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
-            String vcSeriesAReintentarFiltrado) {
+            String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
 
         System.out.println(mensaje);
+        String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
+
+        EjecucionesLecturas ejecucionLecturaToSave = new EjecucionesLecturas();
+        ejecucionLecturaToSave.setNidEjecucionLectura(0L);
+        EjecucionesLecturas ejecucionLecturaSaved = ejecucionesLecturasService.save(ejecucionLecturaToSave, false);
+        EjecucionesLecturas ejecucionLectura = ejecucionesLecturasService
+                .findById(ejecucionLecturaSaved.getNidEjecucionLectura());
+
+        ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+        ejecucionLectura.setNintentoLecturaNumero(
+                programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes);
+
+        if (programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes == 1) {
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(0L);
+        } else {
+
+            EjecucionesLecturas ejecucionLast = ejecucionesLecturasService
+                    .findLastByDescripcionProg("Lectura de medidores programados en la programacion: "
+                            + programacionAMI.getNcodigo() + " por concentrador: " + vcnoSerie);
+
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(ejecucionLast.getNidEjecucionLectura());//
+        }
+
+        EjecucionesLecturaProg ejecucionLecturaProg = new EjecucionesLecturaProg();
+        ejecucionLecturaProg.setVcdescripcionProg("Lectura de medidores programados en la programacion: "
+                + programacionAMI.getNcodigo() + " por concentrador: " + vcnoSerie);
+
+        ejecucionLecturaProg.setVcnoserie(vcnoSerie);
+        ejecucionLecturaProg.setProgramacionAMI(programacionAMI);
 
         String jsseriesMed = "";
-
-        // Este conector es similar al conector anterior pero en este caso, los
-        // medidores asociados al concentrador
-        // vienen ya especificados en
-        // programacionAMI.getGrupoMedidores().getJsseriesMed();
-
-        // en este momento se revisa si se deben de leer todos los medidores de la
-        // programacion
-        // o si es un reintento y solo se leeran los medidores que estan faltantdo
-
-        // Si son medidores que estan faltando se leen los medidores de
-        // vcSeriesAReintentarFiltrado
-
         if (!"EstadoInicio".equalsIgnoreCase(vcSeriesAReintentarFiltrado)) {
-            // en caso de que ya se haya hecho un intento la lectura de los
-            // medidores se hace igualmente a traves del concentrador pero
-            // esta vez solo los medidores que no ha sido leidos que vienen en:
             jsseriesMed = vcSeriesAReintentarFiltrado;
-
-            // Si en cambio es la primera vez que se usa esta funcion los medidores a leeer
-            // seran
-            // todos los que estan en la programacon a a traves de
-            // programacionAMI.getGrupoMedidores().getJsseriesMed()
         } else {
-            // Lectura de los medidores a traves del concentrador que viene en:
             jsseriesMed = programacionAMI.getGrupoMedidores().getJsseriesMed();
         }
 
-        EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
-
-        Random random = new Random();
-
-        ejecucionLectura.setNidEjecucionLectura(0L);
-
-        ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) random.nextInt(1000));
-        ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-        ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis() + random.nextInt(100000)));
-        ejecucionLectura.setNintentoLecturaNumero(random.nextInt(5));
-
-        EjecucionesLecturaProg ejecucionLecturaProg = new EjecucionesLecturaProg();
-
-        ejecucionLecturaProg.setVcdescripcionProg("prpgramacion");
-        ejecucionLecturaProg.setVcserie("vcserie");
-        ejecucionLecturaProg.setVcnoserie("vcnoserie");
-        ejecucionLecturaProg.setProgramacionAMI(programacionAMI);
-
+        ejecucionLecturaProg.setJsseriesMed(jsseriesMed);
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
-        // Guardar
-        EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
-        System.out.println(createdEjecucion);
+        //// <----------------------------
 
-        // Convertir la cadena JSON a una lista de strings
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<String> jsseriesMedList;
+        // Enviar (ejecucionLectura)
 
-        try {
-            jsseriesMedList = objectMapper.readValue(jsseriesMed, new TypeReference<List<String>>() {
-            });
+        String medidor1 = "19014";
+        String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
 
-            // Verificar si la lista contiene elementos
-            if (jsseriesMedList.isEmpty()) {
-                System.out.println("No se encontraron series en la lista.");
-            } else {
-                // Iterar sobre la lista y procesar cada serie
-                for (int i = 0; i < jsseriesMedList.size(); i++) {
-                    System.out.println("vcserie" + (i + 1) + ": " + jsseriesMedList.get(i));
+        //// <----------------------------
 
-                    /*
-                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                     * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                     */
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "Error al procesar medidores faltantes";
+        if (!medidoresFaltantesPorLeer.equals("[]")) {
+            ejecucionLecturaProg.setLlecturaOK(false);
+        } else {
+            ejecucionLecturaProg.setLlecturaOK(true);
         }
 
-        // La direccion Ip y el Puerto en este caso tienen que ser las del concentrador
-        // asociado
-        // que se encuentra en:
-        //
-        // Lugar para pedir esto en Realidad
-        //
+        ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(medidoresFaltantesPorLeer);
+        ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
-        // en caso de que todos los medidores hayan sido leidos el resultado serial un
-        // json
-        // que representa una lista vacia : "[]"
+        ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-        // en caso de que se vayan encontrado casos en los cuales no se leyo se debe de
-        // agregar el medidor no leido a la lista de la siguiente forma:
-        // "[\"Seria de mediddor no leido\", \"15913\", \"61452\"]"
-        // las comillas dentro del json debe de colocarse asi con el caracter de escape
-        // asi: \"
+        System.out.println(ejecucionLectura);
 
-        // las peticiones que se deben hacer a cada medidor estan en
-        String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
-        Concentradores concentrador = concentradoresService.findById(vcnoSerie);
-
-        String ip = concentrador.getParamTiposDeComunicacion().getVcip();
-        String puerto = concentrador.getParamTiposDeComunicacion().getVcpuerto();
-        System.out.println("IP del concentrador: " + ip);
-        System.out.println("Puerto del concentrador: " + puerto);
-
-        // Est ip y puerto se tienen que usar por que son las mismas que se usaron para
-        // generar un hilo y una cola unica para la conexion tcp de este
-        // concentrador
-
-        // las peticiones que se deben hacer a cada medidor vienen en unas variables
-        // boleanas y solo
-        // se deben leer las que vengan en true
-
-        // la accion del rele viene en un string que indica si activar o desactivar
-
-        // la hora de sincronizacion de relog viene en formato time stamp pero se
-        // transforma en string si es neceario
-
-        boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
-        boolean leventos = programacionAMI.getListaPeticiones().isLeventos();
-        boolean lregistros = programacionAMI.getListaPeticiones().isLregistros();
-        boolean lfactorPotencia = programacionAMI.getListaPeticiones().isLfactorPotencia();
-        boolean linstantaneos = programacionAMI.getListaPeticiones().isLinstantaneos();
-        String vcaccionRele = programacionAMI.getListaPeticiones().getVcaccionRele();
-        java.sql.Timestamp dfechaHoraSincronizacion = programacionAMI.getListaPeticiones()
-                .getDfechaHoraSincronizacion();
-
-        // Imprimir las variables
-        System.out.println("llectura_perfil_1: " + llectura_perfil_1);
-        System.out.println("leventos: " + leventos);
-        System.out.println("lregistros: " + lregistros);
-        System.out.println("lfactorPotencia: " + lfactorPotencia);
-        System.out.println("linstantaneos: " + linstantaneos);
-        System.out.println("vcaccionRele: " + vcaccionRele);
-        System.out.println("dfechaHoraSincronizacion: " + dfechaHoraSincronizacion);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
-        System.out.println("dfechaHoraSincronizacion: " + formattedDate);
-
-        //
-        // Lugar para pedir esto en Realidad
-        //
-
-        // Esto ultimo no tiene es inventado, no tiene relacion con la logica de arriba,
-        // solo
-        // devuelve un resultado similar al que deberia de entregar
-        String medidor1 = jsseriesMedList.get(0); // Variables de pruebas
-        String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
         return medidoresFaltantesPorLeer;
 
     }
 
+    @Transactional
     public String UsarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI,
-            String vcserie) {
+            String vcserie, int reintentosRestantes) {
 
         String vcSerieAReintentar = "";
 
         System.out.println(mensaje);
 
-        Medidores medidor = medidoresService.findById(vcserie);
+        EjecucionesLecturas ejecucionLecturaToSave = new EjecucionesLecturas();
+        ejecucionLecturaToSave.setNidEjecucionLectura(0L);
+        EjecucionesLecturas ejecucionLecturaSaved = ejecucionesLecturasService.save(ejecucionLecturaToSave, false);
+        EjecucionesLecturas ejecucionLectura = ejecucionesLecturasService
+                .findById(ejecucionLecturaSaved.getNidEjecucionLectura());
 
-        // lectura de un medidor en especifico,
-        // EL medidor a leer viene en vcserie.
-        // lo que se le va a pedir al medidor viene en
+        ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+        ejecucionLectura.setNintentoLecturaNumero(
+                programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes);
 
-        boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
-        boolean leventos = programacionAMI.getListaPeticiones().isLeventos();
-        boolean lregistros = programacionAMI.getListaPeticiones().isLregistros();
-        boolean lfactorPotencia = programacionAMI.getListaPeticiones().isLfactorPotencia();
-        boolean linstantaneos = programacionAMI.getListaPeticiones().isLinstantaneos();
-        String vcaccionRele = programacionAMI.getListaPeticiones().getVcaccionRele();
-        java.sql.Timestamp dfechaHoraSincronizacion = programacionAMI.getListaPeticiones()
-                .getDfechaHoraSincronizacion();
+        if (programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes == 1) {
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(0L);
+        } else {
 
-        // Imprimir las variables
-        System.out.println("llectura_perfil_1: " + llectura_perfil_1);
-        System.out.println("leventos: " + leventos);
-        System.out.println("lregistros: " + lregistros);
-        System.out.println("lfactorPotencia: " + lfactorPotencia);
-        System.out.println("linstantaneos: " + linstantaneos);
-        System.out.println("vcaccionRele: " + vcaccionRele);
-        System.out.println("dfechaHoraSincronizacion: " + dfechaHoraSincronizacion);
+            EjecucionesLecturas ejecucionLast = ejecucionesLecturasService
+                    .findLastByDescripcionProg("Lectura de medidor programado en la programacion: "
+                            + programacionAMI.getNcodigo() + " con numero de serie: " + vcserie);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
-        System.out.println("dfechaHoraSincronizacion: " + formattedDate);
-
-        // en esta caso es cuando el medidor es Servidor.
-        // En este punto ya se esta en una cola e hilo unicos para este medidor la cual
-        // fue construida de acuerdo a dos casos:
-        // Este medidor esta asociado a un concentrador:
-        // aqui se debe de hacer las eticiones a traves del concentrador con su ip y
-        // puerto:
-
-        if (medidor.getConcentrador() != null) { // NO tener esta linea
-
-            String vcnoSerie = medidor.getConcentrador().getVcnoSerie();
-            Concentradores concentrador = concentradoresService.findById(vcnoSerie);
-
-            String ip = concentrador.getParamTiposDeComunicacion().getVcip();
-            String puerto = concentrador.getParamTiposDeComunicacion().getVcpuerto();
-            System.out.println("IP del concentrador: " + ip);
-            System.out.println("Puerto del concentrador: " + puerto);
-
-        } else { // La ip siempre sera esta.
-
-            String ip = medidor.getVcip();
-            String puerto = medidor.getVcpuerto();
-
-            // Imprimir los valores
-            System.out.println("IP: " + ip);
-            System.out.println("Puerto: " + puerto);
-
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(ejecucionLast.getNidEjecucionLectura());//
         }
 
-        //
-        // construida con la ip y el puerto.
-        // por lo tanto se debe de usar la misma ip y puerto que estan en en hilo y la
-        // cola
-
-        // se pide al medidor con todos sus parametros.
-
-        // si el medidor es leido devuelve un noLeido en True coloca el numero de su
-        // vcSerie para hacer un reintento
-        // si es leido correctamente entega un vacio ""
-
-        EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
-
-        Random random = new Random();
-
-        ejecucionLectura.setNidEjecucionLectura(0L);
-
-        ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) random.nextInt(1000));
-        ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-        ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis() + random.nextInt(100000)));
-        ejecucionLectura.setNintentoLecturaNumero(random.nextInt(5));
-
         EjecucionesLecturaProg ejecucionLecturaProg = new EjecucionesLecturaProg();
+        ejecucionLecturaProg.setVcdescripcionProg("Lectura de medidor programado en la programacion: "
+                + programacionAMI.getNcodigo() + " con numero de serie: " + vcserie);
 
-        ejecucionLecturaProg.setVcdescripcionProg("prpgramacion");
-        ejecucionLecturaProg.setVcserie("vcserie");
-        ejecucionLecturaProg.setVcnoserie("vcnoserie");
+        ejecucionLecturaProg.setVcserie(vcserie);
+        // ejecucionLecturaProg.setVcnoserie(vcnoSerie);
         ejecucionLecturaProg.setProgramacionAMI(programacionAMI);
-
+        // ejecucionLecturaProg.setJsseriesMed(jsseriesMed);
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
-        // Guardar
-        EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
-        System.out.println(createdEjecucion);
+        //// <----------------------------
+        // Enviar (ejecucionLectura)
 
-        /*
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         * <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-         */
+        //// <----------------------------
 
         boolean noLeido = true;
 
         if (noLeido) {
+            ejecucionLecturaProg.setLlecturaOK(false);
             vcSerieAReintentar = vcserie;
-        } else {
-            vcSerieAReintentar = "";
+            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(String.format("[\"%s\"]", vcserie));
 
+        } else {
+            ejecucionLecturaProg.setLlecturaOK(true);
+            vcSerieAReintentar = "";
+            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer("[]");
         }
 
-        return vcSerieAReintentar;
+        
+        ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
+        ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+
+        System.out.println(ejecucionLectura);
+
+        return vcSerieAReintentar;
     }
 
-    public String UsarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+    @Transactional
+    public String UsarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie,
+            int reintentosRestantes) {
 
         String vcSerieAReintentar = "";
 
         System.out.println(mensaje);
 
-        Medidores medidor = medidoresService.findById(vcserie);
+        EjecucionesLecturas ejecucionLecturaToSave = new EjecucionesLecturas();
+        ejecucionLecturaToSave.setNidEjecucionLectura(0L);
+        EjecucionesLecturas ejecucionLecturaSaved = ejecucionesLecturasService.save(ejecucionLecturaToSave, false);
+        EjecucionesLecturas ejecucionLectura = ejecucionesLecturasService
+                .findById(ejecucionLecturaSaved.getNidEjecucionLectura());
 
-        // lectura de un medidor en especifico del traido por su codigo sic,
-        // EL medidor a leer viene en vcserie
-        // lo que se le va a pedir al medidor viene en
+        ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+        ejecucionLectura.setNintentoLecturaNumero(
+                programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes);
 
-        boolean llectura_perfil_1 = programacionAMI.getListaPeticiones().isLlectura_perfil_1();
-        boolean leventos = programacionAMI.getListaPeticiones().isLeventos();
-        boolean lregistros = programacionAMI.getListaPeticiones().isLregistros();
-        boolean lfactorPotencia = programacionAMI.getListaPeticiones().isLfactorPotencia();
-        boolean linstantaneos = programacionAMI.getListaPeticiones().isLinstantaneos();
-        String vcaccionRele = programacionAMI.getListaPeticiones().getVcaccionRele();
-        java.sql.Timestamp dfechaHoraSincronizacion = programacionAMI.getListaPeticiones()
-                .getDfechaHoraSincronizacion();
-
-        // Imprimir las variables
-        System.out.println("llectura_perfil_1: " + llectura_perfil_1);
-        System.out.println("leventos: " + leventos);
-        System.out.println("lregistros: " + lregistros);
-        System.out.println("lfactorPotencia: " + lfactorPotencia);
-        System.out.println("linstantaneos: " + linstantaneos);
-        System.out.println("vcaccionRele: " + vcaccionRele);
-        System.out.println("dfechaHoraSincronizacion: " + dfechaHoraSincronizacion);
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = dfechaHoraSincronizacion.toLocalDateTime().format(formatter);
-        System.out.println("dfechaHoraSincronizacion: " + formattedDate);
-
-        // en esta caso es cuando el medidor es Servidor.
-        // En este punto ya se esta en una cola e hilo unicos para este medidor la cual
-        // fue construida de acuerdo a dos casos:
-
-        if (medidor.getConcentrador() != null) {
-
-            String vcnoSerie = medidor.getConcentrador().getVcnoSerie();
-            Concentradores concentrador = concentradoresService.findById(vcnoSerie);
-
-            String ip = concentrador.getParamTiposDeComunicacion().getVcip();
-            String puerto = concentrador.getParamTiposDeComunicacion().getVcpuerto();
-            System.out.println("IP del concentrador: " + ip);
-            System.out.println("Puerto del concentrador: " + puerto);
-
+        if (programacionAMI.getParametrizacionProg().getNreintentos() - reintentosRestantes == 1) {
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(0L);
         } else {
 
-            String ip = medidor.getVcip();
-            String puerto = medidor.getVcpuerto();
+            EjecucionesLecturas ejecucionLast = ejecucionesLecturasService
+                    .findLastByDescripcionProg("Lectura de medidor programado en la programacion: "
+                            + programacionAMI.getNcodigo() + " con numero de serie: " + vcserie);
 
-            // Imprimir los valores
-            System.out.println("IP: " + ip);
-            System.out.println("Puerto: " + puerto);
-
+            ejecucionLectura.setNidAnteriorIntentoEjecucionLectura(ejecucionLast.getNidEjecucionLectura());//
         }
-
-        EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
-
-        Random random = new Random();
-
-        ejecucionLectura.setNidEjecucionLectura(0L);
-
-        ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) random.nextInt(1000));
-        ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-        ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis() + random.nextInt(100000)));
-        ejecucionLectura.setNintentoLecturaNumero(random.nextInt(5));
 
         EjecucionesLecturaProg ejecucionLecturaProg = new EjecucionesLecturaProg();
+        ejecucionLecturaProg.setVcdescripcionProg("Lectura de medidor programado en la programacion: "
+                + programacionAMI.getNcodigo() + " con numero de serie: " + vcserie);
 
-        ejecucionLecturaProg.setVcdescripcionProg("prpgramacion");
-        ejecucionLecturaProg.setVcserie("vcserie");
-        ejecucionLecturaProg.setVcnoserie("vcnoserie");
+        ejecucionLecturaProg.setVcserie(vcserie);
+        // ejecucionLecturaProg.setVcnoserie(vcnoSerie);
         ejecucionLecturaProg.setProgramacionAMI(programacionAMI);
-
+        // ejecucionLecturaProg.setJsseriesMed(jsseriesMed);
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
-        // Guardar
-        EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
-        System.out.println(createdEjecucion);
+        //// <----------------------------
+        // Enviar (ejecucionLectura)
 
-        // devuelve un Leido o no leido
+        //// <----------------------------
 
-        boolean Leido = true;
+        boolean noLeido = true;
 
-        if (Leido) {
+        if (noLeido) {
+            ejecucionLecturaProg.setLlecturaOK(false);
             vcSerieAReintentar = vcserie;
-        } else {
-            vcSerieAReintentar = "";
+            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(String.format("[\"%s\"]", vcserie));
 
+        } else {
+            ejecucionLecturaProg.setLlecturaOK(true);
+            vcSerieAReintentar = "";
+            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer("[]");
         }
+
+        
+        ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
+
+        ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
+
+        System.out.println(ejecucionLectura);
 
         return vcSerieAReintentar;
 

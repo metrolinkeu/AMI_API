@@ -54,24 +54,24 @@ public class ConectorGeneralService {
     }
 
     public String usarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
-            String vcSeriesAReintentarFiltrado) {
+            String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
         String medidoresFaltantesPorLeer = conectorProgramacionService.UsarConectorProgramacionFiltroConyMed(mensaje, programacionAMI,
-                vcSeriesAReintentarFiltrado);
+                vcSeriesAReintentarFiltrado, reintentosRestantes);
 
         return medidoresFaltantesPorLeer; // Retorna el mensaje para confirmar la ejecución
     }
 
     public String usarConectorProgramacionFiltroMedidores(String mensaje, ProgramacionesAMI programacionAMI,
-            String vcserie) {
+            String vcserie, int reintentosRestantes) {
         String vcSerieMedAReintentar = conectorProgramacionService.UsarConectorProgramacionFiltroMedidores(mensaje, programacionAMI,
-                vcserie);
+                vcserie, reintentosRestantes);
 
         return vcSerieMedAReintentar; // Retorna el mensaje para confirmar la ejecución
     }
 
-    public String usarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie) {
+    public String usarConectorProgramacionFiltroSIC(String mensaje, ProgramacionesAMI programacionAMI, String vcserie, int reintentosRestantes) {
         String vcSerieMedAReintentar = conectorProgramacionService.UsarConectorProgramacionFiltroSIC(mensaje, programacionAMI,
-                vcserie);
+                vcserie, reintentosRestantes);
 
         return vcSerieMedAReintentar; // Retorna el mensaje para confirmar la ejecución
     }

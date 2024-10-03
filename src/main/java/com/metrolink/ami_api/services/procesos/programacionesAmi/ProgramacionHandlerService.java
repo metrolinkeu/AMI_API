@@ -169,35 +169,31 @@ public class ProgramacionHandlerService {
         System.out.println(tiempoInicio);
 
         String vcSeriesAReintentarFiltrado_ = "EstadoInicio";
-        int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos();
+       
 
         switch (filtro.toLowerCase()) {
             case "concentrador":
                 System.out.println("FILTRO POR CONCENTRADOR");
                 programarTareasFrecuentesCaso5(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
 
                 break;
             case "concentradorymedidores":
                 System.out.println("FILTRO POR CONCENTRADOR Y MEDIDORES");
 
                 programarTareasFrecuentesCaso6(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
 
                 break;
             case "medidores":
                 System.out.println("FILTRO POR MEDIDORES");
                 programarTareasFrecuentesCaso7(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
                 break;
             case "frontera sic":
                 System.out.println("FILTRO FRONTERA SIC");
                 programarTareasFrecuentesCaso8(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
                 break;
             default:
                 System.out.println("FILTRO NO DEFINIDO");
@@ -231,32 +227,28 @@ public class ProgramacionHandlerService {
         System.out.println(tiempoInicio);
 
         String vcSeriesAReintentarFiltrado_ = "EstadoInicio";
-        int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos();
+  
 
         switch (filtro.toLowerCase()) {
             case "concentrador":
                 System.out.println("FILTRO POR CONCENTRADOR");
                 programarTareasRecurrenteCaso9(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
                 break;
             case "concentradorymedidores":
                 System.out.println("FILTRO POR CONCENTRADOR Y MEDIDORES");
                 programarTareasRecurrenteCaso10(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
                 break;
             case "medidores":
                 System.out.println("FILTRO POR MEDIDORES");
                 programarTareasRecurrenteCaso11(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
                 break;
             case "frontera sic":
                 System.out.println("FILTRO FRONTERA SIC");
                 programarTareasRecurrenteCaso12(diasSemana, tiempoInicio, programacionAMI, filtro,
-                        vcSeriesAReintentarFiltrado_,
-                        reintentosRestantes - 1);
+                        vcSeriesAReintentarFiltrado_);
                 break;
             default:
                 System.out.println("FILTRO NO DEFINIDO");
@@ -269,10 +261,10 @@ public class ProgramacionHandlerService {
     // Método para programar y reintentar la tarea
     private void programarTareaCaso1(ScheduledExecutorService scheduler, ProgramacionesAMI programacionAMI,
             long delay, String vcSeriesAReintentarFiltrado_, int reintentosRestantes) {
-                
+
         scheduler.schedule(() -> {
             try {
-                
+
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
                         .usarConectorProgramacionFiltroConcentrador("Lectura caso 1", programacionAMI,
@@ -504,7 +496,8 @@ public class ProgramacionHandlerService {
                             String vcserie = jsseriesMedList.get(i);
                             // Crar la tarea que se encolará
                             Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                    .usarConectorProgramacionFiltroSIC("Lectura caso 4", programacionAMI, vcserie, reintentosRestantes);
+                                    .usarConectorProgramacionFiltroSIC("Lectura caso 4", programacionAMI, vcserie,
+                                            reintentosRestantes);
 
                             // Usar GeneradorDeColas para encolar la tarea
                             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -566,8 +559,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasFrecuentesCaso5(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -585,8 +577,10 @@ public class ProgramacionHandlerService {
 
             // Programar la tarea recurrente indefinidamente para ese día de la semana
             scheduler.scheduleAtFixedRate(() -> {
+
+                int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
+
                 System.out.println("Ejecutando tarea para " + diaSemana + " con filtro: " + filtro);
-                // Aquí iría la lógica de ejecución de la tarea para este día
 
                 // Crear la tarea que se encolará
                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
@@ -675,8 +669,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasFrecuentesCaso6(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -694,6 +687,9 @@ public class ProgramacionHandlerService {
 
             // Programar la tarea recurrente indefinidamente para ese día de la semana
             scheduler.scheduleAtFixedRate(() -> {
+
+                int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
+
                 System.out.println("Ejecutando tarea para " + diaSemana + " con filtro: " + filtro);
                 // Aquí iría la lógica de ejecución de la tarea para este día
 
@@ -783,8 +779,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasFrecuentesCaso7(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -802,6 +797,8 @@ public class ProgramacionHandlerService {
 
             // Programar la tarea recurrente indefinidamente para ese día de la semana
             scheduler.scheduleAtFixedRate(() -> {
+
+                int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
 
                 System.out.println("Ejecutando tarea para " + diaSemana + " con filtro: " + filtro);
                 // Aquí iría la lógica de ejecución de la tarea para este día
@@ -986,8 +983,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasFrecuentesCaso8(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -1005,6 +1001,8 @@ public class ProgramacionHandlerService {
 
             // Programar la tarea recurrente indefinidamente para ese día de la semana
             scheduler.scheduleAtFixedRate(() -> {
+
+                int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
 
                 System.out.println("Ejecutando tarea para " + diaSemana + " con filtro: " + filtro);
 
@@ -1051,7 +1049,8 @@ public class ProgramacionHandlerService {
                             String vcserie = jsseriesMedList.get(i);
                             // Crar la tarea que se encolará
                             Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                    .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie, reintentosRestantes);
+                                    .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie,
+                                            reintentosRestantes);
 
                             // Usar GeneradorDeColas para encolar la tarea
                             CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1160,7 +1159,8 @@ public class ProgramacionHandlerService {
                         String vcserie = jsseriesMedList.get(i);
                         // Crar la tarea que se encolará
                         Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie, reintentosRestantes);
+                                .usarConectorProgramacionFiltroSIC("Lectura caso 8", programacionAMI, vcserie,
+                                        reintentosRestantes);
 
                         // Usar GeneradorDeColas para encolar la tarea
                         CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1216,8 +1216,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasRecurrenteCaso9(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -1253,6 +1252,9 @@ public class ProgramacionHandlerService {
 
                 // Programar la tarea recurrente para ese día y dentro del rango de horas
                 scheduler.scheduleAtFixedRate(() -> {
+
+                    int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
+
                     System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
                             + " a la hora: " + horaInicio);
 
@@ -1344,8 +1346,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasRecurrenteCaso10(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -1381,6 +1382,9 @@ public class ProgramacionHandlerService {
 
                 // Programar la tarea recurrente para ese día y dentro del rango de horas
                 scheduler.scheduleAtFixedRate(() -> {
+
+                    int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
+
                     System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
                             + " a la hora: " + horaInicio);
 
@@ -1472,8 +1476,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasRecurrenteCaso11(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -1509,6 +1512,9 @@ public class ProgramacionHandlerService {
 
                 // Programar la tarea recurrente para ese día y dentro del rango de horas
                 scheduler.scheduleAtFixedRate(() -> {
+
+                    int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
+
                     System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
                             + " a la hora: " + horaInicio);
 
@@ -1695,8 +1701,7 @@ public class ProgramacionHandlerService {
     }
 
     private void programarTareasRecurrenteCaso12(List<DayOfWeek> diasSemana, LocalDateTime tiempoInicio,
-            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_,
-            int reintentosRestantes) {
+            ProgramacionesAMI programacionAMI, String filtro, String vcSeriesAReintentarFiltrado_) {
 
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         LocalDateTime ahora = LocalDateTime.now();
@@ -1732,6 +1737,9 @@ public class ProgramacionHandlerService {
 
                 // Programar la tarea recurrente para ese día y dentro del rango de horas
                 scheduler.scheduleAtFixedRate(() -> {
+
+                    int reintentosRestantes = programacionAMI.getParametrizacionProg().getNreintentos() - 1;
+
                     System.out.println("Ejecutando tarea para " + diaSemanaStr + " con filtro: " + filtro
                             + " a la hora: " + horaInicio);
 
@@ -1778,7 +1786,8 @@ public class ProgramacionHandlerService {
                                 String vcserie = jsseriesMedList.get(i);
                                 // Crar la tarea que se encolará
                                 Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                        .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie, reintentosRestantes);
+                                        .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie,
+                                                reintentosRestantes);
 
                                 // Usar GeneradorDeColas para encolar la tarea
                                 CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,
@@ -1889,7 +1898,8 @@ public class ProgramacionHandlerService {
                         String vcserie = jsseriesMedList.get(i);
                         // Crar la tarea que se encolará
                         Callable<String> tareaParaProgramar = () -> conectorGeneralService
-                                .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie, reintentosRestantes);
+                                .usarConectorProgramacionFiltroSIC("Lectura caso 12", programacionAMI, vcserie,
+                                        reintentosRestantes);
 
                         // Usar GeneradorDeColas para encolar la tarea
                         CompletableFuture<String> future = generadorDeColas.encolarSolicitud("M_" + vcserie,

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.StringJoiner;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
@@ -15,6 +17,7 @@ import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLect
 import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturas;
 
 import com.metrolink.ami_api.services.procesos.ejecucionesLecturas.EjecucionesLecturasService;
+import com.metrolink.ami_api.services.procesos.ejecucionesLecturas.EjecucionesLectHandlerService;
 
 @Service
 public class ConectorDetecMedService {
@@ -22,6 +25,10 @@ public class ConectorDetecMedService {
     @Autowired
     private EjecucionesLecturasService ejecucionesLecturasService;
 
+    @Autowired
+    private EjecucionesLectHandlerService ejecucionesLectHandlerService;
+
+    @Transactional
     public String usarConectorDeteccion(String json) {
 
         Random random = new Random();
@@ -37,20 +44,26 @@ public class ConectorDetecMedService {
         String vcnoSerie = jsonNode.get("vcnoSerie").asText();
         System.out.println("vcnoSerie: " + vcnoSerie);
 
-        EjecucionesLecturas ejecucionLectura = new EjecucionesLecturas();
-        ejecucionLectura.setNidEjecucionLectura(0L);
+        EjecucionesLecturas ejecucionLecturaToSave = new EjecucionesLecturas();
+        ejecucionLecturaToSave.setNidEjecucionLectura(0L);
+        EjecucionesLecturas ejecucionLecturaSaved = ejecucionesLecturasService.save(ejecucionLecturaToSave, false);
+        EjecucionesLecturas ejecucionLectura = ejecucionesLecturasService
+                .findById(ejecucionLecturaSaved.getNidEjecucionLectura());
+
+        ejecucionLectura.setNintentoLecturaNumero(1);
         ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0);
         ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-        ejecucionLectura.setNintentoLecturaNumero(1);
 
-        // Crear instancia de EjecucionesLecturaDetect con valores aleatorios
+     
         EjecucionesLecturaDetect ejecucionLecturaDetect = new EjecucionesLecturaDetect();
-        ejecucionLecturaDetect.setVcdescripcionDetect("Deteccion de tabla de medidores del concentrador" + vcnoSerie);
-        ejecucionLecturaDetect.setVcnoserie(vcnoSerie); // Usando el valor del JSON
+        ejecucionLecturaDetect.setVcdescripcionDetect("Deteccion de tabla de medidores del concentrador: " + vcnoSerie);
+        ejecucionLecturaDetect.setVcnoserie(vcnoSerie); 
+        ejecucionLectura.setEjecucionLecturaDetect(ejecucionLecturaDetect);
+       
 
+        //// <----------------------------
 
-
-        ////<----------------------------
+        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
         int cantidadMedidores = 3;
         StringJoiner medidoresJoiner = new StringJoiner(", ");
@@ -61,29 +74,19 @@ public class ConectorDetecMedService {
         String newJson = "{ \"Medidores\": { " + medidoresJoiner.toString() + " } }";
         System.out.println("Procesado: " + newJson);
 
-
-        ////<----------------------------
-        
-
+        //// <----------------------------
 
         if (!newJson.equals("{}")) {
-            ejecucionLecturaDetect.setJsTablaMedidoresDetec(newJson); // JSON vacío para ejemplo
+            ejecucionLecturaDetect.setJsTablaMedidoresDetec(newJson); 
             ejecucionLecturaDetect.setLdeteccionOK(true);
 
-        }else{
+        } else {
             ejecucionLecturaDetect.setLdeteccionOK(false);
         }
-
 
         ejecucionLectura.setEjecucionLecturaDetect(ejecucionLecturaDetect);
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-
-        // Guardar
-        EjecucionesLecturas createdEjecucion = ejecucionesLecturasService.save(ejecucionLectura, false);
-        // esta se setea cuando se termine
-
-        System.out.println(createdEjecucion);
 
         return newJson;
 

@@ -1,36 +1,29 @@
 package com.metrolink.ami_api.services.procesos.programacionesAmi;
 
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Random;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.metrolink.ami_api.models.concentrador.Concentradores;
 import com.metrolink.ami_api.models.medidor.Medidores;
 import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturaProg;
 import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturas;
 import com.metrolink.ami_api.models.procesos.programacionesAmi.ProgramacionesAMI;
-import com.metrolink.ami_api.services.concentrador.ConcentradoresService;
 import com.metrolink.ami_api.services.medidor.MedidoresService;
+import com.metrolink.ami_api.services.procesos.ejecucionesLecturas.EjecucionesLectHandlerService;
 import com.metrolink.ami_api.services.procesos.ejecucionesLecturas.EjecucionesLecturasService;
 
 @Service
 public class ConectorProgramacionService {
 
     @Autowired
-    private ConcentradoresService concentradoresService;
-
-    @Autowired
     private MedidoresService medidoresService;
 
     @Autowired
     private EjecucionesLecturasService ejecucionesLecturasService;
+
+    @Autowired
+    private EjecucionesLectHandlerService ejecucionesLectHandlerService;
 
     @Transactional
     public String UsarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
@@ -94,7 +87,7 @@ public class ConectorProgramacionService {
 
         //// <----------------------------
 
-        // Enviar (ejecucionLectura)
+        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
         String medidor1 = "19014";
         String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
@@ -113,7 +106,7 @@ public class ConectorProgramacionService {
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-        System.out.println(ejecucionLectura);
+   
 
         return medidoresFaltantesPorLeer;
         // return "[]";
@@ -166,7 +159,7 @@ public class ConectorProgramacionService {
 
         //// <----------------------------
 
-        // Enviar (ejecucionLectura)
+        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
         String medidor1 = "19014";
         String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
@@ -184,7 +177,6 @@ public class ConectorProgramacionService {
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-        System.out.println(ejecucionLectura);
 
         return medidoresFaltantesPorLeer;
 
@@ -230,7 +222,7 @@ public class ConectorProgramacionService {
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         //// <----------------------------
-        // Enviar (ejecucionLectura)
+        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
         //// <----------------------------
 
@@ -247,12 +239,10 @@ public class ConectorProgramacionService {
             ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer("[]");
         }
 
-        
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-        System.out.println(ejecucionLectura);
 
         return vcSerieAReintentar;
     }
@@ -297,7 +287,7 @@ public class ConectorProgramacionService {
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         //// <----------------------------
-        // Enviar (ejecucionLectura)
+        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
         //// <----------------------------
 
@@ -314,12 +304,10 @@ public class ConectorProgramacionService {
             ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer("[]");
         }
 
-        
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-        System.out.println(ejecucionLectura);
 
         return vcSerieAReintentar;
 

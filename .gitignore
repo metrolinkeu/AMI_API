@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+# Ignorar archivos temporales
+
+ersPersonalDocumentsAMIAMI_API*

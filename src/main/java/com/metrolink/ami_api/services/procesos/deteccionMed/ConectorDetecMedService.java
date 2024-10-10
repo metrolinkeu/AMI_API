@@ -1,21 +1,14 @@
 package com.metrolink.ami_api.services.procesos.deteccionMed;
 
 import java.io.IOException;
-import java.util.Random;
-import java.util.StringJoiner;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturaDetect;
 import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturas;
-
 import com.metrolink.ami_api.services.procesos.ejecucionesLecturas.EjecucionesLecturasService;
 import com.metrolink.ami_api.services.procesos.ejecucionesLecturas.EjecucionesLectHandlerService;
 
@@ -31,8 +24,7 @@ public class ConectorDetecMedService {
     @Transactional
     public String usarConectorDeteccion(String json) {
 
-        Random random = new Random();
-
+        String newJson = "";
         // Procesar el JSON como antes
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = null;
@@ -54,30 +46,23 @@ public class ConectorDetecMedService {
         ejecucionLectura.setNidAnteriorIntentoEjecucionLectura((long) 0);
         ejecucionLectura.setDinicioEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-     
         EjecucionesLecturaDetect ejecucionLecturaDetect = new EjecucionesLecturaDetect();
         ejecucionLecturaDetect.setVcdescripcionDetect("Deteccion de tabla de medidores del concentrador: " + vcnoSerie);
-        ejecucionLecturaDetect.setVcnoserie(vcnoSerie); 
+        ejecucionLecturaDetect.setVcnoserie(vcnoSerie);
         ejecucionLectura.setEjecucionLecturaDetect(ejecucionLecturaDetect);
-       
 
         //// <----------------------------
+        Object resultado = ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
-        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
-
-        int cantidadMedidores = 3;
-        StringJoiner medidoresJoiner = new StringJoiner(", ");
-        for (int i = 1; i <= cantidadMedidores; i++) {
-            String numeroSerie = String.format("%05d", random.nextInt(99999)); // Número de serie de 5 dígitos
-            medidoresJoiner.add("\"Medidor" + i + "\": \"" + numeroSerie + "\"");
+        // Si esperas un String (en el caso de medidores faltantes por leer)
+        if (resultado instanceof String) {
+            newJson = (String) resultado;
+            System.out.println(newJson);
         }
-        String newJson = "{ \"Medidores\": { " + medidoresJoiner.toString() + " } }";
-        System.out.println("Procesado: " + newJson);
-
         //// <----------------------------
 
         if (!newJson.equals("{}")) {
-            ejecucionLecturaDetect.setJsTablaMedidoresDetec(newJson); 
+            ejecucionLecturaDetect.setJsTablaMedidoresDetec(newJson);
             ejecucionLecturaDetect.setLdeteccionOK(true);
 
         } else {

@@ -106,8 +106,6 @@ public class ConectorProgramacionService {
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-   
-
         return medidoresFaltantesPorLeer;
         // return "[]";
     }
@@ -177,7 +175,6 @@ public class ConectorProgramacionService {
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
 
-
         return medidoresFaltantesPorLeer;
 
     }
@@ -222,27 +219,27 @@ public class ConectorProgramacionService {
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         //// <----------------------------
-        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
+
+        Object resultado = ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
+
+        if (resultado instanceof String) {
+            vcSerieAReintentar = (String) resultado;
+            // System.out.println(newJson);
+        }
 
         //// <----------------------------
 
-        boolean noLeido = true;
-
-        if (noLeido) {
+        if (!vcSerieAReintentar.equals("")) {
             ejecucionLecturaProg.setLlecturaOK(false);
-            vcSerieAReintentar = vcserie;
-            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(String.format("[\"%s\"]", vcserie));
-
+            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(String.format("[\"%s\"]", vcSerieAReintentar));
         } else {
             ejecucionLecturaProg.setLlecturaOK(true);
-            vcSerieAReintentar = "";
             ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer("[]");
         }
 
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-
 
         return vcSerieAReintentar;
     }
@@ -287,27 +284,27 @@ public class ConectorProgramacionService {
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         //// <----------------------------
-        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
+
+        Object resultado = ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
+
+        if (resultado instanceof String) {
+            vcSerieAReintentar = (String) resultado;
+            // System.out.println(newJson);
+        }
 
         //// <----------------------------
 
-        boolean noLeido = true;
-
-        if (noLeido) {
+        if (!vcSerieAReintentar.equals("")) {
             ejecucionLecturaProg.setLlecturaOK(false);
-            vcSerieAReintentar = vcserie;
-            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(String.format("[\"%s\"]", vcserie));
-
+            ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer(String.format("[\"%s\"]", vcSerieAReintentar));
         } else {
             ejecucionLecturaProg.setLlecturaOK(true);
-            vcSerieAReintentar = "";
             ejecucionLecturaProg.setJsmedidoresFaltantesPorLeer("[]");
         }
 
         ejecucionLectura.setEjecucionLecturaProg(ejecucionLecturaProg);
 
         ejecucionLectura.setDfinEjecucionLectura(new Timestamp(System.currentTimeMillis()));
-
 
         return vcSerieAReintentar;
 

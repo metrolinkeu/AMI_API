@@ -63,7 +63,6 @@ public class AutoConfiguracionService {
                 CompletableFuture<List<AutoconfMedidor>> futureAutoConf = generadorDeColas.encolarSolicitud(
                         "C_" + vcnoSerie,
                         () -> {
-                            System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService) Caso 1");
                             return conectorGeneralService.UsarConectorAutoConfMed(vcnoSerie, rootNode);
                         });
 
@@ -73,41 +72,17 @@ public class AutoConfiguracionService {
 
             } else if (!vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode() && vcSICNode.isMissingNode()) {
 
-                // Crear una lista para almacenar los CompletableFutures
-                List<CompletableFuture<AutoconfMedidor>> futuresList = new ArrayList<>();
+                // Usar CompletableFuture para esperar el resultado
+                CompletableFuture<List<AutoconfMedidor>> futureAutoConf = generadorDeColas.encolarSolicitud(
+                        "C_" + vcnoSerie,
+                        () -> {
+                            return conectorGeneralService.UsarConectorAutoConfMed(vcnoSerie, rootNode);
+                        });
 
-                vcserialesNode.forEach(serialNode -> {
-                    String vcserie = serialNode.asText();
-                    System.out.println(vcserie);
-
-                    // Encolar la solicitud y obtener un CompletableFuture
-                    CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
-                            "M_" + vcserie,
-                            () -> {
-                                System.out
-                                        .println("Estoy en la tarea para encolar (AutoConfiguracionService2) Caso 2 ");
-                                return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
-                                        vcserialesNode, rootNode);
-                            });
-
-                    // Agregar el CompletableFuture a la lista de futuros
-                    futuresList.add(futureAutoConf);
-                });
-
-                // Esperar a que todos los futuros se completen y recoger los resultados
-                for (CompletableFuture<AutoconfMedidor> future : futuresList) {
-                    try {
-                        // Obtener el resultado de cada future y agregarlo a la lista
-                        // autoConfiguraciones
-                        AutoconfMedidor autoconfMedidor = future.get(); // Este método bloquea hasta que el resultado
-                                                                        // esté disponible
-                        autoConfiguraciones.add(autoconfMedidor);
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                        // Manejar excepciones según sea necesario
-                    }
-                }
-
+                // Esperar a que se complete la tarea y obtener el resultado
+                autoConfiguraciones = futureAutoConf.get(); // Este método bloquea hasta que
+                                                            // autoConfiguraciones esté disponible
+                                                            
             } else if (vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode() && vcSICNode.isMissingNode()) {
 
                 // Crear una lista para almacenar los CompletableFutures
@@ -121,7 +96,8 @@ public class AutoConfiguracionService {
                     CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
                             "M_" + vcserie,
                             () -> {
-                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService_solo) caso 3");
+                                System.out.println(
+                                        "Estoy en la tarea para encolar (AutoConfiguracionService_solo) caso 3");
                                 return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
                                         vcserialesNode, rootNode);
                             });
@@ -146,41 +122,16 @@ public class AutoConfiguracionService {
 
             } else if (!vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode() && !vcSICNode.isMissingNode()) {
 
-                // Crear una lista para almacenar los CompletableFutures
-                List<CompletableFuture<AutoconfMedidor>> futuresList = new ArrayList<>();
+                // Usar CompletableFuture para esperar el resultado
+                CompletableFuture<List<AutoconfMedidor>> futureAutoConf = generadorDeColas.encolarSolicitud(
+                        "C_" + vcnoSerie,
+                        () -> {
+                            return conectorGeneralService.UsarConectorAutoConfMed(vcnoSerie, rootNode);
+                        });
 
-                List<Medidores> medidores = medidoresService.findByVcsic(vcSIC);
-
-                medidores.forEach(medidor -> {
-                    String vcserie = medidor.getVcSerie();
-                    System.out.println(vcserie);
-
-                    // Encolar la solicitud y obtener un CompletableFuture
-                    CompletableFuture<AutoconfMedidor> futureAutoConf = generadorDeColas.encolarSolicitud(
-                            "M_" + vcserie,
-                            () -> {
-                                System.out.println("Estoy en la tarea para encolar (AutoConfiguracionService) caso 4");
-                                return conectorGeneralService.UsarConectorAutoConfMed_solo(vcserie, vcnoSerie, vcSIC,
-                                        vcserialesNode, rootNode);
-                            });
-
-                    // Agregar el CompletableFuture a la lista de futuros
-                    futuresList.add(futureAutoConf);
-                });
-
-                // Esperar a que todos los futuros se completen y recoger los resultados
-                for (CompletableFuture<AutoconfMedidor> future : futuresList) {
-                    try {
-                        // Obtener el resultado de cada future y agregarlo a la lista
-                        // autoConfiguraciones
-                        AutoconfMedidor autoconfMedidor = future.get(); // Este método bloquea hasta que el resultado
-                                                                        // esté disponible
-                        autoConfiguraciones.add(autoconfMedidor);
-                    } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
-                        // Manejar excepciones según sea necesario
-                    }
-                }
+                // Esperar a que se complete la tarea y obtener el resultado
+                autoConfiguraciones = futureAutoConf.get(); // Este método bloquea hasta que
+                                                            // autoConfiguraciones esté disponible
 
             } else if (vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode() && !vcSICNode.isMissingNode()) {
 

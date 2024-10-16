@@ -25,9 +25,9 @@ public class ConectividadTCP {
 
     public ConexionStreams obtenerIOStreams(String tipoEquipo, String serie) {
 
-        System.out.println("Este es el metodo definir conexion " + tipoEquipo + serie);
+        System.out.println("Este es el metodo definir conexion para " + tipoEquipo + " con serie: "+  serie);
 
-        String ipAddress = "medidor.getVcip()";
+        String ipAddress = "";
         int puerto = 0;
 
         if (tipoEquipo.equals("medidor")) {

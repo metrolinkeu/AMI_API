@@ -29,6 +29,8 @@ public class ConectorProgramacionService {
     public String UsarConectorProgramacionFiltroConcentrador(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
 
+        String medidoresFaltantesPorLeer = "";
+
         System.out.println(mensaje);
         String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
 
@@ -79,7 +81,7 @@ public class ConectorProgramacionService {
             });
             // Asignamos el valor final a la variable jsseriesMed con el formato adecuado
             jsseriesMed += tempBuilder.toString() + "]";
-            System.out.println("jsseriesMed: " + jsseriesMed);
+            System.out.println("jsseriesMed: " + jsseriesMed); 
         }
 
         ejecucionLecturaProg.setJsseriesMed(jsseriesMed);
@@ -87,11 +89,17 @@ public class ConectorProgramacionService {
 
         //// <----------------------------
 
-        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
+        Object resultado = ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
-        String medidor1 = "19014";
-        String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
-        // String medidoresFaltantesPorLeer = "[]";
+        if (resultado instanceof String) {
+            medidoresFaltantesPorLeer = (String) resultado;
+            System.out.println(medidoresFaltantesPorLeer);
+        }
+
+        // String medidor1 = "19014";
+        // String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\",
+        // \"61452\"]", medidor1);
+        // // String medidoresFaltantesPorLeer = "[]";
 
         //// <----------------------------
 
@@ -113,6 +121,8 @@ public class ConectorProgramacionService {
     @Transactional
     public String UsarConectorProgramacionFiltroConyMed(String mensaje, ProgramacionesAMI programacionAMI,
             String vcSeriesAReintentarFiltrado, int reintentosRestantes) {
+
+        String medidoresFaltantesPorLeer = "";
 
         System.out.println(mensaje);
         String vcnoSerie = programacionAMI.getGrupoMedidores().getVcidentificador();
@@ -157,11 +167,17 @@ public class ConectorProgramacionService {
 
         //// <----------------------------
 
-        ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
+        Object resultado = ejecucionesLectHandlerService.EnviarAEjecucionesLectHandler(ejecucionLectura);
 
-        String medidor1 = "19014";
-        String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]", medidor1);
+        if (resultado instanceof String) {
+            medidoresFaltantesPorLeer = (String) resultado;
+            System.out.println(medidoresFaltantesPorLeer);
+        }
 
+        // String medidor1 = "19014";
+        // String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\",
+        // \"61452\"]", medidor1);
+        // // String medidoresFaltantesPorLeer = "[]";
         //// <----------------------------
 
         if (!medidoresFaltantesPorLeer.equals("[]")) {
@@ -224,7 +240,7 @@ public class ConectorProgramacionService {
 
         if (resultado instanceof String) {
             vcSerieAReintentar = (String) resultado;
-            // System.out.println(newJson);
+            System.out.println(vcSerieAReintentar);
         }
 
         //// <----------------------------
@@ -289,7 +305,7 @@ public class ConectorProgramacionService {
 
         if (resultado instanceof String) {
             vcSerieAReintentar = (String) resultado;
-            // System.out.println(newJson);
+            System.out.println(vcSerieAReintentar);
         }
 
         //// <----------------------------

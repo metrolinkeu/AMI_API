@@ -1,7 +1,7 @@
 package com.metrolink.ami_api.services.procesos.ejecucionesLecturas;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
+import com.metrolink.ami_api.comunications.conectividad.ConectividadService;
 import com.metrolink.ami_api.comunications.conectividadTCP.ConexionStreams;
 
 import com.metrolink.ami_api.models.medidor.Medidores;
@@ -11,7 +11,6 @@ import com.metrolink.ami_api.models.primeraLectura.AutoconfMedidor;
 import com.metrolink.ami_api.models.procesos.ejecucionesLecturas.EjecucionesLecturas;
 
 import com.metrolink.ami_api.services.medidor.MedidoresService;
-import com.metrolink.ami_api.services.procesos.conectividad.ConectividadService;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -69,6 +68,11 @@ public class EjecucionesLectHandlerService {
 
                         enviarMensajePrueba(conexionStreams, vcnoserie);
 
+                        //ya teiendo los IOstreams , necesito pasar al control de flijo de secion
+                        //que debo de mandar??
+
+
+                        
                         // Control de Flujo de secion.
 
                         // ------------------------------Simulado
@@ -100,193 +104,32 @@ public class EjecucionesLectHandlerService {
                         JsonNode rootNode = ejecucionLecturas.getEjecucionLecturaAutoConf()
                                         .getJsequiposAutoconfigurar();
 
+                        // Obtener nodos del JSON
                         JsonNode vcnoSerieNode = rootNode.path("vcnoSerie");
-                        String vcnoSerie = rootNode.path("vcnoSerie").asText();
+                        String vcnoSerie = vcnoSerieNode.asText(null);
 
                         JsonNode vcserialesNode = rootNode.path("vcseriales");
 
                         JsonNode vcSICNode = rootNode.path("SIC");
-                        String vcSIC = rootNode.path("SIC").asText();
-
-                        List<Medidores> medidores = new ArrayList<>();
-
-                        AutoconfMedidor autoconfMedidor = new AutoconfMedidor();
-
-                        System.out.println("Ejecución de Lectura AutoConf:");
-                        System.out.println(" Descripción AutoConf: " +
-                                        ejecucionLecturas.getEjecucionLecturaAutoConf().getVcdescripcionAutoconf());
-                        System.out.println(" Serie: " +
-                                        ejecucionLecturas.getEjecucionLecturaAutoConf().getVcserie());
+                        String vcSIC = vcSICNode.asText(null);
 
                         String vcSerie = ejecucionLecturas.getEjecucionLecturaAutoConf().getVcserie();
 
-                        System.out.println(" noSerie: " +
-                                        ejecucionLecturas.getEjecucionLecturaAutoConf().getVcnoserie());
-                        System.out.println(" Equipos AutoConfigurar: " +
-                                        ejecucionLecturas.getEjecucionLecturaAutoConf().getJsequiposAutoconfigurar());
+                        System.out.println("Ejecución de Lectura AutoConf:");
+                        System.out.println(" Descripción AutoConf: "
+                                        + ejecucionLecturas.getEjecucionLecturaAutoConf().getVcdescripcionAutoconf());
+                        System.out.println(" Serie: " + vcSerie);
+                        System.out.println(
+                                        " noSerie: " + ejecucionLecturas.getEjecucionLecturaAutoConf().getVcnoserie());
+                        System.out.println(" Equipos AutoConfigurar: " + rootNode);
 
-                        // ------------------------------
+                        // Determinar qué nodos están presentes
+                        boolean hasVcnoSerie = !vcnoSerieNode.isMissingNode() && !vcnoSerieNode.isNull();
+                        boolean hasVcseriales = !vcserialesNode.isMissingNode() && !vcserialesNode.isNull();
+                        boolean hasVcSIC = !vcSICNode.isMissingNode() && !vcSICNode.isNull();
 
-                        // Solo Concentrador-<<<<<<<<<<<<<<<< UsarConectorAutoConfMed
-
-                        if (!vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode()
-                                        && vcSICNode.isMissingNode()) {
-
-                                // ------------------------------
-                                // Equipo: Concentrador
-                                // peticion: Autoconfiguracion
-
-                                ConexionStreams conexionStreams = conectividadService.conectividad("C_" + vcnoSerie);
-                                enviarMensajePrueba(conexionStreams, vcnoSerie );
-
-                                // ------------------------------Simulado
-                                List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
-
-                                medidores = medidoresService.findByConcentradorVcnoSerie(
-                                                ejecucionLecturas.getEjecucionLecturaAutoConf().getVcnoserie());
-                                for (Medidores medidor : medidores) {
-                                        autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(),
-                                                        random);
-                                        autoconfMedidores.add(autoconfMedidor);
-                                }
-                                // ------------------------------Simulado
-
-                                // resultado
-
-                                // -----------------------------
-                                System.out.println(
-                                                "lista de autoconfiguraciones que viene de ejeuciiones lecturas handler");
-
-                                return autoconfMedidores;
-
-                        }
-                        // Concentrador y lista de medidores UsarConectorAutoConfMed
-                        else if (!vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode()
-                                        && vcSICNode.isMissingNode()) {
-
-                                // ------------------------------
-                                // Equipo: Concentrador
-                                // peticion: Autoconfiguracion
-
-                                ConexionStreams conexionStreams = conectividadService.conectividad("C_" + vcnoSerie);
-                                enviarMensajePrueba(conexionStreams, vcnoSerie );
-
-                                // ------------------------------Simulado
-                                List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
-                                final AutoconfMedidor[] autoconfMedidorHolder = new AutoconfMedidor[1];
-
-                                vcserialesNode.forEach(serialNode -> {
-                                        String vcserie = serialNode.asText();
-                                        autoconfMedidorHolder[0] = crearAutoconfMedidor(vcserie, random); // Modificar
-                                                                                                          // dentro de
-                                                                                                          // la lambda
-                                        autoconfMedidores.add(autoconfMedidorHolder[0]);
-
-                                });
-
-                                // ------------------------------Simulado
-
-                                // resultado
-
-                                // -----------------------------
-                                System.out.println(
-                                                "lista de autoconfiguraciones que viene de ejeuciiones lecturas handler");
-
-                                return autoconfMedidores;
-
-                        }
-
-                        // Lista de medidores
-                        else if (vcnoSerieNode.isMissingNode() && !vcserialesNode.isMissingNode()
-                                        && vcSICNode.isMissingNode()) {
-
-                                // ------------------------------
-                                // Equipo: Medidor
-                                // peticion: Autoconfiguracion
-
-                                ConexionStreams conexionStreams = conectividadService.conectividad("M_" + vcSerie);
-                                enviarMensajePrueba(conexionStreams, vcSerie);
-
-                                // ------------------------------Simulado
-                                autoconfMedidor = crearAutoconfMedidor(vcSerie, random);
-                                // ------------------------------SImulado
-
-                                // resultado
-
-                                // -----------------------------
-                                return autoconfMedidor;
-
-                        }
-
-                        // concentrador con SIC UsarConectorAutoConfMed
-
-                        else if (!vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode()
-                                        && !vcSICNode.isMissingNode()) {
-
-                                // ------------------------------
-                                // Equipo: Concentrador
-                                // peticion: Autoconfiguracion
-
-                                ConexionStreams conexionStreams = conectividadService.conectividad("C_" + vcnoSerie);
-                                enviarMensajePrueba(conexionStreams, vcnoSerie );
-
-                                // ------------------------------Simulado
-                                List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
-
-                                medidores = medidoresService.findByVcsic(vcSIC);
-                                for (Medidores medidor : medidores) {
-                                        autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(),
-                                                        random);
-                                        autoconfMedidores.add(autoconfMedidor);
-                                }
-                                // ------------------------------Simulado
-
-                                // resultado
-
-                                // -----------------------------
-                                System.out.println(
-                                                "lista de autoconfiguraciones que viene de ejeuciiones lecturas handler");
-
-                                return autoconfMedidores;
-
-                        }
-
-                        // solo SIC
-
-                        else if (vcnoSerieNode.isMissingNode() && vcserialesNode.isMissingNode()
-                                        && !vcSICNode.isMissingNode()) {
-
-                                // ------------------------------
-                                // Equipo: Medidor
-                                // peticion: Autoconfiguracion
-
-                                ConexionStreams conexionStreams = conectividadService.conectividad("M_" + vcSerie);
-                                enviarMensajePrueba(conexionStreams, vcSerie );
-
-                                // ------------------------------Simulado
-                                autoconfMedidor = crearAutoconfMedidor(vcSerie, random);
-                                // ------------------------------SImulado
-
-                                // resultado
-
-                                // -----------------------------
-                                return autoconfMedidor;
-
-                        } else {
-                                System.out.println("no existe - rootnode - no valido");
-                        }
-
-                        // ------------------------------Simulado
-                        autoconfMedidor = crearAutoconfMedidor(
-                                        ejecucionLecturas.getEjecucionLecturaAutoConf().getVcserie(),
-                                        random);
-                        // ------------------------------SImulado
-
-                        // resultado
-
-                        // -----------------------------
-
-                        return autoconfMedidor;
+                        return handleAutoConfCase(hasVcnoSerie, hasVcseriales, hasVcSIC, vcnoSerie, vcSerie, vcSIC,
+                                        vcserialesNode);
                 }
 
                 // Manejo del caso de Ejecución de Lectura Prog
@@ -306,25 +149,67 @@ public class EjecucionesLectHandlerService {
                         System.out.println(" Series Medidores: " +
                                         ejecucionLecturas.getEjecucionLecturaProg().getJsseriesMed());
 
+                        String vcnoserie = ejecucionLecturas.getEjecucionLecturaProg().getVcnoserie();
+                        String vcserie = ejecucionLecturas.getEjecucionLecturaProg().getVcserie();
+
                         // ------------------------------
 
-                        // Equipo: Medidor
+                        // Equipo: Concentrador
                         // peticion: las que vengan en la programacion
 
-                        // resultado
+                        if (ejecucionLecturas.getEjecucionLecturaProg().getVcnoserie() != null) { // caso por
+                                                                                                  // concentrador
 
-                        // ------------------------------Simulado
+                                // ------------------------------
+                                // Equipo: Concentrador
+                                // Series: jsseriesMed, estos se leeran
+                                // peticion: Las programadas
 
-                        vcSerieAReintentar = ejecucionLecturas.getEjecucionLecturaProg().getVcserie();
-                        System.out.println("extraje el vcserie del metodo de ejecuciones y es " + vcSerieAReintentar);
-                        System.out.println("");
+                                ejecucionLecturas.getEjecucionLecturaProg().getJsseriesMed(); // Series que se quieren
+                                                                                              // leer
 
-                        // ------------------------------SImulado
+                                ConexionStreams conexionStreams = conectividadService.conectividad("C_" + vcnoserie);
 
-                        // -----------------------------
+                                enviarMensajePrueba(conexionStreams, vcnoserie);
 
-                        return vcSerieAReintentar;
+                                // Control de Flujo de secion.
+                                // ------------------------------Simulado
 
+                                String medidor1 = "19014";
+                                String medidoresFaltantesPorLeer = String.format("[\"%s\", \"15913\", \"61452\"]",
+                                                medidor1);
+
+                                // ------------------------------SImulado
+                                // resultado
+                                // -----------------------------
+                                return medidoresFaltantesPorLeer;
+                        }
+
+                        else {
+
+                                // ------------------------------
+                                // Equipo: Medidor
+                                // serie: vcserie
+                                // peticion: Las programadas
+
+                                ejecucionLecturas.getEjecucionLecturaProg().getVcserie();
+
+                                ConexionStreams conexionStreams = conectividadService.conectividad("M_" + vcserie);
+
+                                enviarMensajePrueba(conexionStreams, vcserie);
+
+                                // Control de Flujo de secion.
+
+                                // ------------------------------Simulado
+                                vcSerieAReintentar = ejecucionLecturas.getEjecucionLecturaProg().getVcserie();
+                                System.out.println("extraje el vcserie del metodo de ejecuciones y es "
+                                                + vcSerieAReintentar);
+                                System.out.println("");
+                                // ------------------------------SImulado
+                                // resultado
+                                // -----------------------------
+                                return vcSerieAReintentar;
+                        }
                 }
 
                 // Caso en que no hay ningún tipo de Ejecución asociado
@@ -386,57 +271,131 @@ public class EjecucionesLectHandlerService {
         private void enviarMensajePrueba(ConexionStreams conexionStreams, String Serie) {
 
                 if (conexionStreams != null) {
-            
-                    InputStream in = conexionStreams.getInputStream();
-                    OutputStream out = conexionStreams.getOutputStream();
-                    Socket socket = conexionStreams.getSocket(); // Necesario para cerrar la conexión
-            
-                    try {
-                        // Comando simulado sin la Serie
-                        byte[] comando = new byte[] { 0x4D, 0x65, 0x6E, 0x73, 0x61, 0x6A, 0x65,
-                                0x20, 0x64, 0x65, 0x20, 0x70, 0x72, 0x75, 0x65, 0x62,
-                                0x61, 0x20, 0x43, 0x6C, 0x69, 0x65, 0x6E, 0x74, 0x65,
-                                0x20, 0x74, 0x63, 0x70, 0x0A }; // "Mensaje de prueba Cliente tcp\n"
-            
-                        // Convertir la Serie a bytes
-                        byte[] serieBytes = (" de : " + Serie).getBytes(); // Concatenar " de : " y la Serie
-            
-                        // Crear un nuevo array de bytes que contenga el comando original seguido de la Serie
-                        byte[] comandoFinal = new byte[comando.length + serieBytes.length];
-            
-                        // Copiar el comando original
-                        System.arraycopy(comando, 0, comandoFinal, 0, comando.length);
-                        // Agregar los bytes de la Serie al final
-                        System.arraycopy(serieBytes, 0, comandoFinal, comando.length, serieBytes.length);
-            
-                        // Enviar el comando con la Serie incluida
-                        out.write(comandoFinal);
-                        out.flush();
-            
-                        // Leer la respuesta
-                        byte[] buffer = new byte[1024];
-                        int bytesRead = in.read(buffer);
-                        if (bytesRead != -1) {
-                            String respuesta = new String(buffer, 0, bytesRead);
-                            System.out.println("Respuesta del medidor: " + respuesta);
-                        }
-            
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } finally {
-                        // Cerrar el 'Socket' al finalizar la comunicación
+
+                        InputStream in = conexionStreams.getInputStream();
+                        OutputStream out = conexionStreams.getOutputStream();
+                        Socket socket = conexionStreams.getSocket(); // Necesario para cerrar la conexión
+
                         try {
-                            if (socket != null && !socket.isClosed()) {
-                                socket.close();
-                            }
+                                byte[] comando = ("Mensaje de prueba Cliente tcp de : " + Serie + "\n").getBytes();
+                                // Enviar el comando con la Serie incluida
+                                out.write(comando);
+                                out.flush();
+
+                                // Leer la respuesta
+                                byte[] buffer = new byte[1024];
+                                int bytesRead = in.read(buffer);
+                                if (bytesRead != -1) {
+                                        String respuesta = new String(buffer, 0, bytesRead);
+                                        System.out.println("Respuesta del medidor: " + respuesta);
+                                }
+
                         } catch (IOException e) {
-                            e.printStackTrace();
+                                e.printStackTrace();
+                        } finally {
+                                // Cerrar el 'Socket' al finalizar la comunicación
+                                try {
+                                        if (socket != null && !socket.isClosed()) {
+                                                socket.close();
+                                        }
+                                } catch (IOException e) {
+                                        e.printStackTrace();
+                                }
                         }
-                    }
-            
+
                 } else {
-                    System.out.println("No se pudo establecer la conexión con el concentrador.");
+                        System.out.println("No se pudo establecer la conexión con el concentrador.");
                 }
-            }
-            
+        }
+
+        // Método para manejar los diferentes casos de AutoConf
+        private Object handleAutoConfCase(boolean hasVcnoSerie, boolean hasVcseriales, boolean hasVcSIC,
+                        String vcnoSerie, String vcSerie, String vcSIC, JsonNode vcserialesNode) {
+                Random random = new Random();
+
+                if (hasVcnoSerie && !hasVcseriales && !hasVcSIC) {
+                        // Caso 1: Solo vcnoSerie está presente
+                        connectAndSendMessage("C", vcnoSerie);
+                        List<AutoconfMedidor> autoconfMedidores = simulateAutoconfMedidoresByConcentrador(vcnoSerie);
+                        System.out.println("Lista de autoconfiguraciones generadas.");
+                        return autoconfMedidores;
+                } else if (hasVcnoSerie && hasVcseriales && !hasVcSIC) {
+                        // Caso 2: vcnoSerie y vcseriales están presentes
+                        connectAndSendMessage("C", vcnoSerie);
+                        List<AutoconfMedidor> autoconfMedidores = simulateAutoconfMedidoresBySeriales(vcserialesNode);
+                        System.out.println("Lista de autoconfiguraciones generadas.");
+                        return autoconfMedidores;
+                } else if (!hasVcnoSerie && hasVcseriales && !hasVcSIC) {
+                        // Caso 3: Solo vcseriales está presente
+                        connectAndSendMessage("M", vcSerie);
+                        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcSerie, random);
+                        return autoconfMedidor;
+                } else if (hasVcnoSerie && !hasVcseriales && hasVcSIC) {
+                        // Caso 4: vcnoSerie y vcSIC están presentes
+                        connectAndSendMessage("C", vcnoSerie);
+                        List<AutoconfMedidor> autoconfMedidores = simulateAutoconfMedidoresBySIC(vcSIC);
+                        System.out.println("Lista de autoconfiguraciones generadas.");
+                        return autoconfMedidores;
+                } else if (!hasVcnoSerie && !hasVcseriales && hasVcSIC) {
+                        // Caso 5: Solo vcSIC está presente
+                        connectAndSendMessage("M", vcSerie);
+                        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcSerie, random);
+                        return autoconfMedidor;
+                } else {
+                        System.out.println("No existe - rootNode - no válido.");
+                        // Caso por defecto
+                        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcSerie, random);
+                        return autoconfMedidor;
+                }
+        }
+
+        // Método para conectar y enviar mensaje
+        private void connectAndSendMessage(String equipoPrefix, String serie) {
+                if (serie != null && !serie.isEmpty()) {
+
+                        ConexionStreams conexionStreams = conectividadService.conectividad(equipoPrefix + "_" + serie);
+
+                        enviarMensajePrueba(conexionStreams, serie);
+
+                } else {
+                        System.out.println("Serie no válida para conexión.");
+                }
+        }
+
+        // Simulación de AutoconfMedidores por Concentrador
+        private List<AutoconfMedidor> simulateAutoconfMedidoresByConcentrador(String vcnoSerie) {
+                Random random = new Random();
+                List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
+                List<Medidores> medidores = medidoresService.findByConcentradorVcnoSerie(vcnoSerie);
+                for (Medidores medidor : medidores) {
+                        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
+                        autoconfMedidores.add(autoconfMedidor);
+                }
+                return autoconfMedidores;
+        }
+
+        // Simulación de AutoconfMedidores por lista de seriales
+        private List<AutoconfMedidor> simulateAutoconfMedidoresBySeriales(JsonNode vcserialesNode) {
+                Random random = new Random();
+                List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
+                vcserialesNode.forEach(serialNode -> {
+                        String vcserie = serialNode.asText();
+                        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(vcserie, random);
+                        autoconfMedidores.add(autoconfMedidor);
+                });
+                return autoconfMedidores;
+        }
+
+        // Simulación de AutoconfMedidores por SIC
+        private List<AutoconfMedidor> simulateAutoconfMedidoresBySIC(String vcSIC) {
+                Random random = new Random();
+                List<AutoconfMedidor> autoconfMedidores = new ArrayList<>();
+                List<Medidores> medidores = medidoresService.findByVcsic(vcSIC);
+                for (Medidores medidor : medidores) {
+                        AutoconfMedidor autoconfMedidor = crearAutoconfMedidor(medidor.getVcSerie(), random);
+                        autoconfMedidores.add(autoconfMedidor);
+                }
+                return autoconfMedidores;
+        }
+
 }

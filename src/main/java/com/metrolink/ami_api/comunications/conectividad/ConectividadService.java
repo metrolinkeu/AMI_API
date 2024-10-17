@@ -1,4 +1,4 @@
-package com.metrolink.ami_api.services.procesos.conectividad;
+package com.metrolink.ami_api.comunications.conectividad;
 
 import java.io.IOException;
 import java.io.InputStream;
